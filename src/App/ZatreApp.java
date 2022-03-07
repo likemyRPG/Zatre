@@ -1,13 +1,14 @@
 package App;
 
 import domein.DomeinController;
-import persistence.MyJDBC;
+import domein.Spel;
+import domein.Speler;
+
 import java.util.*;
 
 public class ZatreApp {
 
     private DomeinController dc;
-    private MyJDBC db;
     Scanner myScanner = new Scanner(System.in);
 
     public ZatreApp(DomeinController dc) {
@@ -15,9 +16,29 @@ public class ZatreApp {
     }
 
     public void start(){
-        db.maakConnectie();
+        dc.startSpel();
         verwelkoming();
-        inlogKeuze();
+        int keuze = inlogKeuze();
+        if(keuze==1) spelerRegistreren();
+        else spelerInloggen();
+    }
+
+    private void spelerInloggen() {
+        System.out.println("Geef uw gebruikersnaam in: ");
+        String gebruikersnaam = myScanner.next();
+        System.out.println("Geef uw geboortejaar in: ");
+        int geboortejaar = myScanner.nextInt();
+        dc.selecteerSpeler(gebruikersnaam, geboortejaar);
+        System.out.println(dc.geefOverzicht());
+    }
+
+    private void spelerRegistreren() {
+        System.out.println("Geef een gebruikersnaam in: ");
+        String gebruikersnaam = myScanner.next();
+        System.out.println("Geef uw geboortejaar in: ");
+        int geboortejaar = myScanner.nextInt();
+        dc.registreerSpeler(gebruikersnaam, geboortejaar);
+        System.out.println(dc.geefOverzicht());
     }
 
     private void verwelkoming(){
