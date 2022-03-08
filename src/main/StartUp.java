@@ -1,6 +1,6 @@
 package main;
 import domein.DomeinController;
-import App.ZatreApp;
+import ui.ZatreApp;
 
 public class StartUp {
     public static void main(String[] args){

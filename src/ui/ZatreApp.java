@@ -1,4 +1,4 @@
-package App;
+package ui;
 
 import domein.DomeinController;
 import domein.Spel;
@@ -18,9 +18,15 @@ public class ZatreApp {
     public void start(){
         dc.startSpel();
         verwelkoming();
-        int keuze = inlogKeuze();
-        if(keuze==1) spelerRegistreren();
-        else spelerInloggen();
+        
+    	int keuze = inlogKeuze();
+    	while(keuze != 3) {
+    		switch(keuze) {
+    		case 1 -> spelerRegistreren();
+    		case 2 -> spelerInloggen();
+    		}
+    		keuze = inlogKeuze();
+    	}
     }
 
     private void spelerInloggen() {
@@ -53,8 +59,9 @@ public class ZatreApp {
             System.out.println("Maak een keuze om verder te gaan:");
             System.out.println("~1~ Registreren");
             System.out.println("~2~ Inloggen");
+            System.out.println("~3~ Stoppen");
             keuze = myScanner.nextInt();
-        }while(keuze > 2 || keuze < 1);
+        }while(keuze > 3 || keuze < 1);
 
         return keuze;
     }

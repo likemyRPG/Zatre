@@ -85,6 +85,6 @@ public class Speler {
     // toString methode voor het afprinten van info van de gebruiker
     @Override
     public String toString(){
-        return String.format("Actieve speler met gebruikersnaam \"%s\" en geboortedatum %d heeft %d speelkansen.", this.gebruikersnaam, this.geboortejaar, this.aantalKansen);
+        return String.format("Actieve speler met gebruikersnaam \"%s\" en geboortedatum %d heeft %d speelkansen.%n", this.gebruikersnaam, this.geboortejaar, this.aantalKansen);
     }
 }
