@@ -10,10 +10,11 @@ public class DomeinController{
 
 	public void startSpel(){
 		spel = new Spel();
+		speler = new Speler();
 	}
 
 	public void registreerSpeler(String gebruikersnaam, int geboortejaar){
-		speler = new Speler(gebruikersnaam, geboortejaar);
+		speler.registreerSpeler(gebruikersnaam, geboortejaar);
 	}
 
 	public void selecteerSpeler(String gebruikersnaam, int geboortejaar){
