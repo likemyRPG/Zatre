@@ -31,23 +31,28 @@ public class MyJDBC {
         }
         return true;
     }
+
     // SQL-commando voor het aantal speelkansen van een bepaalde gebruiker te zoeken
     public static int getAantalKansenBestaandeSpeler(String gebruikersnaam, int geboortedatum){
         try(Connection connection = DriverManager.getConnection(url, user, password);
             Statement statement = connection.createStatement();)
         {
             PreparedStatement pstmt = connection.prepareStatement(SQLCommands.getAantalKansenBestaandeSpeler);
+
             pstmt.setString(1, gebruikersnaam);
             pstmt.setInt(2, geboortedatum);
 
-            ResultSet resultSet = pstmt.getResultSet();
+            ResultSet resultSet = pstmt.executeQuery();
+            while (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
 
-            return resultSet.getInt(1);
         }catch(Exception e) {
             e.printStackTrace();
         }
         return 0;
     }
+
     // SQL-commando voor een nieuw account aan te maken
     public static void maakProfiel(String gebruikersnaam, int geboortedatum, int aantalKansen){
         try(Connection connection = DriverManager.getConnection(url, user, password);

@@ -32,6 +32,8 @@ public class Speler {
         // Zo niet -> Throw Exception
         if(!alBestaand) throw new IllegalArgumentException("Dit account bestaat nog niet!");
         // Aantalkansen uit de database halen
+        setGebruikersnaam(gebruikersnaam);
+        setGeboortejaar(geboortejaar);
         this.aantalKansen = sql.getAantalKansenBestaandeSpeler(gebruikersnaam, geboortejaar);
     }
 
