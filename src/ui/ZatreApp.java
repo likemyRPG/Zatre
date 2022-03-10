@@ -19,31 +19,20 @@ public class ZatreApp {
         dc.startSpel();
         verwelkoming();
         
-    	int keuze = inlogKeuze();
-    	while(keuze != 3) {
-    		switch(keuze) {
-    		case 1 -> spelerRegistreren();
-    		case 2 -> spelerInloggen();
-    		}
-    		keuze = inlogKeuze();
-    	}
+        int keuze = inlogKeuze();
+        while(keuze != 3) {
+            entryPoint(keuze);
+            keuze = inlogKeuze();
+        }
     }
 
-    private void spelerInloggen() {
+    private void entryPoint(int keuze) {
         System.out.println("Geef uw gebruikersnaam in: ");
         String gebruikersnaam = myScanner.next();
         System.out.println("Geef uw geboortejaar in: ");
         int geboortejaar = myScanner.nextInt();
-        dc.selecteerSpeler(gebruikersnaam, geboortejaar);
-        System.out.println(dc.geefOverzicht());
-    }
-
-    private void spelerRegistreren() {
-        System.out.println("Geef een gebruikersnaam in: ");
-        String gebruikersnaam = myScanner.next();
-        System.out.println("Geef uw geboortejaar in: ");
-        int geboortejaar = myScanner.nextInt();
-        dc.registreerSpeler(gebruikersnaam, geboortejaar);
+        if(keuze == 1) dc.registreerSpeler(gebruikersnaam, geboortejaar);
+        else dc.selecteerSpeler(gebruikersnaam, geboortejaar);
         System.out.println(dc.geefOverzicht());
     }
 
