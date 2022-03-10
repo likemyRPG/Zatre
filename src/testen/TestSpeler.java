@@ -35,4 +35,9 @@ class SpelerTest {
     public void speler_MaakEenSpelerAan_Foutievenaam_naamTeKort_ThrowException(String gebruikersnaam) {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {speler.setGebruikersnaam(gebruikersnaam);});
     }
+    @ParameterizedTest
+    @ValueSource(strings = {"zweeduizenddrie", "idk", "test"})
+    public void speler_MaakEenSpelerAan_EnkelCijfers_ThrowException(int geboortedatum) {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {speler.setGeboortejaar(geboortedatum);});
+    }
 }
