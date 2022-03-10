@@ -26,6 +26,7 @@ public class ZatreApp {
         }
     }
 
+    //methode voor registreren OF selecteren van speler
     private void entryPoint(int keuze) {
         System.out.println("Geef uw gebruikersnaam in: ");
         String gebruikersnaam = myScanner.next();
