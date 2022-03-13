@@ -1,5 +1,4 @@
 package ui;
-
 import domein.DomeinController;
 import java.util.*;
 import persistence.language;
@@ -11,15 +10,15 @@ public class ZatreApp {
     language ln = new language();
     ResourceBundle rb = ln.taal();
 
-
     public ZatreApp(DomeinController dc) {
         this.dc = dc;
     }
 
     public void start(){
+        ln.keuze();
+        rb = ln.taal();
         dc.startSpel();
         verwelkoming();
-        ln.keuze();
         int keuze = inlogKeuze();
         while(keuze != 3) {
             entryPoint(keuze);
@@ -43,23 +42,14 @@ public class ZatreApp {
         System.out.println("------------------");
     }
 
-    //private ResourceBundle keuze(){
-    //    System.out.print("Please pick your preferred language! (fr, nl, en): ");
-    //    String invoer = myScanner.next();
-
-    //    Locale.setDefault(new Locale(invoer));
-    //    ResourceBundle rb = ResourceBundle.getBundle("java/cfg/language");
-    //    return rb;
-    //}
-
     private int inlogKeuze(){
         int keuze;
 
         do{
             System.out.println(rb.getString("choice"));
-            System.out.println("~1~" + rb.getString("register"));
-            System.out.println("~2~" + rb.getString("login"));
-            System.out.println("~3~" + rb.getString("quit"));
+            System.out.println("~1~ " + rb.getString("register"));
+            System.out.println("~2~ " + rb.getString("login"));
+            System.out.println("~3~ " + rb.getString("quit"));
             keuze = myScanner.nextInt();
         }while(keuze > 3 || keuze < 1);
 
