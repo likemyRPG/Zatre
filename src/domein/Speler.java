@@ -2,6 +2,9 @@ package domein;
 import persistence.SQLCommands;
 import persistence.MyJDBC;
 import java.util.Calendar;
+import java.util.ResourceBundle;
+import persistence.language;
+
 public class Speler {
 
     private MyJDBC sql;
@@ -9,6 +12,10 @@ public class Speler {
     private String gebruikersnaam;
     private int aantalKansen;
     public static final int MIN_LEEFTIJD = 6;
+
+    language ln = new language();
+    ResourceBundle rb = ln.taal();
+
 
     public Speler(){
 
@@ -27,10 +34,10 @@ public class Speler {
     }
     // Een speler selecteren
     public void selecteerSpeler(String gebruikersnaam, int geboortejaar){
-        // Checken of speler wel degelijk een account heeft
+        // Controleren of speler wel degelijk een account heeft
         boolean alBestaand = sql.zoekProfiel(gebruikersnaam, geboortejaar);
         // Zo niet -> Throw Exception
-        if(!alBestaand) throw new IllegalArgumentException("Dit account bestaat nog niet!");
+        if(!alBestaand) throw new IllegalArgumentException(rb.getString("accReq"));
         // Aantalkansen uit de database halen
         setGebruikersnaam(gebruikersnaam);
         setGeboortejaar(geboortejaar);
@@ -43,11 +50,11 @@ public class Speler {
         int jaar = Calendar.getInstance().get(Calendar.YEAR);
         // Exception wanneer het gebootejaar 0 is
         if(geboortejaar <= 0)
-            throw new IllegalArgumentException("Geboortejaar moet ingevuld zijn!");
+            throw new IllegalArgumentException(rb.getString("birthYearReq"));
         // Checken of de leeftijd van de speler groter is dan de minimum leeftijd
         else if(geboortejaar > (jaar-MIN_LEEFTIJD))
             // -> Wanneer < MINIMUM => Throw Exception
-            throw new IllegalArgumentException(String.format("De minimum leeftijd is %d jaar!", MIN_LEEFTIJD));
+            throw new IllegalArgumentException(String.format(rb.getString("minAge")));
         this.geboortejaar = geboortejaar;
     }
 
@@ -55,17 +62,17 @@ public class Speler {
     public void setGebruikersnaam(String gebruikersnaam) {
         // Wanneer gebruikersnaam leeg of null is -> Throw exception
         if(gebruikersnaam == null || gebruikersnaam.isEmpty())
-            throw new IllegalArgumentException("Gebruikersnaam moet ingevuld zijn!");
+            throw new IllegalArgumentException(rb.getString("usernameReq"));
             // Wanneer gebruikersnaam minder dan 5 karakters bevat -> Throw exception
         else if(gebruikersnaam.length() < 5)
-            throw new IllegalArgumentException("Gebruikersnaam moet minstens een lengte van 5 letters hebben...");
+            throw new IllegalArgumentException(rb.getString("minLengthUsername"));
         this.gebruikersnaam = gebruikersnaam;
     }
     // Functie om te controleren of een speler al bestaat
     // Throw Exception wanneer het een bestaande speler is
     public void controleerUniekheid(){
         boolean alBestaand = sql.zoekProfiel(this.gebruikersnaam,this.geboortejaar);
-        if(alBestaand) throw new IllegalArgumentException("Het account bestaat al!");
+        if(alBestaand) throw new IllegalArgumentException(rb.getString("accountExists"));
     }
     // Getter geboortejaar voor testen
     public int getGeboortejaar() {
