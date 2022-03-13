@@ -8,7 +8,7 @@ public class ZatreApp {
     private DomeinController dc;
     Scanner myScanner = new Scanner(System.in);
     language ln = new language();
-    ResourceBundle rb = ln.taal();
+    ResourceBundle rb;
 
     public ZatreApp(DomeinController dc) {
         this.dc = dc;
