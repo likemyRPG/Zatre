@@ -1,12 +1,10 @@
 package domein;
-import persistence.MyJDBC;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import persistence.language;
 
 public class Speler {
 
-    private MyJDBC sql;
     private int geboortejaar;
     private String gebruikersnaam;
     private int aantalKansen;
@@ -19,28 +17,14 @@ public class Speler {
 
     }
 
-    // Nieuwe speler aanmaken
-    public void registreerSpeler(String gebruikersnaam, int geboortejaar){
-        setGeboortejaar(geboortejaar);
-        setGebruikersnaam(gebruikersnaam);
-        // Aantalkansen standaard gelijk zetten met 5
-        this.aantalKansen = 5;
-        // Controleren of de gebruiker (gebruikersnaam en geboortedatum) al reeds bestaad
-        controleerUniekheid();
-        // Een profiel aanmaken in de database
-        sql.maakProfiel(this.gebruikersnaam, this.geboortejaar, this.aantalKansen);
-    }
-    // Een speler selecteren
-    public void selecteerSpeler(String gebruikersnaam, int geboortejaar){
-        // Controleren of speler wel degelijk een account heeft
-        boolean alBestaand = sql.zoekProfiel(gebruikersnaam, geboortejaar);
-        // Zo niet -> Throw Exception
-        if(!alBestaand) throw new IllegalArgumentException(rb.getString("accReq"));
-        // Aantalkansen uit de database halen
+    public Speler(String gebruikersnaam, int geboortejaar, int aantalKansen) {
         setGebruikersnaam(gebruikersnaam);
         setGeboortejaar(geboortejaar);
-        this.aantalKansen = sql.getAantalKansenBestaandeSpeler(gebruikersnaam, geboortejaar);
+        this.aantalKansen = aantalKansen;
     }
+
+    // Getters And Setters //
+    //--------------------------------------------------------------------------------------------------------------//
 
     // Setter voor geboortejaar
     public void setGeboortejaar(int geboortejaar) {
@@ -67,13 +51,6 @@ public class Speler {
         this.gebruikersnaam = gebruikersnaam;
     }
 
-    // Functie om te controleren of een speler al bestaat
-    // Throw Exception wanneer het een bestaande speler is
-    public void controleerUniekheid(){
-        boolean alBestaand = sql.zoekProfiel(this.gebruikersnaam,this.geboortejaar);
-        if(alBestaand) throw new IllegalArgumentException(rb.getString("accountExists"));
-    }
-
     // Getter geboortejaar voor testen
     public int getGeboortejaar() {
         return this.geboortejaar;
@@ -88,6 +65,9 @@ public class Speler {
     public int getAantalKansen() {
         return this.aantalKansen;
     }
+
+
+    // ToString METHODE //
 
     // toString methode voor het afprinten van info van de gebruiker
     @Override
