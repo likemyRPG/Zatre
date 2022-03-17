@@ -52,12 +52,12 @@ public class SpelerRepository {
     public String geefSpelers() {
         // Checken of de lijst van spelers leeg is, wanneer deze leeg is krijg je een gepast bericht
         if(spelers.isEmpty())
-            return String.format("Er zijn nog geen spelers");
+            return String.format(language.rb.getString("noPlayersYet"));
         // String aanmaken voor alle spelers te returnen
-        String resultaat = " ";
+        String resultaat = "";
         // De spelers toevoegen aan de string
         for(Speler gekozenSpelers : spelers)
-            resultaat += String.format("%s%n", gekozenSpelers.getGebruikersnaam());
+            resultaat += String.format("%s\t\t%4d%n", gekozenSpelers.getGebruikersnaam(), gekozenSpelers.getAantalKansen());
         // De String returnen
         return resultaat;
     }
