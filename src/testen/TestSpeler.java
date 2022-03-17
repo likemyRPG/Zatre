@@ -15,7 +15,7 @@ class SpelerTest {
     private Speler speler;
     @BeforeEach
     public void BeforeEach() {
-        speler = new Speler();
+        // speler = new Speler();
     }
 
     @ParameterizedTest
