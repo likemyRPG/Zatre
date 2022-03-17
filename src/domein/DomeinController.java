@@ -16,12 +16,13 @@ public class DomeinController{
 
 	public void registreerSpeler(String gebruikersnaam, int geboortejaar){
 		spelerRepository.registreerSpeler(gebruikersnaam, geboortejaar);
+		speler = spelerRepository.getSpelers().get(spelerRepository.getSpelers().size() -1 );
 	}
 
 	public void selecteerSpeler(String gebruikersnaam, int geboortejaar){
 		spelerRepository.selecteerSpeler(gebruikersnaam, geboortejaar);
+		speler = spelerRepository.getSpelers().get(spelerRepository.getSpelers().size() -1 );
 	}
-
 
 	public String geefSpelers(){
 		return spelerRepository.geefSpelers();
@@ -30,7 +31,5 @@ public class DomeinController{
 		return speler.toString();
 	}
 
-	public void startSpel() {
-		speler = new Speler();
-	}
+
 }

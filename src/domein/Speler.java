@@ -5,6 +5,7 @@ import persistence.language;
 
 public class Speler {
 
+    //region Variabelen
     private int geboortejaar;
     private String gebruikersnaam;
     private int aantalKansen;
@@ -12,19 +13,17 @@ public class Speler {
 
     language ln = new language();
     ResourceBundle rb = ln.taal();
+    //endregion
 
-    public Speler(){
-
-    }
-
+    //region Methodes
     public Speler(String gebruikersnaam, int geboortejaar, int aantalKansen) {
         setGebruikersnaam(gebruikersnaam);
         setGeboortejaar(geboortejaar);
         this.aantalKansen = aantalKansen;
     }
+    //endregion
 
-    // Getters And Setters //
-    //--------------------------------------------------------------------------------------------------------------//
+    //region Getters And Setters
 
     // Setter voor geboortejaar
     public void setGeboortejaar(int geboortejaar) {
@@ -66,11 +65,12 @@ public class Speler {
         return this.aantalKansen;
     }
 
-    // ToString METHODE //
+    //endregion
 
-    // toString methode voor het afprinten van info van de gebruiker
+    //region toString methode
     @Override
     public String toString(){
         return String.format(rb.getString("userInfo"), this.gebruikersnaam, this.geboortejaar, this.aantalKansen);
     }
+    //endregion
 }
