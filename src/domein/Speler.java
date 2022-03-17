@@ -66,7 +66,6 @@ public class Speler {
         return this.aantalKansen;
     }
 
-
     // ToString METHODE //
 
     // toString methode voor het afprinten van info van de gebruiker
