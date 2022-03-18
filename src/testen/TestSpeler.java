@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import domein.Speler;
 
+
 class SpelerTest {
 
     static final String gebruikersnaam = "testGebruiker";
