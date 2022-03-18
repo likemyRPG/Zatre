@@ -1,23 +1,27 @@
 package persistence;
 import java.util.*;
-import java.util.ResourceBundle;
 
 public class language {
-    ResourceBundle rb = taal();
+    static public ResourceBundle rb;
     Scanner myScanner = new Scanner(System.in);
-
     String gekozenTaal;
+    String[] talen = {"en", "nl", "fr"};
 
     public void keuze(){
-        System.out.print("Please pick your preferred language! (fr, nl, en): ");
-        gekozenTaal = myScanner.next();
+        do{
+            System.out.print("Please pick your preferred language! (fr, nl, en): ");
+            gekozenTaal = myScanner.next();
+        }while(!Arrays.toString(talen).contains(gekozenTaal.toLowerCase()) || gekozenTaal.length() != 2);
     }
+
+
 
     public ResourceBundle taal(){
-        Locale.setDefault(new Locale(gekozenTaal));
-        ResourceBundle rb = ResourceBundle.getBundle("java/cfg/language");
+        if (rb == null)
+        {
+            Locale.setDefault(new Locale(gekozenTaal));
+            rb = ResourceBundle.getBundle("java/cfg/language");
+        }
         return rb;
     }
-
-
 }
