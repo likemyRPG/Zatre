@@ -40,18 +40,20 @@ public class ZatreApp {
             geboortejaar = myScanner.nextInt();
         }while(geboortejaar < 1900 || geboortejaar > jaar-MIN_LEEFTIJD);
         if(keuze == 1) dc.registreerSpeler(gebruikersnaam, geboortejaar);
-        else dc.selecteerSpeler(gebruikersnaam, geboortejaar);
-        aantalActieveSpelers++;
+        else {
+            dc.selecteerSpeler(gebruikersnaam, geboortejaar);
+            aantalActieveSpelers++;
+        }
         System.out.println(dc.geefOverzicht());
     }
 
     private void verwelkoming(){
-        System.out.println("Welcome to Zatre!");
+        System.out.println(rb.getString("welcome"));
         System.out.println("------------------");
     }
 
     private void toonSpelers(){
-        System.out.printf("%d " + rb.getString("active") + " %s%n", aantalActieveSpelers, aantalActieveSpelers<1 ? rb.getString("players"): rb.getString("player"));
+        System.out.printf("%d " + rb.getString("active") + " %s%n", aantalActieveSpelers,aantalActieveSpelers<1 ? rb.getString("players"): rb.getString("player"));
         System.out.printf("------------------%n");
         System.out.printf("%s\t\t%4s%n", rb.getString("name"), rb.getString("chances"));
         System.out.print(dc.geefSpelers());

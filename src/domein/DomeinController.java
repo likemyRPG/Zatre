@@ -3,8 +3,6 @@ package domein;
 import domein.Speler;
 import domein.Spel;
 
-import javax.swing.plaf.SeparatorUI;
-
 public class DomeinController{
 
 	SpelerRepository spelerRepository;

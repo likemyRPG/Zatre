@@ -20,7 +20,7 @@ public class language {
         if (rb == null)
         {
             Locale.setDefault(new Locale(gekozenTaal));
-            rb = ResourceBundle.getBundle("java/cfg/language");
+            rb = ResourceBundle.getBundle("config/language/language");
         }
         return rb;
     }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+
 public class SpelerRepository {
 
     private MyJDBC sql;
@@ -31,8 +32,6 @@ public class SpelerRepository {
         Speler speler = new Speler(gebruikersnaam, geboortejaar, 5);
         // Speler toevoegen aan de database
         sql.maakProfiel(gebruikersnaam, geboortejaar, 5);
-        // Voeg de speler toe aan de lijst van spelers
-        spelers.add(speler);
     }
 
     public void selecteerSpeler(String gebruikersnaam, int geboortejaar){
