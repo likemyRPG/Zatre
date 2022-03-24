@@ -40,8 +40,10 @@ public class ZatreApp {
             geboortejaar = myScanner.nextInt();
         }while(geboortejaar < 1900 || geboortejaar > jaar-MIN_LEEFTIJD);
         if(keuze == 1) dc.registreerSpeler(gebruikersnaam, geboortejaar);
-        else dc.selecteerSpeler(gebruikersnaam, geboortejaar);
-        aantalActieveSpelers++;
+        else {
+            dc.selecteerSpeler(gebruikersnaam, geboortejaar);
+            aantalActieveSpelers++;
+        }
         System.out.println(dc.geefOverzicht());
     }
 
