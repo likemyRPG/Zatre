@@ -103,8 +103,8 @@ public class ZatreApp {
 
                 }
                 else if(keuze == 2){
-                    // if(aantalActieveSpelers <= 2 && aantalActieveSpelers >= 4) START SPEL
-                    // else System.out.println('Het spel moet minstens 2 spelers hebben
+                    dc.startSpel();
+                    toonSpelers();
                 }
             }while(keuze < 1 || keuze > 2);
             keuze = keuzeMenu();

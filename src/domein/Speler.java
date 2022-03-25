@@ -72,5 +72,9 @@ public class Speler {
     public String toString(){
         return String.format(rb.getString("userInfo"), this.gebruikersnaam, this.geboortejaar, this.aantalKansen);
     }
+
+    public void wijzigSpeelkansen() {
+        this.aantalKansen-=1;
+    }
     //endregion
 }

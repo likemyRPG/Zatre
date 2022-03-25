@@ -5,6 +5,7 @@ import persistence.language;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 import java.util.ResourceBundle;
 
 
@@ -12,11 +13,6 @@ public class SpelerRepository {
 
     private MyJDBC sql;
     private List<Speler> spelers;
-
-    // Variabele aanmaken voor de verschillende talen
-
-    // language ln = new language();
-    // ResourceBundle rb = ln.taal();
 
     public SpelerRepository() {
         // Een nieuwe list aanmaken van spelers
@@ -46,6 +42,18 @@ public class SpelerRepository {
         Speler speler = new Speler(gebruikersnaam, geboortejaar, aantalKansen);
         // De speler toevoegen aan de lijst van spelers
         spelers.add(speler);
+    }
+
+    public List<Speler> shufflePlayers(){
+        Collections.shuffle(spelers);
+        return spelers;
+    }
+
+    public void verminderSpeelkansen(){
+        for (Speler speler : spelers){
+            speler.wijzigSpeelkansen();
+            sql.verminderSpeelkansen(speler.getGebruikersnaam(), speler.getGeboortejaar(), speler.getAantalKansen());
+        }
     }
 
     public String geefSpelers() {
