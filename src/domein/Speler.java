@@ -1,6 +1,8 @@
 package domein;
 import java.util.Calendar;
 import java.util.ResourceBundle;
+
+import exceptions.GeboortejaarBuitenBereikException;
 import persistence.language;
 
 public class Speler {
@@ -16,7 +18,7 @@ public class Speler {
     //endregion
 
     //region Methodes
-    public Speler(String gebruikersnaam, int geboortejaar, int aantalKansen) {
+    public Speler(String gebruikersnaam, int geboortejaar, int aantalKansen) throws GeboortejaarBuitenBereikException {
         setGebruikersnaam(gebruikersnaam);
         setGeboortejaar(geboortejaar);
         this.aantalKansen = aantalKansen;
@@ -26,16 +28,17 @@ public class Speler {
     //region Getters And Setters
 
     // Setter voor geboortejaar
-    public void setGeboortejaar(int geboortejaar) {
+    public void setGeboortejaar(int geboortejaar) throws GeboortejaarBuitenBereikException {
         // Het huidige jaar ophalen
         int jaar = Calendar.getInstance().get(Calendar.YEAR);
         // Exception wanneer het gebootejaar 0 is
         if(geboortejaar <= 0)
-            throw new IllegalArgumentException(rb.getString("birthYearReq"));
+            throw new GeboortejaarBuitenBereikException(String.format(rb.getString("geboorteException")));
         // Checken of de leeftijd van de speler groter is dan de minimum leeftijd
-        else if(geboortejaar > (jaar-MIN_LEEFTIJD))
+        else if(geboortejaar < 1900||geboortejaar > (jaar-MIN_LEEFTIJD))
             // -> Wanneer < MINIMUM => Throw Exception
-            throw new IllegalArgumentException(String.format(rb.getString("minAge")));
+            throw new GeboortejaarBuitenBereikException(String.format(rb.getString("geboorteException")));
+            // throw new IllegalArgumentException(String.format(rb.getString("minAge")));
         this.geboortejaar = geboortejaar;
     }
 

@@ -1,12 +1,14 @@
 package ui;
 import domein.DomeinController;
 import java.util.*;
+
+import exceptions.GeboortejaarBuitenBereikException;
 import persistence.language;
 
 public class ZatreApp {
 
     //region Variabelen
-    private DomeinController dc;
+    private final DomeinController dc;
     Scanner myScanner = new Scanner(System.in);
     language ln = new language();
     ResourceBundle rb;
@@ -19,7 +21,7 @@ public class ZatreApp {
         this.dc = dc;
     }
 
-    public void start(){
+    public void start() throws GeboortejaarBuitenBereikException {
         ln.keuze();
         rb = ln.taal();
         verwelkoming();
@@ -27,24 +29,56 @@ public class ZatreApp {
     }
 
     //methode voor registreren OF selecteren van speler
-    private void entryPoint(int keuze) {
+    private void Registreren() {
         String gebruikersnaam;
         int geboortejaar;
+        boolean isFout = true;
+            do {
+                try {
+                    System.out.println(rb.getString("fillInUsername"));
+                    gebruikersnaam = myScanner.next();
 
-        do{
-            System.out.println(rb.getString("fillInUsername"));
-            gebruikersnaam = myScanner.next();
-        }while(gebruikersnaam.length() < 5);
-        do{
-            System.out.println(rb.getString("fillInBirthYear"));
-            geboortejaar = myScanner.nextInt();
-        }while(geboortejaar < 1900 || geboortejaar > jaar-MIN_LEEFTIJD);
-        if(keuze == 1) dc.registreerSpeler(gebruikersnaam, geboortejaar);
-        else {
-            dc.selecteerSpeler(gebruikersnaam, geboortejaar);
-            aantalActieveSpelers++;
+                    System.out.println(rb.getString("fillInBirthYear"));
+                    geboortejaar = myScanner.nextInt();
+
+
+                    dc.registreerSpeler(gebruikersnaam, geboortejaar);
+                    isFout = false;
+
+
+                    System.out.println(dc.geefOverzicht());
+
+                } catch (GeboortejaarBuitenBereikException e) {
+                    System.out.println(e.getMessage());
+                }
+            }while (isFout) ;
+
         }
-        System.out.println(dc.geefOverzicht());
+
+    private void Login() {
+        String gebruikersnaam;
+        int geboortejaar;
+        boolean isFout = true;
+        do {
+            try {
+                System.out.println(rb.getString("fillInUsername"));
+                gebruikersnaam = myScanner.next();
+
+                System.out.println(rb.getString("fillInBirthYear"));
+                geboortejaar = myScanner.nextInt();
+
+
+                dc.selecteerSpeler(gebruikersnaam, geboortejaar);
+                isFout = false;
+
+                aantalActieveSpelers++;
+                System.out.println(dc.geefOverzicht());
+
+            } catch (GeboortejaarBuitenBereikException e) {
+                System.out.println(e.getMessage());
+            }
+        }while (isFout) ;
+
     }
 
     private void verwelkoming(){
@@ -86,7 +120,7 @@ public class ZatreApp {
         return keuze;
     }
 
-    private void inleiding(){
+    private void inleiding() throws GeboortejaarBuitenBereikException {
         int keuze = keuzeMenu();
         do{
             do{
@@ -94,8 +128,8 @@ public class ZatreApp {
                     if(aantalActieveSpelers < 4)
                     {
                         int inlogKeuze = inlogKeuze();
-                        if (inlogKeuze == 1) entryPoint(inlogKeuze);
-                        else if(inlogKeuze == 2) entryPoint(inlogKeuze);
+                        if (inlogKeuze == 1) Registreren();
+                        else if(inlogKeuze == 2) Login();
                         else if(inlogKeuze == 3) break;
                         toonSpelers();
                     }
