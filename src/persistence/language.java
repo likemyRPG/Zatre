@@ -24,4 +24,12 @@ public class language {
         }
         return rb;
     }
+    public ResourceBundle taal2(String taal){
+        if (rb == null)
+        {
+            Locale.setDefault(new Locale(taal));
+            rb = ResourceBundle.getBundle("config/language/language");
+        }
+        return rb;
+    }
 }

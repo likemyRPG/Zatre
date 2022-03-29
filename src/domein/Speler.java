@@ -1,8 +1,6 @@
 package domein;
 import java.util.Calendar;
 import java.util.ResourceBundle;
-
-import exceptions.GeboortejaarBuitenBereikException;
 import persistence.language;
 
 public class Speler {
@@ -18,27 +16,26 @@ public class Speler {
     //endregion
 
     //region Methodes
-    public Speler(String gebruikersnaam, int geboortejaar, int aantalKansen) throws GeboortejaarBuitenBereikException {
+    public Speler(String gebruikersnaam, int geboortejaar) {
         setGebruikersnaam(gebruikersnaam);
         setGeboortejaar(geboortejaar);
-        this.aantalKansen = aantalKansen;
+        this.aantalKansen = 5;
     }
     //endregion
 
     //region Getters And Setters
 
     // Setter voor geboortejaar
-    public void setGeboortejaar(int geboortejaar) throws GeboortejaarBuitenBereikException {
+    public void setGeboortejaar(int geboortejaar) {
         // Het huidige jaar ophalen
         int jaar = Calendar.getInstance().get(Calendar.YEAR);
         // Exception wanneer het gebootejaar 0 is
         if(geboortejaar <= 0)
-            throw new GeboortejaarBuitenBereikException(String.format(rb.getString("geboorteException")));
+            throw new IllegalArgumentException(rb.getString("birthYearReq"));
         // Checken of de leeftijd van de speler groter is dan de minimum leeftijd
-        else if(geboortejaar < 1900||geboortejaar > (jaar-MIN_LEEFTIJD))
+        else if(geboortejaar > (jaar-MIN_LEEFTIJD))
             // -> Wanneer < MINIMUM => Throw Exception
-            throw new GeboortejaarBuitenBereikException(String.format(rb.getString("geboorteException")));
-            // throw new IllegalArgumentException(String.format(rb.getString("minAge")));
+            throw new IllegalArgumentException(String.format(rb.getString("minAge")));
         this.geboortejaar = geboortejaar;
     }
 
@@ -50,7 +47,7 @@ public class Speler {
             // Wanneer gebruikersnaam minder dan 5 karakters bevat -> Throw exception
         else if(gebruikersnaam.length() < 5)
             throw new IllegalArgumentException(rb.getString("minLengthUsername"));
-        this.gebruikersnaam = gebruikersnaam;
+        else this.gebruikersnaam = gebruikersnaam;
     }
 
     // Getter geboortejaar voor testen

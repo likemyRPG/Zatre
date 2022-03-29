@@ -2,7 +2,7 @@ package domein;
 
 import domein.Speler;
 import domein.Spel;
-import exceptions.GeboortejaarBuitenBereikException;
+import exceptions.OutOfRangeException;
 
 public class DomeinController{
 
@@ -14,12 +14,12 @@ public class DomeinController{
 		spelerRepository = new SpelerRepository();
 	}
 
-	public void registreerSpeler(String gebruikersnaam, int geboortejaar) throws GeboortejaarBuitenBereikException {
+	public void registreerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
 		spelerRepository.registreerSpeler(gebruikersnaam, geboortejaar);
 		speler = spelerRepository.getSpelers().get(spelerRepository.getSpelers().size() -1 );
 	}
 
-	public void selecteerSpeler(String gebruikersnaam, int geboortejaar) throws GeboortejaarBuitenBereikException {
+	public void selecteerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
 		spelerRepository.selecteerSpeler(gebruikersnaam, geboortejaar);
 		speler = spelerRepository.getSpelers().get(spelerRepository.getSpelers().size() -1 );
 	}
