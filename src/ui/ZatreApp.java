@@ -2,7 +2,8 @@ package ui;
 import domein.DomeinController;
 import java.util.*;
 
-import exceptions.GeboortejaarBuitenBereikException;
+
+import exceptions.OutOfRangeException;
 import persistence.language;
 
 public class ZatreApp {
@@ -21,7 +22,7 @@ public class ZatreApp {
         this.dc = dc;
     }
 
-    public void start() throws GeboortejaarBuitenBereikException {
+    public void start() throws OutOfRangeException {
         ln.keuze();
         rb = ln.taal();
         verwelkoming();
@@ -48,7 +49,7 @@ public class ZatreApp {
 
                     System.out.println(dc.geefOverzicht());
 
-                } catch (GeboortejaarBuitenBereikException e) {
+                } catch (OutOfRangeException e) {
                     System.out.println(e.getMessage());
                 }
             }while (isFout) ;
@@ -74,7 +75,7 @@ public class ZatreApp {
                 aantalActieveSpelers++;
                 System.out.println(dc.geefOverzicht());
 
-            } catch (GeboortejaarBuitenBereikException e) {
+            } catch (OutOfRangeException e) {
                 System.out.println(e.getMessage());
             }
         }while (isFout) ;
@@ -120,7 +121,7 @@ public class ZatreApp {
         return keuze;
     }
 
-    private void inleiding() throws GeboortejaarBuitenBereikException {
+    private void inleiding() throws OutOfRangeException {
         int keuze = keuzeMenu();
         do{
             do{
@@ -133,7 +134,7 @@ public class ZatreApp {
                         else if(inlogKeuze == 3) break;
                         toonSpelers();
                     }
-                    else throw new IllegalArgumentException(rb.getString("maxplayers"));
+                    else throw new OutOfRangeException(rb.getString("maxplayers"));
 
                 }
                 else if(keuze == 2){

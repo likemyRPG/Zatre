@@ -1,6 +1,6 @@
 package domein;
 
-import exceptions.GeboortejaarBuitenBereikException;
+import exceptions.OutOfRangeException;
 import persistence.MyJDBC;
 import persistence.language;
 
@@ -20,19 +20,19 @@ public class SpelerRepository {
         spelers = new ArrayList<>();
     }
 
-    public void registreerSpeler(String gebruikersnaam, int geboortejaar) throws GeboortejaarBuitenBereikException {
+    public void registreerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
         // Controleren of een speler al bestaat
         boolean alBestaand = sql.zoekProfiel(gebruikersnaam, geboortejaar);
         // Throw Exception wanneer het een bestaande speler is
         if(alBestaand) throw new IllegalArgumentException(language.rb.getString("accountExists"));
         // Een nieuwe speler aanmaken
-        Speler speler = new Speler(gebruikersnaam, geboortejaar, 5);
+        Speler speler = new Speler(gebruikersnaam, geboortejaar);
         // Speler toevoegen aan de database
         sql.maakProfiel(gebruikersnaam, geboortejaar, 5);
 
     }
 
-    public void selecteerSpeler(String gebruikersnaam, int geboortejaar) throws GeboortejaarBuitenBereikException {
+    public void selecteerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
         // Controleren of speler wel degelijk een account heeft
         boolean alBestaand = sql.zoekProfiel(gebruikersnaam, geboortejaar);
         // Zo niet --> Throw Exception
@@ -41,7 +41,7 @@ public class SpelerRepository {
         // Aaatal kansen uit de database halen
         int aantalKansen = sql.getAantalKansenBestaandeSpeler(gebruikersnaam, geboortejaar);
         // Een nieuwe speler aanmaken
-        Speler speler = new Speler(gebruikersnaam, geboortejaar, aantalKansen);
+        Speler speler = new Speler(gebruikersnaam, geboortejaar);
         // De speler toevoegen aan de lijst van spelers
         spelers.add(speler);
     }
