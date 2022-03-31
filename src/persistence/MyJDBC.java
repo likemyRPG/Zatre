@@ -68,4 +68,19 @@ public class MyJDBC {
             e.printStackTrace();
         }
     }
+
+    public static void verminderSpeelkansen(String gebruikersnaam, int geboortedatum, int kansen) {
+        try(Connection connection = DriverManager.getConnection(url, user, password);
+            Statement statement = connection.createStatement();)
+        {
+            PreparedStatement pstmt = connection.prepareStatement(SQLCommands.verminderSpeelkansen);
+            pstmt.setString(2, gebruikersnaam);
+            pstmt.setInt(3, geboortedatum);
+            pstmt.setInt(1, kansen);
+
+            boolean resultSet = pstmt.execute();
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

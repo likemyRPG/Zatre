@@ -14,8 +14,6 @@ public class language {
         }while(!Arrays.toString(talen).contains(gekozenTaal.toLowerCase()) || gekozenTaal.length() != 2);
     }
 
-
-
     public ResourceBundle taal(){
         if (rb == null)
         {
@@ -23,5 +21,9 @@ public class language {
             rb = ResourceBundle.getBundle("config/language/language");
         }
         return rb;
+    }
+
+    public void setGekozenTaal(String gekozenTaal) {
+        this.gekozenTaal = gekozenTaal;
     }
 }

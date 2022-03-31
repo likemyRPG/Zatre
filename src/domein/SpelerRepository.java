@@ -1,10 +1,12 @@
 package domein;
 
+import exceptions.OutOfRangeException;
 import persistence.MyJDBC;
 import persistence.language;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 import java.util.ResourceBundle;
 
 
@@ -13,28 +15,24 @@ public class SpelerRepository {
     private MyJDBC sql;
     private List<Speler> spelers;
 
-    // Variabele aanmaken voor de verschillende talen
-
-    // language ln = new language();
-    // ResourceBundle rb = ln.taal();
-
     public SpelerRepository() {
         // Een nieuwe list aanmaken van spelers
         spelers = new ArrayList<>();
     }
 
-    public void registreerSpeler(String gebruikersnaam, int geboortejaar){
+    public void registreerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
         // Controleren of een speler al bestaat
         boolean alBestaand = sql.zoekProfiel(gebruikersnaam, geboortejaar);
         // Throw Exception wanneer het een bestaande speler is
         if(alBestaand) throw new IllegalArgumentException(language.rb.getString("accountExists"));
         // Een nieuwe speler aanmaken
-        Speler speler = new Speler(gebruikersnaam, geboortejaar, 5);
+        Speler speler = new Speler(gebruikersnaam, geboortejaar);
         // Speler toevoegen aan de database
         sql.maakProfiel(gebruikersnaam, geboortejaar, 5);
+
     }
 
-    public void selecteerSpeler(String gebruikersnaam, int geboortejaar){
+    public void selecteerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
         // Controleren of speler wel degelijk een account heeft
         boolean alBestaand = sql.zoekProfiel(gebruikersnaam, geboortejaar);
         // Zo niet --> Throw Exception
@@ -43,9 +41,21 @@ public class SpelerRepository {
         // Aaatal kansen uit de database halen
         int aantalKansen = sql.getAantalKansenBestaandeSpeler(gebruikersnaam, geboortejaar);
         // Een nieuwe speler aanmaken
-        Speler speler = new Speler(gebruikersnaam, geboortejaar, aantalKansen);
+        Speler speler = new Speler(gebruikersnaam, geboortejaar);
         // De speler toevoegen aan de lijst van spelers
         spelers.add(speler);
+    }
+
+    public List<Speler> shufflePlayers(){
+        Collections.shuffle(spelers);
+        return spelers;
+    }
+
+    public void verminderSpeelkansen(){
+        for (Speler speler : spelers){
+            speler.wijzigSpeelkansen();
+            sql.verminderSpeelkansen(speler.getGebruikersnaam(), speler.getGeboortejaar(), speler.getAantalKansen());
+        }
     }
 
     public String geefSpelers() {

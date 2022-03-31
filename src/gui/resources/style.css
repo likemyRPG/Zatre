@@ -1,0 +1,34 @@
+.button{
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1d1d1d;
+    -fx-border-style: none;
+    -fx-label-padding: 4px;
+    -fx-background-color: lightgrey;
+}
+
+.button:hover{
+    -fx-background-color: white;
+    -fx-text-fill: #1d1d1d;
+    -fx-cursor: hand;
+}
+
+.combo-box .list-cell
+{
+    -fx-background: white;
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-padding: 3 0 2 7;
+    -fx-cell-size: 1.66667em;
+}
+
+.lblLogin{
+    -fx-text-fill: red;
+}
+
+.frontImage{
+    -fx-alignment: center;
+}
+.bg-style{
+    -fx-background-color: #1d1d1d;
+}

@@ -16,10 +16,10 @@ public class Speler {
     //endregion
 
     //region Methodes
-    public Speler(String gebruikersnaam, int geboortejaar, int aantalKansen) {
+    public Speler(String gebruikersnaam, int geboortejaar) {
         setGebruikersnaam(gebruikersnaam);
         setGeboortejaar(geboortejaar);
-        this.aantalKansen = aantalKansen;
+        this.aantalKansen = 5;
     }
     //endregion
 
@@ -47,7 +47,7 @@ public class Speler {
             // Wanneer gebruikersnaam minder dan 5 karakters bevat -> Throw exception
         else if(gebruikersnaam.length() < 5)
             throw new IllegalArgumentException(rb.getString("minLengthUsername"));
-        this.gebruikersnaam = gebruikersnaam;
+        else this.gebruikersnaam = gebruikersnaam;
     }
 
     // Getter geboortejaar voor testen
@@ -71,6 +71,10 @@ public class Speler {
     @Override
     public String toString(){
         return String.format(rb.getString("userInfo"), this.gebruikersnaam, this.geboortejaar, this.aantalKansen);
+    }
+
+    public void wijzigSpeelkansen() {
+        this.aantalKansen-=1;
     }
     //endregion
 }
