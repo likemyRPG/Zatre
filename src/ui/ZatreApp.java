@@ -68,7 +68,6 @@ public class ZatreApp {
                 System.out.println(rb.getString("fillInBirthYear"));
                 geboortejaar = myScanner.nextInt();
 
-
                 dc.selecteerSpeler(gebruikersnaam, geboortejaar);
                 isFout = false;
 

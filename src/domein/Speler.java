@@ -17,10 +17,10 @@ public class Speler {
     //endregion
 
     //region Methodes
-    public Speler(String gebruikersnaam, int geboortejaar) {
+    public Speler(String gebruikersnaam, int geboortejaar, int aantalKansen) {
         setGebruikersnaam(gebruikersnaam);
         setGeboortejaar(geboortejaar);
-        this.aantalKansen = 5;
+        this.aantalKansen = aantalKansen;
     }
     //endregion
 
@@ -31,7 +31,7 @@ public class Speler {
         // Het huidige jaar ophalen
         int jaar = Calendar.getInstance().get(Calendar.YEAR);
         // Exception wanneer het gebootejaar 0 is
-        if (geboortejaar >= 0)
+        if (geboortejaar <= 0)
             throw new IllegalArgumentException(rb.getString("birthYearReq"));
         // Checken of de leeftijd van de speler groter is dan de minimum leeftijd
         if (geboortejaar > (jaar - MIN_LEEFTIJD))

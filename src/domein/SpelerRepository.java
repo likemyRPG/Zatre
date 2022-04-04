@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.*;
 import java.util.ResourceBundle;
 
-
 public class SpelerRepository {
 
     private MyJDBC sql;
     private List<Speler> spelers;
+    private int aantalSpelers = 0;
 
     public SpelerRepository() {
         // Een nieuwe list aanmaken van spelers
@@ -21,29 +21,38 @@ public class SpelerRepository {
     }
 
     public void registreerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
-        // Controleren of een speler al bestaat
-        boolean alBestaand = sql.zoekProfiel(gebruikersnaam, geboortejaar);
-        // Throw Exception wanneer het een bestaande speler is
-        if(alBestaand) throw new IllegalArgumentException(language.rb.getString("accountExists"));
-        // Een nieuwe speler aanmaken
-        Speler speler = new Speler(gebruikersnaam, geboortejaar);
-        // Speler toevoegen aan de database
-        sql.maakProfiel(gebruikersnaam, geboortejaar, 5);
-
+        aantalSpelers = spelers.size();
+        if(aantalSpelers <= 3){
+            // Controleren of een speler al bestaat
+            boolean alBestaand = sql.zoekProfiel(gebruikersnaam, geboortejaar);
+            // Throw Exception wanneer het een bestaande speler is
+            if(alBestaand) throw new IllegalArgumentException(language.rb.getString("accountExists"));
+            // Een nieuwe speler aanmaken
+            Speler speler = new Speler(gebruikersnaam, geboortejaar, 5);
+            // Speler toevoegen aan de database
+            sql.maakProfiel(gebruikersnaam, geboortejaar, 5);
+            spelers.add(speler);
+        }
+        else throw new IllegalArgumentException("Het maximum aantal spelers is bereikt!");
     }
 
     public void selecteerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
-        // Controleren of speler wel degelijk een account heeft
-        boolean alBestaand = sql.zoekProfiel(gebruikersnaam, geboortejaar);
-        // Zo niet --> Throw Exception
-        if(!alBestaand) throw new IllegalArgumentException(language.rb.getString("accReq"));
+        aantalSpelers = spelers.size();
+        if(aantalSpelers <= 3)
+        {
+            // Controleren of speler wel degelijk een account heeft
+            boolean alBestaand = sql.zoekProfiel(gebruikersnaam, geboortejaar);
+            // Zo niet --> Throw Exception
+            if(!alBestaand) throw new IllegalArgumentException(language.rb.getString("accReq"));
+            // Aantal kansen uit de database halen
+            int aantalKansen = sql.getAantalKansenBestaandeSpeler(gebruikersnaam, geboortejaar);
+            // Een nieuwe speler aanmaken
+            Speler speler = new Speler(gebruikersnaam, geboortejaar, aantalKansen);
+            // De speler toevoegen aan de lijst van spelers
+            spelers.add(speler);
+        }
+        else throw new IllegalArgumentException("Het maximum aantal spelers is bereikt!");
 
-        // Aaatal kansen uit de database halen
-        int aantalKansen = sql.getAantalKansenBestaandeSpeler(gebruikersnaam, geboortejaar);
-        // Een nieuwe speler aanmaken
-        Speler speler = new Speler(gebruikersnaam, geboortejaar);
-        // De speler toevoegen aan de lijst van spelers
-        spelers.add(speler);
     }
 
     public List<Speler> shufflePlayers(){
@@ -71,7 +80,39 @@ public class SpelerRepository {
         return resultaat;
     }
 
+    public String geefSpelersNaam() {
+        if(spelers.isEmpty())
+            return String.format(language.rb.getString("noPlayersYet"));
+        String resultaat = "";
+
+        for(Speler gekozenSpelers : spelers)
+            resultaat += String.format("%s%n", gekozenSpelers.getGebruikersnaam());
+        return resultaat;
+    }
+
+    public String geefSpelersKansen() {
+        if(spelers.isEmpty())
+            return null;
+        String resultaat = "";
+
+        for(Speler gekozenSpelers : spelers)
+            resultaat += String.format("%4d%n", gekozenSpelers.getAantalKansen());
+        return resultaat;
+    }
+
+    public boolean alToegevoegd(String gebruikersnaam, int geboortedatum){
+        for(Speler speler : spelers){
+            if(gebruikersnaam.equals(speler.getGebruikersnaam()) && speler.getGeboortejaar() == geboortedatum)
+                return true;
+        }
+        return false;
+    }
+
     public List<Speler> getSpelers() {
         return spelers;
+    }
+
+    public int getAantalSpelers() {
+        return spelers.size();
     }
 }

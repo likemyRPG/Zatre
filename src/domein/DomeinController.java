@@ -1,7 +1,5 @@
 package domein;
 
-import domein.Speler;
-import domein.Spel;
 import exceptions.OutOfRangeException;
 
 public class DomeinController{
@@ -24,6 +22,10 @@ public class DomeinController{
 		speler = spelerRepository.getSpelers().get(spelerRepository.getSpelers().size() -1 );
 	}
 
+	public boolean alToegevoegd(String gebruikersnaam, int geboortejaar){
+		return spelerRepository.alToegevoegd(gebruikersnaam, geboortejaar);
+	}
+
 	public void startSpel(){
 		spel = new Spel();
 		spelerRepository.shufflePlayers();
@@ -33,7 +35,21 @@ public class DomeinController{
 	public String geefSpelers(){
 		return spelerRepository.geefSpelers();
 	}
+
+	public String geefSpelersNaam(){
+		return spelerRepository.geefSpelersNaam();
+	}
+
+	public String geefSpelerKansen(){
+		return spelerRepository.geefSpelersKansen();
+	}
+
+	public int geefAantalSpelers(){
+		return spelerRepository.getAantalSpelers();
+	}
+
 	public String geefOverzicht(){
 		return speler.toString();
 	}
+
 }

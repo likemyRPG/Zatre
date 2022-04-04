@@ -25,5 +25,6 @@ public class language {
 
     public void setGekozenTaal(String gekozenTaal) {
         this.gekozenTaal = gekozenTaal;
+        rb = null;
     }
 }
