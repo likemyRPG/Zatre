@@ -1,4 +1,5 @@
 package domein;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import persistence.language;
@@ -30,11 +31,11 @@ public class Speler {
         // Het huidige jaar ophalen
         int jaar = Calendar.getInstance().get(Calendar.YEAR);
         // Exception wanneer het gebootejaar 0 is
-        if(geboortejaar <= 0)
+        if (geboortejaar >= 0)
             throw new IllegalArgumentException(rb.getString("birthYearReq"));
         // Checken of de leeftijd van de speler groter is dan de minimum leeftijd
-        else if(geboortejaar > (jaar-MIN_LEEFTIJD))
-            // -> Wanneer < MINIMUM => Throw Exception
+        if (geboortejaar > (jaar - MIN_LEEFTIJD))
+        // -> Wanneer < MINIMUM => Throw Exception
             throw new IllegalArgumentException(String.format(rb.getString("minAge")));
         this.geboortejaar = geboortejaar;
     }
@@ -42,12 +43,12 @@ public class Speler {
     // Setter voor gebruikersnaam
     public void setGebruikersnaam(String gebruikersnaam) {
         // Wanneer gebruikersnaam leeg of null is -> Throw exception
-        if(gebruikersnaam == null || gebruikersnaam.isEmpty())
+        if (gebruikersnaam == null || gebruikersnaam.isEmpty())
             throw new IllegalArgumentException(rb.getString("usernameReq"));
-            // Wanneer gebruikersnaam minder dan 5 karakters bevat -> Throw exception
-        else if(gebruikersnaam.length() < 5)
+        // Wanneer gebruikersnaam minder dan 5 karakters bevat -> Throw exception
+        if (gebruikersnaam.length() < 5)
             throw new IllegalArgumentException(rb.getString("minLengthUsername"));
-        else this.gebruikersnaam = gebruikersnaam;
+        this.gebruikersnaam = gebruikersnaam;
     }
 
     // Getter geboortejaar voor testen
