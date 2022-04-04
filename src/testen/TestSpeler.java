@@ -17,17 +17,16 @@ class TestSpeler {
 
     private static final String GELDIGE_NAAM = "testGebruiker";
     private static final int GELDIGE_GEBOORTE = 2003;
+    private static final int AANTAL_KANSEN = 5;
+    language ln = new language();
     // static final int GELDIGE_KANSEN = 5;
     private Speler speler;
     @BeforeEach
     public void BeforeEach() {
-    	
-    	language ln = new language();
-        ResourceBundle rb = ln.taal2("nl");
+        ln.setGekozenTaal("nl");
+        ln.taal();
         
-        rb = ln.taal2("nl");
-        
-        speler = new Speler(GELDIGE_NAAM,GELDIGE_GEBOORTE);
+        speler = new Speler(GELDIGE_NAAM,GELDIGE_GEBOORTE, AANTAL_KANSEN);
     }
 
     @Test
@@ -36,24 +35,23 @@ class TestSpeler {
         Assertions.assertEquals(GELDIGE_GEBOORTE,speler.getGeboortejaar());
     }
 
-
     @ParameterizedTest
     @NullAndEmptySource
 	@ValueSource(strings = {"a"," ","  ","\t","\t\t"})
     public void maakSpeler_ongeldigeNaam_geldigeGeboorte_Exception(String n) {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {new Speler(n,GELDIGE_GEBOORTE);});
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {new Speler(n,GELDIGE_GEBOORTE, AANTAL_KANSEN);});
     }
 
     @ParameterizedTest
     @ValueSource(ints = {2020, 2021, 2017,0,-500,-1000,3000})
     public void maakSpeler_geldigeNaam_ongeldigeGeboorte_Exception(int d) {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {new Speler(GELDIGE_NAAM,d);});
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {new Speler(GELDIGE_NAAM,d, AANTAL_KANSEN);});
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"Test", "User", "AbCd","a","ab","abc"})
     public void maakSpeler_naamTeKort_Exception(String n) {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {new Speler(n,GELDIGE_GEBOORTE);});
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {new Speler(n,GELDIGE_GEBOORTE, AANTAL_KANSEN);});
     }
 
 }

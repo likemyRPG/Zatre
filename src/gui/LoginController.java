@@ -95,23 +95,27 @@ public class LoginController extends GridPane {
     }
 
     public void checkLogin(){
-        boolean succes = true;
         String gebruikersnaam = usernameTextField.getText();
         int geboortejaar = Integer.parseInt(birthYearTextField.getText());
-        try {
-            dc.selecteerSpeler(gebruikersnaam, geboortejaar);
-        }catch (Exception e){
-            lblLoginMessage.setText(rb.getString("Exception"));
-            succes = false;
+        boolean succes = true;
+        boolean alToegevoegd = dc.alToegevoegd(gebruikersnaam, geboortejaar);
+        if(alToegevoegd) lblLoginMessage.setText("Speler is al toegevoegd!");
+        else{
+            try {
+                dc.selecteerSpeler(gebruikersnaam, geboortejaar);
+            }catch (Exception e){
+                lblLoginMessage.setText(rb.getString("Exception"));
+                succes = false;
+            }
+            if(succes) continueLogin();
         }
 
-        if(succes) returnToPlayers();
     }
 
-    private void returnToPlayers() {
+    private void continueLogin() {
         try {
-            AddPlayersOptionController AddPlayer = new AddPlayersOptionController(dc);
-            Scene scene = new Scene(AddPlayer, 600, 400);
+            PlayerInformationController PlayerInformation = new PlayerInformationController(dc);
+            Scene scene = new Scene(PlayerInformation, 600, 400);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             stage.setScene(scene);
