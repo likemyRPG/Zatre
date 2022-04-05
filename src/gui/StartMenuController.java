@@ -107,6 +107,17 @@ public class StartMenuController extends GridPane {
     }
 
     public void onClickStartGame(ActionEvent event) {
+        try
+        {
+            GameStartScreen GameStart = new GameStartScreen(dc); // <1>
+            Scene scene = new Scene(GameStart, 600, 400);
+            scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
+            Stage stage = (Stage) this.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
 
     public void onClickQuit(ActionEvent event) {

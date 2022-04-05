@@ -96,7 +96,7 @@ public class SpelerRepository {
         String resultaat = "";
 
         for(Speler gekozenSpelers : spelers)
-            resultaat += String.format("%4d%n", gekozenSpelers.getAantalKansen());
+            resultaat += String.format("%4d❤%n", gekozenSpelers.getAantalKansen());
         return resultaat;
     }
 

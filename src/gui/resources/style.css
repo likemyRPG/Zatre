@@ -13,6 +13,15 @@
     -fx-cursor: hand;
 }
 
+.lblTitel{
+    -fx-font-size: 36px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.Test{
+    -fx-background-color: none;
+}
+
 .combo-box .list-cell
 {
     -fx-background: white;

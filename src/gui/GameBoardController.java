@@ -1,10 +1,8 @@
 package gui;
 
 import domein.DomeinController;
-import domein.Spel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -12,8 +10,6 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -22,7 +18,7 @@ public class GameBoardController extends Pane {
 
     private DomeinController dc;
     GridPane SpelbordGrid = new GridPane();
-
+    private int i =0;
 
     public GameBoardController(DomeinController dc) {
         try
@@ -68,9 +64,16 @@ public class GameBoardController extends Pane {
         for (int i=0; i<15;i++) {
             SpelbordGrid.getRowConstraints().add(new RowConstraints(30));
         }
-        SpelbordGrid.toFront();
-        SpelbordGrid.setOnMouseClicked(this::clickGrid);
 
+        for(int i = 0; i >= SpelbordGrid.getColumnCount(); i++){
+            for(int y =0; y >= SpelbordGrid.getRowCount(); y++){
+                addButton(i, y);
+                System.out.println(i + " " + y);
+            }
+        }
+        SpelbordGrid.toFront();
+
+        //region Blablka
         ImageView imgZatre1 = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/zatre_1.png")));
         imgZatre1.setFitWidth(30);
         imgZatre1.setFitHeight(30);
@@ -140,7 +143,23 @@ public class GameBoardController extends Pane {
         btnQuitGame.setLayoutY(590);
 
         this.getChildren().addAll(Title,Spelbord,SpelbordGrid,imgZatre1,imgZatre2,imgZatre3,imgZatre4,imgZatre5,imgZatre6,btnPiece1,btnPiece2,btnPiece3,btnPiece4,btnPiece5,btnPiece6,tbSelectionPiece,btnQuitGame);
+
+        //endregion
     }
+    private void addButton(int row, int column) {
+        i++;
+        final Button temp = new Button("Button " + i);
+        final int numButton= i;
+        temp.setId("" + i);
+        temp.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                System.out.println("id(" + temp.getId()  + ") =  " + numButton);
+            }
+        });
+        SpelbordGrid.add(temp, row, column);
+    }
+
     public void onClickButtonQuitGame(ActionEvent event){
         try
         {
@@ -154,15 +173,4 @@ public class GameBoardController extends Pane {
             System.out.println(e);
         }
     }
-    public void clickGrid(javafx.scene.input.MouseEvent event) {
-        Node clickedNode = event.getPickResult().getIntersectedNode();
-        System.out.println(clickedNode);
-        if (clickedNode == SpelbordGrid) {
-            double colIndex = SpelbordGrid.getColumnIndex(clickedNode);
-            double rowIndex = SpelbordGrid.getRowIndex(clickedNode);
-            System.out.println("Mouse clicked cell: " + colIndex + " And: " + rowIndex);
-        }
-    }
-
-
 }
