@@ -8,26 +8,21 @@ import java.util.List;
 
 public class Spel {
     int[][] spelBord = new int[15][15];
+    private List<Integer> randomPieces;
     List<Integer> stenen= new ArrayList();
 
     public Spel() {
-        //Maak het spel aan geeft de ontzichtbare vakjes de waarde 7
         setDefaultValue();
-        maakSteentjesAan();
-        /*for (int aNumber : stenen ) {
-            System.out.println( aNumber );
-        }
-        //Print het bord af
-            for (int row = 0; row < spelBord.length; row++)// Door de rijen gaan
-            {
-                for (int col = 0; col < spelBord[row].length; col++)// Door de kolommen gaan
-                {
-                    System.out.printf("%3d", spelBord[row][col]);
-                }
-                System.out.println(); // Print een nieuwe rij af
-            }*/
     }
 
+    public List<Integer> getRandomPieces(int value) {
+        randomPieces = new ArrayList<>();
+        //Get 3 random ints between 1 and 6 and add to the List
+        for (int i = 0; i < 3; i++) {
+            randomPieces.add((int) (Math.random() * value) + 1);
+        }
+        return randomPieces;
+    }
     // De "ontzichtbare" vakjes krijgen de waarde 7
 
     private void setDefaultValue(){
@@ -63,16 +58,6 @@ public class Spel {
         spelBord[14][12]=7;
         spelBord[14][13]=7;
         spelBord[14][14]=7;
-    }
-
-    private void maakSteentjesAan(){
-        stenen.add(1);
-        for (int i = 1; i <= 6; i++){
-            for (int y = 0; y <= 21; y++){
-                stenen.add(i);
-            }
-        }
-        Collections.shuffle(stenen);
     }
 }
 

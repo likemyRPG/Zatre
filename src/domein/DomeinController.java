@@ -2,14 +2,21 @@ package domein;
 
 import exceptions.OutOfRangeException;
 
+import java.util.List;
+
+import domein.Piece;
+
 public class DomeinController{
 
 	SpelerRepository spelerRepository;
+	PieceRepository pieceRepository;
 	Speler speler;
 	Spel spel;
+	Piece piece;
 
 	public DomeinController(){
 		spelerRepository = new SpelerRepository();
+		pieceRepository = new PieceRepository();
 	}
 
 	public void registreerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
@@ -52,4 +59,13 @@ public class DomeinController{
 		return speler.toString();
 	}
 
+	public List<Integer> getRandomPieces(int value){
+		return pieceRepository.giveRandomPieces(value);
+	}
+
+	public String geefSteentjesWeer(){
+		return pieceRepository.giveValues();
+	}
+
+	public int geefAantalSteentjes(){ return pieceRepository.getAmountOfPieces();}
 }
