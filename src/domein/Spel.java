@@ -29,6 +29,7 @@ public class Spel {
     }
 
     // De "ontzichtbare" vakjes krijgen de waarde 7
+
     private void setDefaultValue(){
         spelBord[0][0]=7;
         spelBord[0][1]=7;

@@ -36,9 +36,12 @@ public class StartMenuController extends GridPane {
         try
         {
             this.dc = dc;
+            dc.selecteerSpeler("Larss",2003);
+            dc.selecteerSpeler("Jochen",2003);
             buildGUI();
             aantalSpelers = dc.geefAantalSpelers();
             buttonDisabled();
+
         }catch (Exception e){
             System.out.println(e);
         }
@@ -107,15 +110,15 @@ public class StartMenuController extends GridPane {
     }
 
     public void onClickStartGame(ActionEvent event) {
-        try
-        {
-            GameStartScreen GameStart = new GameStartScreen(dc); // <1>
+        try {
+            GameStartScreen GameStart = new GameStartScreen(dc);
             Scene scene = new Scene(GameStart, 600, 400);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             stage.setScene(scene);
             stage.show();
-        }catch (Exception e){
+        }catch (Exception e)
+        {
             System.out.println(e);
         }
     }

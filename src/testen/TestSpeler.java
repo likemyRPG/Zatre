@@ -54,4 +54,9 @@ class TestSpeler {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {new Speler(n,GELDIGE_GEBOORTE, AANTAL_KANSEN);});
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = {0, -1, -2, -3, -4, -5})
+    public void maakSpeler_aantalKansen_Exception(int a) {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {new Speler(GELDIGE_NAAM,GELDIGE_GEBOORTE, a);});
+    }
 }

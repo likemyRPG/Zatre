@@ -6,10 +6,11 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -18,24 +19,30 @@ public class GameBoardController extends Pane {
 
     private DomeinController dc;
     GridPane SpelbordGrid = new GridPane();
-    private int i =0;
+    ToolBar tbSelectionPiece;
+    Label lblAantalSteentjes;
+    private int i = 0;
+    private int piece = 0;
+    private int valueOfSelectedPiece = 0;
 
     public GameBoardController(DomeinController dc) {
-        try
-        {
+        try {
             this.dc = dc;
             buildGUI();
-
-        }catch (Exception e){
+            generateButtons();
+            System.out.println(dc.geefSteentjesWeer());
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 
     private void buildGUI() {
-        //getStyleClass().add("bg-style");
+        getStyleClass().add("bg-style");
 
-        double scaleFactor=2;
+        double scaleFactor = 2;
 
+
+        //region create gameboard
         ImageView Title = new ImageView(new Image(
                 getClass().getResourceAsStream
                         ("/gui/resources/Zatre_Spelbord_Title.png")));
@@ -55,122 +62,121 @@ public class GameBoardController extends Pane {
 
         SpelbordGrid.setLayoutX(75);
         SpelbordGrid.setLayoutY(75);
-        SpelbordGrid.setGridLinesVisible(true);
-        GridPane.setColumnSpan(SpelbordGrid,15);
-        GridPane.setRowSpan(SpelbordGrid,15);
-        for(int i=0; i<15;i++) {
+        SpelbordGrid.setGridLinesVisible(false);
+        GridPane.setColumnSpan(SpelbordGrid, 15);
+        GridPane.setRowSpan(SpelbordGrid, 15);
+        for (int i = 0; i < 15; i++) {
             SpelbordGrid.getColumnConstraints().add(new ColumnConstraints(30));
         }
-        for (int i=0; i<15;i++) {
+        for (int i = 0; i < 15; i++) {
             SpelbordGrid.getRowConstraints().add(new RowConstraints(30));
         }
 
-        for(int i = 0; i >= SpelbordGrid.getColumnCount(); i++){
-            for(int y =0; y >= SpelbordGrid.getRowCount(); y++){
-                addButton(i, y);
-                System.out.println(i + " " + y);
-            }
-        }
+
         SpelbordGrid.toFront();
+        SpelbordGrid.setOnMouseClicked(this::clickGrid);
+        //endregion
 
-        //region Blablka
-        ImageView imgZatre1 = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/zatre_1.png")));
-        imgZatre1.setFitWidth(30);
-        imgZatre1.setFitHeight(30);
-
-        ImageView imgZatre2 = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/zatre_2.png")));
-        imgZatre2.setFitWidth(30);
-        imgZatre2.setFitHeight(30);
-
-        ImageView imgZatre3 = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/zatre_3.png")));
-        imgZatre3.setFitWidth(30);
-        imgZatre3.setFitHeight(30);
-
-        ImageView imgZatre4 = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/zatre_4.png")));
-        imgZatre4.setFitWidth(30);
-        imgZatre4.setFitHeight(30);
-
-        ImageView imgZatre5 = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/zatre_5.png")));
-        imgZatre5.setFitWidth(30);
-        imgZatre5.setFitHeight(30);
-
-        ImageView imgZatre6 = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/zatre_6.png")));
-        imgZatre6.setFitWidth(30);
-        imgZatre6.setFitHeight(30);
-
-        Button btnPiece1 = new Button();
-        btnPiece1.setPrefWidth(30);
-        btnPiece1.setPrefHeight(30);
-        btnPiece1.setGraphic(imgZatre1);
-
-        Button btnPiece2 = new Button();
-        btnPiece2.setPrefWidth(30);
-        btnPiece2.setPrefHeight(30);
-        btnPiece2.setGraphic(imgZatre2);
-
-        Button btnPiece3 = new Button();
-        btnPiece3.setPrefWidth(30);
-        btnPiece3.setPrefHeight(30);
-        btnPiece3.setGraphic(imgZatre3);
-
-        Button btnPiece4 = new Button();
-        btnPiece4.setPrefWidth(30);
-        btnPiece4.setPrefHeight(30);
-        btnPiece4.setGraphic(imgZatre4);
-
-        Button btnPiece5 = new Button();
-        btnPiece5.setPrefWidth(30);
-        btnPiece5.setPrefHeight(30);
-        btnPiece5.setGraphic(imgZatre5);
-
-        Button btnPiece6 = new Button();
-        btnPiece6.setPrefWidth(30);
-        btnPiece6.setPrefHeight(30);
-        btnPiece6.setGraphic(imgZatre6);
-
-        ToolBar tbSelectionPiece = new ToolBar(btnPiece1,btnPiece2,btnPiece3,btnPiece4,btnPiece5,btnPiece6);
-        tbSelectionPiece.setLayoutX(130);
+        //region configure ToolBar
+        tbSelectionPiece = new ToolBar();
+        tbSelectionPiece.setLayoutX(212);
         tbSelectionPiece.setLayoutY(548);
-        tbSelectionPiece.setPrefWidth(305);
-        tbSelectionPiece.setPrefHeight(40);
+        tbSelectionPiece.setMinWidth(175);
+        tbSelectionPiece.setMinHeight(50);
+        //endregion
 
+        //region add labels
+        lblAantalSteentjes = new Label("Aantal Steentjes: " + dc.geefAantalSteentjes());
+        lblAantalSteentjes.setLayoutX(400);
+        lblAantalSteentjes.setLayoutY(555);
+        lblAantalSteentjes.getStylesheets().add("lblText");
+        //endregion
 
+        Button btnGivePieces = new Button();
+        btnGivePieces.setLayoutX(50);
+        btnGivePieces.setLayoutY(548);
+        btnGivePieces.setMinWidth(60);
+        btnGivePieces.setMinHeight(50);
+        btnGivePieces.setText("Geef steentjes");
+        btnGivePieces.setOnAction(this::givePieces);
+
+        //region Button Quit Game
         Button btnQuitGame = new Button("Quit game!");
         btnQuitGame.setMaxWidth(Double.MAX_VALUE);
         btnQuitGame.setOnAction(this::onClickButtonQuitGame);
 
         btnQuitGame.setLayoutX(610);
         btnQuitGame.setLayoutY(590);
+        //endregion
 
-        this.getChildren().addAll(Title,Spelbord,SpelbordGrid,imgZatre1,imgZatre2,imgZatre3,imgZatre4,imgZatre5,imgZatre6,btnPiece1,btnPiece2,btnPiece3,btnPiece4,btnPiece5,btnPiece6,tbSelectionPiece,btnQuitGame);
+        //Add to gameboard
+        this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, lblAantalSteentjes, btnGivePieces,btnQuitGame);
 
         //endregion
     }
-    private void addButton(int row, int column) {
-        i++;
-        final Button temp = new Button("Button " + i);
-        final int numButton= i;
-        temp.setId("" + i);
-        temp.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                System.out.println("id(" + temp.getId()  + ") =  " + numButton);
-            }
-        });
-        SpelbordGrid.add(temp, row, column);
+
+    private void clickGrid(MouseEvent e) {
+
+        int column = (int) (e.getX() / 30);
+        int row = (int) (e.getY() / 30);
+
+        if(valueOfSelectedPiece!=0) {
+            ImageView image = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/zatre_" + valueOfSelectedPiece + ".png")));
+            image.setFitWidth(28);
+            image.setFitHeight(28);
+            image.setLayoutY(1);
+            image.setLayoutX(1);
+            SpelbordGrid.add(image, column, row);
+            updateToolbar();
+            valueOfSelectedPiece = 0;
+        }
     }
 
-    public void onClickButtonQuitGame(ActionEvent event){
-        try
-        {
+    private void updateToolbar() {
+    //remove button by id from toolbar
+        tbSelectionPiece.getItems().remove(i);
+
+        lblAantalSteentjes.setText("Aantal Steentjes: " + dc.geefAantalSteentjes());
+    }
+    private void givePieces(ActionEvent e) {
+        generateButtons();
+    }
+
+    private void generateButtons(){
+        List<Integer> pieces = dc.getRandomPieces(3);
+        int nrButton=1;
+
+        for (Integer piece : pieces) {
+            Button btnPiece = new Button();
+            btnPiece.setPrefWidth(30);
+            btnPiece.setPrefHeight(30);
+            btnPiece.setId(toString().valueOf(nrButton)+ toString().valueOf(piece));
+            btnPiece.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/zatre_" + piece + ".png"))));
+            btnPiece.setOnAction(this::onClickButtonPiece);
+            tbSelectionPiece.getItems().add(btnPiece);
+            nrButton++;
+        }
+    }
+
+    private void onClickButtonPiece(ActionEvent actionEvent) {
+            Button btnPiece = (Button) actionEvent.getSource();
+            piece = Integer.parseInt(btnPiece.getId());
+            System.out.println(piece);
+            //get the last digit of the int piece
+            valueOfSelectedPiece = piece % 10;
+    }
+
+    public void onClickButtonQuitGame(ActionEvent event) {
+        try {
             StartMenuController StartMenu = new StartMenuController(dc); // <1>
             Scene scene = new Scene(StartMenu, 600, 400);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             stage.setScene(scene);
             stage.show();
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 }
+

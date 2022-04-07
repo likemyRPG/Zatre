@@ -1,6 +1,7 @@
 package main;
 
 import domein.DomeinController;
+import gui.GameBoardController;
 import gui.StartScreenController;
 import javafx.application.Application;
 import javafx.scene.Scene;
