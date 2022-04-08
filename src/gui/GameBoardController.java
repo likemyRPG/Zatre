@@ -33,8 +33,9 @@ public class GameBoardController extends Pane {
     private int i = 0;
     private int piece = 0;
     private int valueOfSelectedPiece = 0;
-    private boolean firstPiece = true;
+    private boolean firstPiece = true, firstRound = true;
     private int[][] spelBord = new int[15][15];
+    private int[][] ownPieces = new int[15][15];
     //endregion
 
     public GameBoardController(DomeinController dc) {
@@ -129,8 +130,6 @@ public class GameBoardController extends Pane {
         txtPlayer1.setLayoutY(74);
         //endregion
 
-
-
         //region Add to gameboard
         this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes,txtPlayer1,btnQuitGame);
 
@@ -150,7 +149,7 @@ public class GameBoardController extends Pane {
                 }
             }
         }
-            //Check if row and col are a part of a 2 dimensional array
+        //Check if row and col are a part of a 2 dimensional array
         if(firstPiece){
             if(column ==7 && row == 7){
                 placePiece(column, row);
@@ -166,22 +165,17 @@ public class GameBoardController extends Pane {
     }
 
     private boolean allowedPlacement(int column, int row) {
-        if(spelBord[column+1][row]!=0 && spelBord[column+1][row]!=7)
+        if(spelBord[column+1][row]!=0 && spelBord[column+1][row]!= 7 && (ownPieces[column+1][row] == 0 || firstRound))
             return true;
-        else if(spelBord[column-1][row]!=0 && spelBord[column+1][row]!=7)
+        else if(spelBord[column-1][row]!=0 && spelBord[column+1][row]!=7 && (ownPieces[column-1][row] == 0 || firstRound))
             return true;
-        else if(spelBord[column][row+1]!=0 && spelBord[column][row+1]!=7)
+        else if(spelBord[column][row+1]!=0 && spelBord[column][row+1]!=7 && (ownPieces[column][row+1] == 0 || firstRound))
             return true;
-        else if(spelBord[column][row-1]!=0 && spelBord[column][row-1]!=7)
-            return true;
-        else return false;
+        else return spelBord[column][row - 1] != 0 && spelBord[column][row - 1] != 7 && (ownPieces[column][row - 1] == 0 || firstRound);
     }
 
     private boolean alreadyUsed(int column, int row){
-        if(spelBord[row][column] != 0){
-            return true;
-        }
-        return false;
+        return spelBord[column][row] != 0;
     }
 
     private void placePiece(int column, int row){
@@ -190,6 +184,7 @@ public class GameBoardController extends Pane {
         image.setFitHeight(26);
         SpelbordGrid.add(image, column, row);
         spelBord[column][row] = valueOfSelectedPiece;
+        ownPieces[column][row] = valueOfSelectedPiece;
         SpelbordGrid.setHalignment(image, HPos.CENTER);
         SpelbordGrid.setValignment(image, VPos.CENTER);
         valueOfSelectedPiece = 0;
@@ -201,10 +196,21 @@ public class GameBoardController extends Pane {
         tbSelectionPiece.getItems().remove(index);
         amountOfPieces--;
         lblAantalSteentjes.setText("x" + amountOfPieces);
-        if (tbSelectionPiece.getItems().isEmpty() && amountOfPieces > 0)
+        if (tbSelectionPiece.getItems().isEmpty() && amountOfPieces > 0){
+            if(!firstPiece) firstRound=false;
+            clearOwnPieces();
             generateButtons(2);
+        }
         else if(amountOfPieces==0)
             System.out.println("Game ended");
+    }
+
+    private void clearOwnPieces() {
+        for (int row = 0; row < ownPieces.length; row++) {
+            for (int col = 0; col < ownPieces.length; col++) {
+                ownPieces[row][col] = 0;
+            }
+        }
     }
 
     private void generateButtons(int amount){
@@ -225,18 +231,18 @@ public class GameBoardController extends Pane {
     }
 
     private void onClickButtonPiece(ActionEvent actionEvent) {
-            Button btnPiece = (Button) actionEvent.getSource();
-            piece = Integer.parseInt(btnPiece.getId());
+        Button btnPiece = (Button) actionEvent.getSource();
+        piece = Integer.parseInt(btnPiece.getId());
 
-            valueOfSelectedPiece = piece % 10;
-            //Get the location of the button in the toolbar element
-            index = tbSelectionPiece.getItems().indexOf(btnPiece);
-            //Delete background color of all the buttons in the toolbar
-            for (Node node : tbSelectionPiece.getItems()) {
-                node.setStyle("-fx-background-color: #1d1d1d;");
-            }
-            //Make button selected
-            btnPiece.setStyle("-fx-background-color: white;");
+        valueOfSelectedPiece = piece % 10;
+        //Get the location of the button in the toolbar element
+        index = tbSelectionPiece.getItems().indexOf(btnPiece);
+        //Delete background color of all the buttons in the toolbar
+        for (Node node : tbSelectionPiece.getItems()) {
+            node.setStyle("-fx-background-color: #1d1d1d;");
+        }
+        //Make button selected
+        btnPiece.setStyle("-fx-background-color: white;");
     }
 
     public void onClickButtonQuitGame(ActionEvent event) {
