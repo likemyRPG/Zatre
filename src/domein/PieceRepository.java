@@ -22,11 +22,13 @@ public class PieceRepository {
 
     public void createPieces(){
         for (int i = 1; i <= 6; i++){
-        for (int y = 0; y <= 21; y++){
+        for (int y = 1; y <= 20; y++){
             Piece piece = new Piece(i);
             pieces.add(piece);
         }
         }
+        Piece piece = new Piece(1);
+        pieces.add(piece);
     }
 
     public void shufflePieces(){

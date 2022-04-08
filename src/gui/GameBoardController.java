@@ -1,11 +1,16 @@
 package gui;
 
 import domein.DomeinController;
+import domein.Spel;
 import javafx.event.ActionEvent;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,6 +27,7 @@ public class GameBoardController extends Pane {
     GridPane SpelbordGrid = new GridPane();
     ToolBar tbSelectionPiece;
     Label lblAantalSteentjes;
+    int index, amountOfPieces = 121;
     private int i = 0;
     private int piece = 0;
     private int valueOfSelectedPiece = 0;
@@ -93,14 +99,6 @@ public class GameBoardController extends Pane {
         lblAantalSteentjes.getStylesheets().add("lblText");
         //endregion
 
-        Button btnGivePieces = new Button();
-        btnGivePieces.setLayoutX(50);
-        btnGivePieces.setLayoutY(548);
-        btnGivePieces.setMinWidth(60);
-        btnGivePieces.setMinHeight(50);
-        btnGivePieces.setText("Geef steentjes");
-        btnGivePieces.setOnAction(this::givePieces);
-
         //region Button Quit Game
         Button btnQuitGame = new Button("Quit game!");
         btnQuitGame.setMaxWidth(Double.MAX_VALUE);
@@ -110,8 +108,31 @@ public class GameBoardController extends Pane {
         btnQuitGame.setLayoutY(590);
         //endregion
 
-        //Add to gameboard
-        this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, lblAantalSteentjes, btnGivePieces,btnQuitGame);
+        //region ImageView
+        ImageView imageAmountOfPieces = new ImageView(new Image(
+                getClass().getResourceAsStream
+                        ("/gui/resources/zatre_1.png")));
+        imageAmountOfPieces.minWidth(30);
+        imageAmountOfPieces.minHeight(30);
+        imageAmountOfPieces.setLayoutX(10);
+        imageAmountOfPieces.setLayoutY(590);
+        //endregion
+
+        //region Players
+        TextField txtPlayer1 = new TextField("Player 1");
+        txtPlayer1.getStyleClass().add("txtPlayer");
+        txtPlayer1.setAlignment(Pos.CENTER);
+        txtPlayer1.setEditable(false);
+        txtPlayer1.setMinWidth(50);
+        txtPlayer1.setPrefWidth(50);
+        txtPlayer1.setLayoutX(580);
+        txtPlayer1.setLayoutY(74);
+        //endregion
+
+
+
+        //region Add to gameboard
+        this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes,txtPlayer1,btnQuitGame);
 
         //endregion
     }
@@ -120,24 +141,39 @@ public class GameBoardController extends Pane {
 
         int column = (int) (e.getX() / 30);
         int row = (int) (e.getY() / 30);
+        boolean isEmpty = true;
 
-        if(valueOfSelectedPiece!=0) {
-            ImageView image = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/zatre_" + valueOfSelectedPiece + ".png")));
-            image.setFitWidth(28);
-            image.setFitHeight(28);
-            image.setLayoutY(1);
-            image.setLayoutX(1);
-            SpelbordGrid.add(image, column, row);
-            updateToolbar();
-            valueOfSelectedPiece = 0;
+        for (Node node : SpelbordGrid.getChildren()) {
+            if (GridPane.getColumnIndex(node) == column && GridPane.getRowIndex(node) == row) {
+                if (node instanceof ImageView) {
+                    isEmpty = false;
+                }
+            }
+        }
+            //Check if row and col are a part of a 2 dimensional array
+        if(firstPiece){
+            if(column ==7 && row == 7){
+                placePiece(column, row);
+                firstPiece = false;
+            }
+        }else{
+            if(isEmpty){
+                if(valueOfSelectedPiece != 0 && !alreadyUsed(column, row) && allowedPlacement(column, row)){
+                    placePiece(column, row);
+                }
+            }
         }
     }
 
     private void updateToolbar() {
-    //remove button by id from toolbar
-        tbSelectionPiece.getItems().remove(i);
-
-        lblAantalSteentjes.setText("Aantal Steentjes: " + dc.geefAantalSteentjes());
+        //If toolbar has no elements, add all pieces
+        tbSelectionPiece.getItems().remove(index);
+        amountOfPieces--;
+        lblAantalSteentjes.setText("x" + amountOfPieces);
+        if (tbSelectionPiece.getItems().isEmpty() && amountOfPieces > 0)
+            generateButtons(2);
+        else if(amountOfPieces==0)
+            System.out.println("Game ended");
     }
     private void givePieces(ActionEvent e) {
         generateButtons();
@@ -154,6 +190,7 @@ public class GameBoardController extends Pane {
             btnPiece.setId(toString().valueOf(nrButton)+ toString().valueOf(piece));
             btnPiece.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/zatre_" + piece + ".png"))));
             btnPiece.setOnAction(this::onClickButtonPiece);
+            btnPiece.setStyle("-fx-background-color: #1d1d1d;");
             tbSelectionPiece.getItems().add(btnPiece);
             nrButton++;
         }
@@ -162,8 +199,7 @@ public class GameBoardController extends Pane {
     private void onClickButtonPiece(ActionEvent actionEvent) {
             Button btnPiece = (Button) actionEvent.getSource();
             piece = Integer.parseInt(btnPiece.getId());
-            System.out.println(piece);
-            //get the last digit of the int piece
+
             valueOfSelectedPiece = piece % 10;
     }
 
@@ -180,4 +216,3 @@ public class GameBoardController extends Pane {
         }
     }
 }
-
