@@ -2,22 +2,7 @@ package domein;
 
 
 public class Tile {
-    private int x;
-    private int y;
-    private int value;
-    private boolean isMerged;
-    private boolean isEmpty;
-    private boolean isNew;
-
-    public Tile(int x, int y, int value) {
-        this.x = x;
-        this.y = y;
-        this.value = value;
-        isMerged = false;
-        isEmpty = false;
-        isNew = false;
-    }
-
+    private int[][] spelBord = new int[15][15];
 
     private void nonUsableTiles(){
         spelBord[0][0]=7;

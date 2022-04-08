@@ -18,11 +18,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.util.Arrays;
 import java.util.List;
 
 
 public class GameBoardController extends Pane {
 
+    //region Variables
     private DomeinController dc;
     GridPane SpelbordGrid = new GridPane();
     ToolBar tbSelectionPiece;
@@ -31,13 +33,16 @@ public class GameBoardController extends Pane {
     private int i = 0;
     private int piece = 0;
     private int valueOfSelectedPiece = 0;
+    private boolean firstPiece = true;
+    private int[][] spelBord = new int[15][15];
+    //endregion
 
     public GameBoardController(DomeinController dc) {
         try {
             this.dc = dc;
             buildGUI();
-            generateButtons();
-            System.out.println(dc.geefSteentjesWeer());
+            addNonUsableTiles();
+            generateButtons(3);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -46,10 +51,7 @@ public class GameBoardController extends Pane {
     private void buildGUI() {
         getStyleClass().add("bg-style");
 
-        double scaleFactor = 2;
-
-
-        //region create gameboard
+        //region Create gameboard
         ImageView Title = new ImageView(new Image(
                 getClass().getResourceAsStream
                         ("/gui/resources/Zatre_Spelbord_Title.png")));
@@ -66,7 +68,6 @@ public class GameBoardController extends Pane {
         Spelbord.setScaleX(0.939);
         Spelbord.setScaleY(0.939);
 
-
         SpelbordGrid.setLayoutX(75);
         SpelbordGrid.setLayoutY(75);
         SpelbordGrid.setGridLinesVisible(false);
@@ -79,12 +80,11 @@ public class GameBoardController extends Pane {
             SpelbordGrid.getRowConstraints().add(new RowConstraints(30));
         }
 
-
         SpelbordGrid.toFront();
         SpelbordGrid.setOnMouseClicked(this::clickGrid);
         //endregion
 
-        //region configure ToolBar
+        //region Configure ToolBar
         tbSelectionPiece = new ToolBar();
         tbSelectionPiece.setLayoutX(212);
         tbSelectionPiece.setLayoutY(548);
@@ -92,11 +92,11 @@ public class GameBoardController extends Pane {
         tbSelectionPiece.setMinHeight(50);
         //endregion
 
-        //region add labels
-        lblAantalSteentjes = new Label("Aantal Steentjes: " + dc.geefAantalSteentjes());
-        lblAantalSteentjes.setLayoutX(400);
-        lblAantalSteentjes.setLayoutY(555);
-        lblAantalSteentjes.getStylesheets().add("lblText");
+        //region Add labels
+        lblAantalSteentjes = new Label("x" + dc.geefAantalSteentjes());
+        lblAantalSteentjes.setLayoutX(45);
+        lblAantalSteentjes.setLayoutY(592);
+        lblAantalSteentjes.getStyleClass().add("lblText");
         //endregion
 
         //region Button Quit Game
@@ -165,6 +165,37 @@ public class GameBoardController extends Pane {
         }
     }
 
+    private boolean allowedPlacement(int column, int row) {
+        if(spelBord[column+1][row]!=0 && spelBord[column+1][row]!=7)
+            return true;
+        else if(spelBord[column-1][row]!=0 && spelBord[column+1][row]!=7)
+            return true;
+        else if(spelBord[column][row+1]!=0 && spelBord[column][row+1]!=7)
+            return true;
+        else if(spelBord[column][row-1]!=0 && spelBord[column][row-1]!=7)
+            return true;
+        else return false;
+    }
+
+    private boolean alreadyUsed(int column, int row){
+        if(spelBord[row][column] != 0){
+            return true;
+        }
+        return false;
+    }
+
+    private void placePiece(int column, int row){
+        ImageView image = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/zatre_" + valueOfSelectedPiece + ".png")));
+        image.setFitWidth(26);
+        image.setFitHeight(26);
+        SpelbordGrid.add(image, column, row);
+        spelBord[column][row] = valueOfSelectedPiece;
+        SpelbordGrid.setHalignment(image, HPos.CENTER);
+        SpelbordGrid.setValignment(image, VPos.CENTER);
+        valueOfSelectedPiece = 0;
+        updateToolbar();
+    }
+
     private void updateToolbar() {
         //If toolbar has no elements, add all pieces
         tbSelectionPiece.getItems().remove(index);
@@ -175,14 +206,10 @@ public class GameBoardController extends Pane {
         else if(amountOfPieces==0)
             System.out.println("Game ended");
     }
-    private void givePieces(ActionEvent e) {
-        generateButtons();
-    }
 
-    private void generateButtons(){
-        List<Integer> pieces = dc.getRandomPieces(3);
+    private void generateButtons(int amount){
+        List<Integer> pieces = dc.getRandomPieces(amount);
         int nrButton=1;
-
         for (Integer piece : pieces) {
             Button btnPiece = new Button();
             btnPiece.setPrefWidth(30);
@@ -194,6 +221,7 @@ public class GameBoardController extends Pane {
             tbSelectionPiece.getItems().add(btnPiece);
             nrButton++;
         }
+        pieces.clear();
     }
 
     private void onClickButtonPiece(ActionEvent actionEvent) {
@@ -201,6 +229,14 @@ public class GameBoardController extends Pane {
             piece = Integer.parseInt(btnPiece.getId());
 
             valueOfSelectedPiece = piece % 10;
+            //Get the location of the button in the toolbar element
+            index = tbSelectionPiece.getItems().indexOf(btnPiece);
+            //Delete background color of all the buttons in the toolbar
+            for (Node node : tbSelectionPiece.getItems()) {
+                node.setStyle("-fx-background-color: #1d1d1d;");
+            }
+            //Make button selected
+            btnPiece.setStyle("-fx-background-color: white;");
     }
 
     public void onClickButtonQuitGame(ActionEvent event) {
@@ -214,5 +250,40 @@ public class GameBoardController extends Pane {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    private void addNonUsableTiles(){
+        spelBord[0][0]=7;
+        spelBord[0][1]=7;
+        spelBord[0][2]=7;
+        spelBord[0][3]=7;
+        spelBord[0][7]=7;
+        spelBord[0][11]=7;
+        spelBord[0][12]=7;
+        spelBord[0][13]=7;
+        spelBord[0][14]=7;
+        spelBord[1][0]=7;
+        spelBord[1][14]=7;
+        spelBord[2][0]=7;
+        spelBord[2][14]=7;
+        spelBord[3][0]=7;
+        spelBord[3][14]=7;
+        spelBord[7][0]=7;
+        spelBord[7][14]=7;
+        spelBord[11][0]=7;
+        spelBord[11][14]=7;
+        spelBord[12][0]=7;
+        spelBord[12][14]=7;
+        spelBord[13][0]=7;
+        spelBord[13][14]=7;
+        spelBord[14][0]=7;
+        spelBord[14][1]=7;
+        spelBord[14][2]=7;
+        spelBord[14][3]=7;
+        spelBord[14][7]=7;
+        spelBord[14][11]=7;
+        spelBord[14][12]=7;
+        spelBord[14][13]=7;
+        spelBord[14][14]=7;
     }
 }
