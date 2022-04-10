@@ -1,6 +1,7 @@
 package main;
 import domein.DomeinController;
 import exceptions.OutOfRangeException;
+import javafx.application.Application;
 import ui.ZatreApp;
 
 public class StartUp {
@@ -9,6 +10,8 @@ public class StartUp {
         ZatreApp app = new ZatreApp(DC);
         app.start();
     }
+
+
 
 
 }
