@@ -209,6 +209,7 @@ public class GameBoardController extends Pane {
         int column = (int) (e.getX() / 30);
         int row = (int) (e.getY() / 30);
         boolean isEmpty = true;
+        System.out.println(column + " " + row);
 
         for (Node node : SpelbordGrid.getChildren()) {
             if (GridPane.getColumnIndex(node) == column && GridPane.getRowIndex(node) == row) {
