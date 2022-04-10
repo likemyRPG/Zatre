@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -50,9 +51,9 @@ public class GameBoardController extends Pane {
     }
 
     private void buildGUI() {
-        getStyleClass().add("bg-style");
+/*        getStyleClass().add("bg-style");*/
 
-        //region Create gameboard
+        //region Create Gameboard
         ImageView Title = new ImageView(new Image(
                 getClass().getResourceAsStream
                         ("/gui/resources/Zatre_Spelbord_Title.png")));
@@ -93,30 +94,46 @@ public class GameBoardController extends Pane {
         tbSelectionPiece.setMinHeight(50);
         //endregion
 
-        //region Add labels
-        lblAantalSteentjes = new Label("x" + dc.geefAantalSteentjes());
-        lblAantalSteentjes.setLayoutX(45);
-        lblAantalSteentjes.setLayoutY(592);
-        lblAantalSteentjes.getStyleClass().add("lblText");
-        //endregion
-
-        //region Button Quit Game
-        Button btnQuitGame = new Button("Quit game!");
-        btnQuitGame.setMaxWidth(Double.MAX_VALUE);
-        btnQuitGame.setOnAction(this::onClickButtonQuitGame);
-
-        btnQuitGame.setLayoutX(610);
-        btnQuitGame.setLayoutY(590);
-        //endregion
-
-        //region ImageView
+        //region Aantal Steentjes
         ImageView imageAmountOfPieces = new ImageView(new Image(
                 getClass().getResourceAsStream
                         ("/gui/resources/zatre_1.png")));
         imageAmountOfPieces.minWidth(30);
         imageAmountOfPieces.minHeight(30);
         imageAmountOfPieces.setLayoutX(10);
-        imageAmountOfPieces.setLayoutY(590);
+        imageAmountOfPieces.setLayoutY(606);
+
+
+        lblAantalSteentjes = new Label("x" + dc.geefAantalSteentjes());
+        lblAantalSteentjes.setLayoutX(45);
+        lblAantalSteentjes.setLayoutY(608);
+        lblAantalSteentjes.getStyleClass().add("lblText");
+        //endregion
+
+        //region Scoreboard
+
+        GridPane Scoreboard = new GridPane();
+        Scoreboard.setLayoutX(580);
+        Scoreboard.setLayoutY(100);
+        int width = 250;
+        int height = 450;
+        Scoreboard.setMinWidth(width);
+        Scoreboard.setMinHeight(height);
+        //make cells use all available space
+        Scoreboard.setGridLinesVisible(true);
+        Scoreboard.setStyle("-fx-border-color: white");
+        GridPane.setColumnSpan(Scoreboard, 5);
+        GridPane.setRowSpan(Scoreboard, 5);
+        int amountOfColumns = 6;
+        int amountOfRows = 22;
+        for (int i = 0; i < amountOfColumns; i++) {
+            Scoreboard.getColumnConstraints().add(new ColumnConstraints(width / amountOfColumns));
+        }
+        for (int i = 0; i < amountOfRows; i++) {
+            Scoreboard.getRowConstraints().add(new RowConstraints(height / amountOfRows));
+        }
+/*        Scoreboard.add(, 1, 1);*/
+
         //endregion
 
         //region Players
@@ -124,16 +141,67 @@ public class GameBoardController extends Pane {
         txtPlayer1.getStyleClass().add("txtPlayer");
         txtPlayer1.setAlignment(Pos.CENTER);
         txtPlayer1.setEditable(false);
-        txtPlayer1.setMinWidth(50);
-        txtPlayer1.setPrefWidth(50);
-        txtPlayer1.setLayoutX(580);
-        txtPlayer1.setLayoutY(74);
+        txtPlayer1.setMinWidth(150);
+        txtPlayer1.setPrefWidth(150);
+        txtPlayer1.setMinHeight(20);
+        txtPlayer1.setLayoutX(Scoreboard.getLayoutX() + Scoreboard.getMinWidth() / 2 - txtPlayer1.getMinWidth() / 2);
+        txtPlayer1.setLayoutY(Scoreboard.getLayoutY() - (txtPlayer1.getMinHeight()+5));
+
+        ImageView imgLeftArrow = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/left_arrow.png")));
+        //scale image to fit the size of the textfield
+        imgLeftArrow.setFitWidth(20);
+        imgLeftArrow.setFitHeight(txtPlayer1.getMinHeight());
+        imgLeftArrow.setLayoutX(txtPlayer1.getLayoutX() - imgLeftArrow.getFitWidth() - 5);
+        imgLeftArrow.setLayoutY(txtPlayer1.getLayoutY() + (txtPlayer1.getMinHeight() / 2)+2 - imgLeftArrow.getFitHeight() / 2);
+        imgLeftArrow.setOnMouseClicked(this::clickLeftArrow);
+
+        ImageView imgRightArrow = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/right_arrow.png")));
+        imgRightArrow.setFitWidth(20);
+        imgRightArrow.setFitHeight(txtPlayer1.getMinHeight());
+        imgRightArrow.setLayoutX(txtPlayer1.getLayoutX() + txtPlayer1.getMinWidth() + 5);
+        imgRightArrow.setLayoutY(txtPlayer1.getLayoutY() + (txtPlayer1.getMinHeight() / 2)+2 - imgRightArrow.getFitHeight() / 2);
+        imgRightArrow.setOnMouseClicked(this::clickRightArrow);
         //endregion
 
-        //region Add to gameboard
-        this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes,txtPlayer1,btnQuitGame);
+        //region Random Button
 
+        Button btnRandom = new Button("Random");
+        btnRandom.setMaxWidth(Double.MAX_VALUE);
+        btnRandom.setLayoutX(10);
+        btnRandom.setLayoutY(550);
+        btnRandom.setOnAction(this::onClickButtonRandom);
         //endregion
+
+        //region Button Quit Game
+        Button btnQuitGame = new Button("Quit game!");
+        btnQuitGame.setMaxWidth(Double.MAX_VALUE);
+        btnQuitGame.setOnAction(this::onClickButtonQuitGame);
+
+        btnQuitGame.setLayoutX(900 - btnQuitGame.getMaxWidth() - 10);
+        btnQuitGame.setLayoutY(645 - btnQuitGame.getMaxHeight() - 10);
+        //endregion
+
+        //region Add To Gameboard
+        this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes,btnRandom,txtPlayer1,imgLeftArrow,imgRightArrow,Scoreboard,btnQuitGame);
+        //endregion
+    }
+
+    private void clickLeftArrow(MouseEvent mouseEvent) {
+    }
+
+    private void clickRightArrow(MouseEvent mouseEvent) {
+    }
+
+    private void onClickButtonRandom(ActionEvent actionEvent) {
+        //print the values of spelBord in console
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                System.out.print(spelBord[j][i] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println("--------------------------------------------------------------------------------");
+        System.out.println();
     }
 
     private void clickGrid(MouseEvent e) {
@@ -149,7 +217,6 @@ public class GameBoardController extends Pane {
                 }
             }
         }
-        //Check if row and col are a part of a 2 dimensional array
         if(firstPiece){
             if(column ==7 && row == 7){
                 placePiece(column, row);
@@ -165,13 +232,18 @@ public class GameBoardController extends Pane {
     }
 
     private boolean allowedPlacement(int column, int row) {
-        if(spelBord[column+1][row]!=0 && spelBord[column+1][row]!= 7 && (ownPieces[column+1][row] == 0 || firstRound))
-            return true;
-        else if(spelBord[column-1][row]!=0 && spelBord[column+1][row]!=7 && (ownPieces[column-1][row] == 0 || firstRound))
-            return true;
-        else if(spelBord[column][row+1]!=0 && spelBord[column][row+1]!=7 && (ownPieces[column][row+1] == 0 || firstRound))
-            return true;
-        else return spelBord[column][row - 1] != 0 && spelBord[column][row - 1] != 7 && (ownPieces[column][row - 1] == 0 || firstRound);
+        if(column != 14 || column != 0) {
+            if ((spelBord[column + 1][row] != 0 && spelBord[column + 1][row] != 7 && (ownPieces[column + 1][row] == 0 | firstRound)))
+                return true;
+            else if ((spelBord[column - 1][row] != 0 && spelBord[column - 1][row] != 7 && (ownPieces[column - 1][row] == 0 | firstRound)))
+                return true;
+        }else if(row != 14 || row != 0) {
+            if ((spelBord[column][row + 1] != 0 && spelBord[column][row + 1] != 7 && (ownPieces[column][row + 1] == 0 | firstRound)))
+                return true;
+            else
+                return ((spelBord[column][row - 1] != 0 && spelBord[column][row - 1] != 7 && (ownPieces[column][row - 1] == 0 || firstRound)));
+        }
+        return false;
     }
 
     private boolean alreadyUsed(int column, int row){
@@ -206,9 +278,9 @@ public class GameBoardController extends Pane {
     }
 
     private void clearOwnPieces() {
-        for (int row = 0; row < ownPieces.length; row++) {
-            for (int col = 0; col < ownPieces.length; col++) {
-                ownPieces[row][col] = 0;
+        for (int col = 0; col < ownPieces.length; col++) {
+            for (int row = 0; row < ownPieces.length; row++) {
+                ownPieces[col][row] = 0;
             }
         }
     }

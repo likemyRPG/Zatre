@@ -78,7 +78,7 @@ public class GameStartScreen extends Pane {
     private void onClickButtonOk(ActionEvent event) {
         try {
             GameBoardController GameBoard = new GameBoardController(dc);
-            Scene scene = new Scene(GameBoard, 737, 645);
+            Scene scene = new Scene(GameBoard, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             stage.setScene(scene);
