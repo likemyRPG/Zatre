@@ -64,11 +64,9 @@ public class GameBoardController extends Pane {
 
         ImageView Spelbord = new ImageView(new Image(
                 getClass().getResourceAsStream
-                        ("/gui/resources/Zatre_gameBoard.png")));
-        Spelbord.setLayoutX(60);
-        Spelbord.setLayoutY(60);
-        Spelbord.setScaleX(0.939);
-        Spelbord.setScaleY(0.939);
+                        ("/gui/resources/Zatre_gameBoard_V2.png")));
+        Spelbord.setLayoutX(75);
+        Spelbord.setLayoutY(75);
 
         SpelbordGrid.setLayoutX(75);
         SpelbordGrid.setLayoutY(75);
@@ -102,6 +100,7 @@ public class GameBoardController extends Pane {
         imageAmountOfPieces.minHeight(30);
         imageAmountOfPieces.setLayoutX(10);
         imageAmountOfPieces.setLayoutY(606);
+
 
 
         lblAantalSteentjes = new Label("x" + dc.geefAantalSteentjes());
