@@ -9,34 +9,38 @@ import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
+import javafx.scene.media.Media;
+import javafx.util.Duration;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 
 public class GameBoardController extends Pane {
 
     //region Variables
     private DomeinController dc;
-    GridPane SpelbordGrid = new GridPane();
-    ToolBar tbSelectionPiece;
-    Label lblAantalSteentjes;
-    int index, amountOfPieces = 121;
+    GridPane SpelbordGrid = new GridPane(); //Het spelbord
+    ToolBar tbSelectionPiece; //De toolbar voor het selecteren van een stuk
+    Label lblAantalSteentjes; //Het label voor het aantal steentjes dat nog over is
+    Slider sliderVolume; //De slider voor het volume
+    int index, amountOfPieces = 121; //Het aantal steentjes dat nog over is
     private int i = 0;
     private int piece = 0;
     private int valueOfSelectedPiece = 0;
     private boolean firstPiece = true, firstRound = true;
     private int[][] spelBord = new int[15][15];
     private int[][] ownPieces = new int[15][15];
+    MediaPlayer mediaPlayer;
     //endregion
 
     public GameBoardController(DomeinController dc) {
@@ -45,13 +49,14 @@ public class GameBoardController extends Pane {
             buildGUI();
             addNonUsableTiles();
             generateButtons(3);
+            addMusic();
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
     private void buildGUI() {
-/*        getStyleClass().add("bg-style");*/
+        getStyleClass().add("bg-style");
 
         //region Create Gameboard
         ImageView Title = new ImageView(new Image(
@@ -100,8 +105,6 @@ public class GameBoardController extends Pane {
         imageAmountOfPieces.minHeight(30);
         imageAmountOfPieces.setLayoutX(10);
         imageAmountOfPieces.setLayoutY(606);
-
-
 
         lblAantalSteentjes = new Label("x" + dc.geefAantalSteentjes());
         lblAantalSteentjes.setLayoutX(45);
@@ -180,8 +183,27 @@ public class GameBoardController extends Pane {
         btnQuitGame.setLayoutY(645 - btnQuitGame.getMaxHeight() - 10);
         //endregion
 
+        //region create sliderVolume
+        sliderVolume = new Slider();
+        sliderVolume.setMin(0);
+        sliderVolume.setMax(100);
+        sliderVolume.setValue(50);
+        sliderVolume.setLayoutX(760);
+        sliderVolume.setLayoutY(610);
+        sliderVolume.setOnMouseClicked(this::changeMusicVolume);
+        //endregion
+
+        //region Music button
+        ImageView imgMusic = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/Music.png")));
+        imgMusic.setFitWidth(20);
+        imgMusic.setFitHeight(20);
+        imgMusic.setLayoutX(740);
+        imgMusic.setLayoutY(608);
+        imgMusic.setOnMouseClicked(this::clickMusic);
+        //endregion
+
         //region Add To Gameboard
-        this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes,btnRandom,txtPlayer1,imgLeftArrow,imgRightArrow,Scoreboard,btnQuitGame);
+        this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes,btnRandom,txtPlayer1,sliderVolume, imgLeftArrow,imgRightArrow,Scoreboard,btnQuitGame, imgMusic);
         //endregion
     }
 
@@ -195,7 +217,7 @@ public class GameBoardController extends Pane {
         //print the values of spelBord in console
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
-                System.out.print(spelBord[j][i] + " ");
+                System.out.print(spelBord[i][j] + " ");
             }
             System.out.println();
         }
@@ -205,34 +227,58 @@ public class GameBoardController extends Pane {
 
     private void clickGrid(MouseEvent e) {
 
-        int column = (int) (e.getX() / 30);
-        int row = (int) (e.getY() / 30);
+        int row = (int) (e.getX() / 30);
+        int column = (int) (e.getY() / 30);
         boolean isEmpty = true;
-        System.out.println(column + " " + row);
+        System.out.println(row + " " + column);
 
-        for (Node node : SpelbordGrid.getChildren()) {
-            if (GridPane.getColumnIndex(node) == column && GridPane.getRowIndex(node) == row) {
-                if (node instanceof ImageView) {
-                    isEmpty = false;
+        if (valueOfSelectedPiece == 0) {
+            tbSelectionPiece.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Selecteer een steen");
+            alert.setHeaderText(null);
+            if(firstRound){
+                alert.setContentText("Selecteer een steen om te beginnen met spelen! De eerste steen mag enkel in het middelste vakje worden geplaatst.");
+            }else{
+                alert.setContentText("Selecteer een steen om te plaatsen.");
+            }
+            alert.showAndWait();
+        }else{
+            tbSelectionPiece.setBorder(new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            for (Node node : SpelbordGrid.getChildren()) {
+                if (GridPane.getColumnIndex(node) == column && GridPane.getRowIndex(node) == row) {
+                    if (node instanceof ImageView) {
+                        isEmpty = false;
+                    }
                 }
             }
-        }
-        if(firstPiece){
-            if(column ==7 && row == 7){
-                placePiece(column, row);
-                firstPiece = false;
-            }
-        }else{
-            if(isEmpty){
-                if(valueOfSelectedPiece != 0 && !alreadyUsed(column, row) && allowedPlacement(column, row)){
-                    placePiece(column, row);
+            if(firstPiece){
+                if(column ==7 && row == 7){
+                    placePiece(row, column);
+                    firstPiece = false;
+                }
+            }else{
+                if(isEmpty){
+                    if(valueOfSelectedPiece != 0 && !alreadyUsed(row, column) && allowedPlacement(row, column)){
+                        placePiece(row, column);
+                    }
                 }
             }
         }
     }
 
-    private boolean allowedPlacement(int column, int row) {
-        if(column != 14 || column != 0) {
+    private boolean allowedPlacement(int row, int column) {
+        if (firstPiece) {
+            if (row == 7 && column == 7) {
+                return true;
+            } else {
+                return false;
+            }
+        }else
+        {
+            return true;
+        }
+        /*if(column != 14 || column != 0) {
             if ((spelBord[column + 1][row] != 0 && spelBord[column + 1][row] != 7 && (ownPieces[column + 1][row] == 0 | firstRound)))
                 return true;
             else if ((spelBord[column - 1][row] != 0 && spelBord[column - 1][row] != 7 && (ownPieces[column - 1][row] == 0 | firstRound)))
@@ -243,20 +289,20 @@ public class GameBoardController extends Pane {
             else
                 return ((spelBord[column][row - 1] != 0 && spelBord[column][row - 1] != 7 && (ownPieces[column][row - 1] == 0 || firstRound)));
         }
-        return false;
+        return true;*/
     }
 
-    private boolean alreadyUsed(int column, int row){
-        return spelBord[column][row] != 0;
+    private boolean alreadyUsed(int row, int column){
+        return spelBord[row][column] != 0;
     }
 
-    private void placePiece(int column, int row){
+    private void placePiece(int row, int column){
         ImageView image = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/zatre_" + valueOfSelectedPiece + ".png")));
         image.setFitWidth(26);
         image.setFitHeight(26);
-        SpelbordGrid.add(image, column, row);
-        spelBord[column][row] = valueOfSelectedPiece;
-        ownPieces[column][row] = valueOfSelectedPiece;
+        SpelbordGrid.add(image, row, column);
+        spelBord[row][column] = valueOfSelectedPiece;
+        ownPieces[row][column] = valueOfSelectedPiece;
         SpelbordGrid.setHalignment(image, HPos.CENTER);
         SpelbordGrid.setValignment(image, VPos.CENTER);
         valueOfSelectedPiece = 0;
@@ -280,7 +326,7 @@ public class GameBoardController extends Pane {
     private void clearOwnPieces() {
         for (int col = 0; col < ownPieces.length; col++) {
             for (int row = 0; row < ownPieces.length; row++) {
-                ownPieces[col][row] = 0;
+                ownPieces[row][col] = 0;
             }
         }
     }
@@ -364,4 +410,36 @@ public class GameBoardController extends Pane {
         spelBord[14][13]=7;
         spelBord[14][14]=7;
     }
+
+    //region Music
+    private void addMusic() {
+        File musicFolder = new File("src/gui/resources/music");
+        File[] musicFiles = musicFolder.listFiles();
+        Random random = new Random();
+        int randomNumber = random.nextInt(musicFiles.length);
+        String musicFile = musicFiles[randomNumber].getAbsolutePath();
+        mediaPlayer = new MediaPlayer(new Media(new File(musicFile).toURI().toString()));
+        mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    }
+
+    private void changeMusicVolume(MouseEvent event) {
+        mediaPlayer.setVolume(sliderVolume.getValue() / 100);
+    }
+
+    private void clickMusic(MouseEvent event) {
+        if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            mediaPlayer.pause();
+            //set Imageview to play
+            ImageView imgMusic = (ImageView) event.getSource();
+            imgMusic.setImage(new Image(getClass().getResourceAsStream("/gui/resources/Music2.png")));
+        }
+        else {
+            mediaPlayer.play();
+            //set Imageview to pause
+            ImageView imgMusic = (ImageView) event.getSource();
+            imgMusic.setImage(new Image(getClass().getResourceAsStream("/gui/resources/Music.png")));
+        }
+    }
+    //endregion
 }
