@@ -94,12 +94,40 @@ public class RegisterController extends GridPane {
 
     public void checkRegister() {
         int year = Calendar.getInstance().get(Calendar.YEAR);
+        String gebruikersnaam = usernameTextField.getText();
+        int geboortejaar = Integer.parseInt(birthyearTextField.getText());
         boolean valid = true;
+
         if(valid) {
-            if (usernameTextField.getText().length() < 5)
+            if (usernameTextField.getText().length() < 5 || usernameTextField.getText().length() > 45)
                 messageLabel.setText(rb.getString("minLengthUsername"));
-            if (year - Integer.parseInt(birthyearTextField.getText()) < 6)
+            else if (year - Integer.parseInt(birthyearTextField.getText()) < 6)
                 messageLabel.setText(rb.getString("minAge"));
+            else {
+                try {
+                    dc.registreerSpeler(gebruikersnaam, geboortejaar);
+                } catch (Exception e) {
+                    valid = false;
+                    messageLabel.setText(rb.getString("Exception"));
+                    System.out.println(e);
+                }
+                if(valid) continueRegister();
+            }
+        }
+
+    }
+
+    private void continueRegister() {
+        try {
+            PlayerInformationController PlayerInformation = new PlayerInformationController(dc);
+            Scene scene = new Scene(PlayerInformation, 600, 400);
+            scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
+            Stage stage = (Stage) this.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e)
+        {
+            System.out.println(e);
         }
     }
 
