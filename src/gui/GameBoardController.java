@@ -37,6 +37,7 @@ public class GameBoardController extends Pane {
     private int[][] spelBord = new int[15][15];
     private int[][] ownPieces = new int[15][15];
     MediaPlayer mediaPlayer;
+    Button btnSettings;
     //endregion
 
     public GameBoardController(DomeinController dc) {
@@ -140,21 +141,21 @@ public class GameBoardController extends Pane {
         txtPlayer1.setPrefWidth(150);
         txtPlayer1.setMinHeight(20);
         txtPlayer1.setLayoutX(Scoreboard.getLayoutX() + Scoreboard.getMinWidth() / 2 - txtPlayer1.getMinWidth() / 2);
-        txtPlayer1.setLayoutY(Scoreboard.getLayoutY() - (txtPlayer1.getMinHeight()+5));
+        txtPlayer1.setLayoutY(Scoreboard.getLayoutY() - (txtPlayer1.getMinHeight() + 5));
 
         ImageView imgLeftArrow = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/left_arrow.png")));
         //scale image to fit the size of the textfield
         imgLeftArrow.setFitWidth(20);
         imgLeftArrow.setFitHeight(txtPlayer1.getMinHeight());
         imgLeftArrow.setLayoutX(txtPlayer1.getLayoutX() - imgLeftArrow.getFitWidth() - 5);
-        imgLeftArrow.setLayoutY(txtPlayer1.getLayoutY() + (txtPlayer1.getMinHeight() / 2)+2 - imgLeftArrow.getFitHeight() / 2);
+        imgLeftArrow.setLayoutY(txtPlayer1.getLayoutY() + (txtPlayer1.getMinHeight() / 2) + 2 - imgLeftArrow.getFitHeight() / 2);
         imgLeftArrow.setOnMouseClicked(this::clickLeftArrow);
 
         ImageView imgRightArrow = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/right_arrow.png")));
         imgRightArrow.setFitWidth(20);
         imgRightArrow.setFitHeight(txtPlayer1.getMinHeight());
         imgRightArrow.setLayoutX(txtPlayer1.getLayoutX() + txtPlayer1.getMinWidth() + 5);
-        imgRightArrow.setLayoutY(txtPlayer1.getLayoutY() + (txtPlayer1.getMinHeight() / 2)+2 - imgRightArrow.getFitHeight() / 2);
+        imgRightArrow.setLayoutY(txtPlayer1.getLayoutY() + (txtPlayer1.getMinHeight() / 2) + 2 - imgRightArrow.getFitHeight() / 2);
         imgRightArrow.setOnMouseClicked(this::clickRightArrow);
         //endregion
 
@@ -196,7 +197,7 @@ public class GameBoardController extends Pane {
         //endregion
 
         //region Add To Gameboard
-        this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes,btnRandom,txtPlayer1,sliderVolume, imgLeftArrow,imgRightArrow,Scoreboard,btnQuitGame, imgMusic);
+        this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer1, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, btnQuitGame, imgMusic);
         //endregion
     }
 
@@ -229,13 +230,13 @@ public class GameBoardController extends Pane {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Selecteer een steen");
             alert.setHeaderText(null);
-            if(firstRound){
+            if (firstRound) {
                 alert.setContentText("Selecteer een steen om te beginnen met spelen! De eerste steen mag enkel in het middelste vakje worden geplaatst.");
-            }else{
+            } else {
                 alert.setContentText("Selecteer een steen om te plaatsen.");
             }
             alert.showAndWait();
-        }else{
+        } else {
             tbSelectionPiece.setBorder(new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             for (Node node : SpelbordGrid.getChildren()) {
                 if (GridPane.getColumnIndex(node) == column && GridPane.getRowIndex(node) == row) {
@@ -244,30 +245,50 @@ public class GameBoardController extends Pane {
                     }
                 }
             }
-            if(firstPiece){
-                if(column ==7 && row == 7){
+            if (firstPiece) {
+                if (column == 7 && row == 7) {
                     placePiece(row, column);
                     firstPiece = false;
                 }
-            }else{
-                if(isEmpty){
-                    if(valueOfSelectedPiece != 0 && !alreadyUsed(row, column) && allowedPlacement(row, column)){
+            } else {
+                if (isEmpty) {
+                    if (valueOfSelectedPiece != 0 && !alreadyUsed(row, column) && allowedPlacement(row, column) && allowedPlacementSum(row, column, valueOfSelectedPiece) && checkSpecialTileAllowed(row, column, valueOfSelectedPiece)) {
                         placePiece(row, column);
-                        //sum of continous following values in array row starting from row, column position and ending when the value is 0 or 7
-                        System.out.println("sumV: " + sumOfContinousFollowingValuesV(row, column));
-                        System.out.println("sumH: " + sumOfContinousFollowingValuesH(row, column));
-                        }
-
-
                     }
                 }
             }
         }
+    }
 
-    private int sumOfContinousFollowingValuesH(int row, int column) {
+
+    private boolean checkSpecialTileAllowed(int row, int column, int valueOfSelectedPiece) {
+        if(checkSpecialTile(row, column)) {
+            return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) >= 10 || sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) == valueOfSelectedPiece) && (sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) >= 10 || sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) == valueOfSelectedPiece));
+        }else return true;
+    }
+
+    private boolean checkSpecialTile(int row, int column) {
+        if(row ==column) return true;
+        else if((row == 0 || row == 14) && (column == 6 || column == 8))
+            return true;
+        else if((column == 0 || column == 14) && (row == 6 || row == 8))
+            return true;
+        return (column == 14-row);
+
+    }
+
+    private boolean allowedPlacementSum(int row, int column, int valueOfSelectedPiece) {
+        //return true if the value of sumOfContinousFollowingValuesH and the value of sumOfContinousFollowingValuesS are less than or equal to 12
+        System.out.println("sumOfContinousFollowingValuesH: " + sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece));
+        System.out.println("sumOfContinousFollowingValuesV: " + sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece));
+        return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) <= 12 || sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) == valueOfSelectedPiece) && (sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) <= 12) || sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) == valueOfSelectedPiece);
+    }
+
+    private int sumOfContinousFollowingValuesH(int row, int column, int valueOfSelectedPiece) {
         int sum1 = 0, sum2 = 0;
         int i = column;
         int j = row;
+        spelBord[row][column] = valueOfSelectedPiece;
         while (spelBord[j][i] != 0 && spelBord[j][i] != 7) {
             sum1 += spelBord[j][i];
             if(i != 14)
@@ -282,14 +303,15 @@ public class GameBoardController extends Pane {
                  i--;
             else break;
         }
-        System.out.println("sum: " + sum1 + " " + sum2 +  " " +  spelBord[row][column]);
-        return (sum1 + sum2) - spelBord[row][column];
+        spelBord[row][column] = 0;
+        return (sum1 + sum2) - valueOfSelectedPiece;
     }
 
-    private int sumOfContinousFollowingValuesV(int row, int column) {
+    private int sumOfContinousFollowingValuesV(int row, int column, int valueOfSelectedPiece) {
         int sum1 = 0, sum2 = 0;
         int i = column;
         int j = row;
+        spelBord[row][column] = valueOfSelectedPiece;
         while (spelBord[j][i] != 0 && spelBord[j][i] != 7) {
             sum1 += spelBord[j][i];
             if(j != 14)
@@ -304,10 +326,9 @@ public class GameBoardController extends Pane {
                 j--;
             else break;
         }
-        System.out.println("sum: " + sum1 + " " + sum2 +  " " +  spelBord[row][column]);
-        return (sum1 + sum2) - spelBord[row][column];
+        spelBord[row][column] = 0;
+        return (sum1 + sum2) - valueOfSelectedPiece;
     }
-
 
     private boolean allowedPlacement(int row, int column) {
         if(column != 14 && (spelBord[row][column+1]!=0 && spelBord[row][column+1]!= 7 && (ownPieces[row][column+1] == 0 || firstRound)))
@@ -403,6 +424,37 @@ public class GameBoardController extends Pane {
         }
     }
 
+    //region Music
+    private void addMusic() {
+        File musicFolder = new File("src/gui/resources/music");
+        File[] musicFiles = musicFolder.listFiles();
+        Random random = new Random();
+        int randomNumber = random.nextInt(musicFiles.length);
+        String musicFile = musicFiles[randomNumber].getAbsolutePath();
+        mediaPlayer = new MediaPlayer(new Media(new File(musicFile).toURI().toString()));
+        mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    }
+
+    private void changeMusicVolume(MouseEvent event) {
+        mediaPlayer.setVolume(sliderVolume.getValue() / 100);
+    }
+
+    private void clickMusic(MouseEvent event) {
+        if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            mediaPlayer.pause();
+            //set Imageview to play
+            ImageView imgMusic = (ImageView) event.getSource();
+            imgMusic.setImage(new Image(getClass().getResourceAsStream("/gui/resources/Music2.png")));
+        }
+        else {
+            mediaPlayer.play();
+            //set Imageview to pause
+            ImageView imgMusic = (ImageView) event.getSource();
+            imgMusic.setImage(new Image(getClass().getResourceAsStream("/gui/resources/Music.png")));
+        }
+    }
+
     private void addNonUsableTiles(){
         spelBord[0][0]=7;
         spelBord[0][1]=7;
@@ -436,37 +488,6 @@ public class GameBoardController extends Pane {
         spelBord[14][12]=7;
         spelBord[14][13]=7;
         spelBord[14][14]=7;
-    }
-
-    //region Music
-    private void addMusic() {
-        File musicFolder = new File("src/gui/resources/music");
-        File[] musicFiles = musicFolder.listFiles();
-        Random random = new Random();
-        int randomNumber = random.nextInt(musicFiles.length);
-        String musicFile = musicFiles[randomNumber].getAbsolutePath();
-        mediaPlayer = new MediaPlayer(new Media(new File(musicFile).toURI().toString()));
-        mediaPlayer.setAutoPlay(true);
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    }
-
-    private void changeMusicVolume(MouseEvent event) {
-        mediaPlayer.setVolume(sliderVolume.getValue() / 100);
-    }
-
-    private void clickMusic(MouseEvent event) {
-        if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-            mediaPlayer.pause();
-            //set Imageview to play
-            ImageView imgMusic = (ImageView) event.getSource();
-            imgMusic.setImage(new Image(getClass().getResourceAsStream("/gui/resources/Music2.png")));
-        }
-        else {
-            mediaPlayer.play();
-            //set Imageview to pause
-            ImageView imgMusic = (ImageView) event.getSource();
-            imgMusic.setImage(new Image(getClass().getResourceAsStream("/gui/resources/Music.png")));
-        }
     }
     //endregion
 }
