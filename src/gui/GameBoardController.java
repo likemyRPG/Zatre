@@ -1,12 +1,10 @@
 package gui;
 
 import domein.DomeinController;
-import domein.Spel;
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -18,9 +16,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
-import javafx.util.Duration;
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -79,12 +75,11 @@ public class GameBoardController extends Pane {
         GridPane.setColumnSpan(SpelbordGrid, 15);
         GridPane.setRowSpan(SpelbordGrid, 15);
         for (int i = 0; i < 15; i++) {
-            SpelbordGrid.getColumnConstraints().add(new ColumnConstraints(30));
-        }
-        for (int i = 0; i < 15; i++) {
             SpelbordGrid.getRowConstraints().add(new RowConstraints(30));
         }
-
+        for (int i = 0; i < 15; i++) {
+            SpelbordGrid.getColumnConstraints().add(new ColumnConstraints(30));
+        }
         SpelbordGrid.toFront();
         SpelbordGrid.setOnMouseClicked(this::clickGrid);
         //endregion
@@ -113,7 +108,6 @@ public class GameBoardController extends Pane {
         //endregion
 
         //region Scoreboard
-
         GridPane Scoreboard = new GridPane();
         Scoreboard.setLayoutX(580);
         Scoreboard.setLayoutY(100);
@@ -134,7 +128,6 @@ public class GameBoardController extends Pane {
         for (int i = 0; i < amountOfRows; i++) {
             Scoreboard.getRowConstraints().add(new RowConstraints(height / amountOfRows));
         }
-/*        Scoreboard.add(, 1, 1);*/
 
         //endregion
 
@@ -215,8 +208,8 @@ public class GameBoardController extends Pane {
 
     private void onClickButtonRandom(ActionEvent actionEvent) {
         //print the values of spelBord in console
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
+        for (int i = 0; i < spelBord.length; i++) {
+            for (int j = 0; j < spelBord[i].length; j++) {
                 System.out.print(spelBord[i][j] + " ");
             }
             System.out.println();
@@ -226,9 +219,8 @@ public class GameBoardController extends Pane {
     }
 
     private void clickGrid(MouseEvent e) {
-
-        int row = (int) (e.getX() / 30);
-        int column = (int) (e.getY() / 30);
+        int column = (int) (e.getX() / 30);
+        int row = (int) (e.getY() / 30);
         boolean isEmpty = true;
         System.out.println(row + " " + column);
 
@@ -261,35 +253,70 @@ public class GameBoardController extends Pane {
                 if(isEmpty){
                     if(valueOfSelectedPiece != 0 && !alreadyUsed(row, column) && allowedPlacement(row, column)){
                         placePiece(row, column);
+                        //sum of continous following values in array row starting from row, column position and ending when the value is 0 or 7
+                        System.out.println("sumV: " + sumOfContinousFollowingValuesV(row, column));
+                        System.out.println("sumH: " + sumOfContinousFollowingValuesH(row, column));
+                        }
+
+
                     }
                 }
             }
         }
+
+    private int sumOfContinousFollowingValuesH(int row, int column) {
+        int sum1 = 0, sum2 = 0;
+        int i = column;
+        int j = row;
+        while (spelBord[j][i] != 0 && spelBord[j][i] != 7) {
+            sum1 += spelBord[j][i];
+            if(i != 14)
+                i++;
+            else break;
+        }
+        i = column;
+        j = row;
+        while (spelBord[j][i] != 0 && spelBord[j][i] != 7) {
+            sum2 += spelBord[j][i];
+            if(i != 0)
+                 i--;
+            else break;
+        }
+        System.out.println("sum: " + sum1 + " " + sum2 +  " " +  spelBord[row][column]);
+        return (sum1 + sum2) - spelBord[row][column];
     }
 
+    private int sumOfContinousFollowingValuesV(int row, int column) {
+        int sum1 = 0, sum2 = 0;
+        int i = column;
+        int j = row;
+        while (spelBord[j][i] != 0 && spelBord[j][i] != 7) {
+            sum1 += spelBord[j][i];
+            if(j != 14)
+                j++;
+            else break;
+        }
+        i = column;
+        j = row;
+        while (spelBord[j][i] != 0 && spelBord[j][i] != 7) {
+            sum2 += spelBord[j][i];
+            if(j != 0)
+                j--;
+            else break;
+        }
+        System.out.println("sum: " + sum1 + " " + sum2 +  " " +  spelBord[row][column]);
+        return (sum1 + sum2) - spelBord[row][column];
+    }
+
+
     private boolean allowedPlacement(int row, int column) {
-        if (firstPiece) {
-            if (row == 7 && column == 7) {
-                return true;
-            } else {
-                return false;
-            }
-        }else
-        {
+        if(column != 14 && (spelBord[row][column+1]!=0 && spelBord[row][column+1]!= 7 && (ownPieces[row][column+1] == 0 || firstRound)))
             return true;
-        }
-        /*if(column != 14 || column != 0) {
-            if ((spelBord[column + 1][row] != 0 && spelBord[column + 1][row] != 7 && (ownPieces[column + 1][row] == 0 | firstRound)))
-                return true;
-            else if ((spelBord[column - 1][row] != 0 && spelBord[column - 1][row] != 7 && (ownPieces[column - 1][row] == 0 | firstRound)))
-                return true;
-        }else if(row != 14 || row != 0) {
-            if ((spelBord[column][row + 1] != 0 && spelBord[column][row + 1] != 7 && (ownPieces[column][row + 1] == 0 | firstRound)))
-                return true;
-            else
-                return ((spelBord[column][row - 1] != 0 && spelBord[column][row - 1] != 7 && (ownPieces[column][row - 1] == 0 || firstRound)));
-        }
-        return true;*/
+        else if(column != 0 && (spelBord[row][column-1]!=0 && spelBord[row][column-1]!=7 && (ownPieces[row][column-1] == 0 || firstRound)))
+            return true;
+        else if(row !=14 && spelBord[row+1][column]!=0 && spelBord[row+1][column]!=7 && (ownPieces[row+1][column] == 0 || firstRound))
+            return true;
+        else return row != 0 && ( spelBord[row-1][column] != 0 && spelBord[row-1][column] != 7 && (ownPieces[row-1][column] == 0 || firstRound));
     }
 
     private boolean alreadyUsed(int row, int column){
@@ -300,7 +327,7 @@ public class GameBoardController extends Pane {
         ImageView image = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/zatre_" + valueOfSelectedPiece + ".png")));
         image.setFitWidth(26);
         image.setFitHeight(26);
-        SpelbordGrid.add(image, row, column);
+        SpelbordGrid.add(image, column, row); //add image to grid
         spelBord[row][column] = valueOfSelectedPiece;
         ownPieces[row][column] = valueOfSelectedPiece;
         SpelbordGrid.setHalignment(image, HPos.CENTER);
