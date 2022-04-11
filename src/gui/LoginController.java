@@ -21,6 +21,8 @@ import static persistence.language.rb;
 public class LoginController extends GridPane {
     private DomeinController dc;
     private Button btnCancel;
+    private Label UsernameLabel;
+    private Label birthYearLabel;
     private Label lblLoginMessage;
     private TextField usernameTextField;
     private TextField birthYearTextField;
@@ -51,27 +53,40 @@ public class LoginController extends GridPane {
 
         btnLogin = new Button(rb.getString("login"));
         btnLogin.setMaxWidth(Double.MAX_VALUE);
-        add(btnLogin, 1,5);
+        add(btnLogin, 0,5);
+        GridPane.setColumnSpan(btnLogin, 2);
         btnLogin.setOnAction(this::onClickLogin);
-        
+
+        UsernameLabel = new Label(rb.getString("fillInUsername"));
+        UsernameLabel.setMaxWidth(Double.MAX_VALUE);
+        UsernameLabel.getStyleClass().add("lblText");
+        add(UsernameLabel, 0, 2);
+
+        birthYearLabel = new Label(rb.getString("fillInBirthYear"));
+        birthYearLabel.setMaxWidth(Double.MAX_VALUE);
+        birthYearLabel.getStyleClass().add("lblText");
+        add(birthYearLabel, 0, 3);
+
         usernameTextField = new TextField();
         usernameTextField.setMaxWidth(Double.MAX_VALUE);
         add(usernameTextField, 1, 2);
-        usernameTextField.setPromptText(rb.getString("fillInUsername"));
+        usernameTextField.setPromptText(rb.getString("username"));
 
         birthYearTextField = new TextField();
         birthYearTextField.setMaxWidth(Double.MAX_VALUE);
         add(birthYearTextField, 1, 3);
-        birthYearTextField.setPromptText(rb.getString("fillInBirthYear"));
+        birthYearTextField.setPromptText(rb.getString("birthyear"));
 
         lblLoginMessage = new Label();
         lblLoginMessage.setMaxWidth(Double.MAX_VALUE);
         lblLoginMessage.getStyleClass().add("lblLogin");
-        add(lblLoginMessage, 1, 4);
+        add(lblLoginMessage, 0, 4);
+        GridPane.setColumnSpan(lblLoginMessage, 2);
 
         btnCancel = new Button(rb.getString("back"));
         btnCancel.setMaxWidth(Double.MAX_VALUE);
-        add(btnCancel, 1,6);
+        add(btnCancel, 0,6);
+        GridPane.setColumnSpan(btnCancel, 2);
         btnCancel.setOnAction(this::onClickCancel);
     }
 

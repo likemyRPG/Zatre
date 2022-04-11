@@ -47,10 +47,12 @@
 .bg-style{
     -fx-background-color: #1d1d1d;
 }
+
+
 .txtPlayer
 {
     -fx-font-family: "Microsoft YaHei UI";
     -fx-font-size: 12px;
     -fx-style: bold;
-    fx-alignment: center;
+    -fx-alignment: center;
 }

@@ -5,9 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -53,37 +52,47 @@ public class RegisterController extends GridPane {
         col2.setHgrow(Priority.ALWAYS);
         getColumnConstraints().addAll(col1, col2);
 
-
         registerButton = new Button(rb.getString("register"));
         registerButton.setMaxWidth(Double.MAX_VALUE);
-        add(registerButton, 1,5);
+        add(registerButton, 0,5);
+        GridPane.setColumnSpan(registerButton, 2);
         registerButton.setOnAction(this::registerButtonOnAction);
 
-        cancelButton = new Button(rb.getString("cancel"));
+        cancelButton = new Button(rb.getString("back"));
         cancelButton.setMaxWidth(Double.MAX_VALUE);
-        add(cancelButton, 1,6);
+        add(cancelButton, 0,6);
+        GridPane.setColumnSpan(cancelButton, 2);
         cancelButton.setOnAction(this::cancelButtonOnAction);
+
+        usernameLabel = new Label(rb.getString("fillInUsername"));
+        usernameLabel.setMaxWidth(Double.MAX_VALUE);
+        usernameLabel.getStyleClass().add("lblText");
+        add(usernameLabel, 0, 2);
+
+        birthyearLabel = new Label(rb.getString("fillInBirthYear"));
+        birthyearLabel.setMaxWidth(Double.MAX_VALUE);
+        birthyearLabel.getStyleClass().add("lblText");
+        add(birthyearLabel, 0, 3);
 
         usernameTextField = new TextField();
         usernameTextField.setMaxWidth(Double.MAX_VALUE);
         add(usernameTextField, 1, 2);
-        usernameTextField.setPromptText(rb.getString("fillInUsername"));
+        usernameTextField.setPromptText(rb.getString("username"));
 
         birthyearTextField = new TextField();
         birthyearTextField.setMaxWidth(Double.MAX_VALUE);
         add(birthyearTextField, 1, 3);
-        birthyearTextField.setPromptText(rb.getString("fillInBirthYear"));
+        birthyearTextField.setPromptText(rb.getString("birthyear"));
 
         messageLabel = new Label();
         messageLabel.setMaxWidth(Double.MAX_VALUE);
         messageLabel.getStyleClass().add("lblLogin");
-        add(messageLabel, 1, 4);
-
+        add(messageLabel, 0, 4);
+        GridPane.setColumnSpan(messageLabel, 2);
     }
 
     public void registerButtonOnAction(ActionEvent event) {
         int year = Calendar.getInstance().get(Calendar.YEAR);
-
 
         if (usernameTextField.getText().isBlank() == false && birthyearTextField.getText().isBlank() == false)
                 checkRegister();
@@ -101,7 +110,7 @@ public class RegisterController extends GridPane {
         if(valid) {
             if (usernameTextField.getText().length() < 5 || usernameTextField.getText().length() > 45)
                 messageLabel.setText(rb.getString("minLengthUsername"));
-            else if (year - Integer.parseInt(birthyearTextField.getText()) < 6)
+            else if (year - Integer.parseInt(birthyearTextField.getText()) < 6 || year - Integer.parseInt(birthyearTextField.getText()) > 120)
                 messageLabel.setText(rb.getString("minAge"));
             else {
                 try {
