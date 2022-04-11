@@ -7,8 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class PlayerInformationController extends Pane {
     private DomeinController dc;
@@ -54,6 +56,7 @@ public class PlayerInformationController extends Pane {
             Scene scene = new Scene(AddPlayer, 600, 400);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
+            scene.setFill(Color.TRANSPARENT);
             stage.setScene(scene);
             stage.show();
         }catch (Exception e)

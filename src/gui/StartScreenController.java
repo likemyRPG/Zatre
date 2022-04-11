@@ -14,7 +14,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,6 +77,7 @@ public class StartScreenController extends Pane {
             Scene scene = new Scene(language, 600, 400);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
+            scene.setFill(Color.TRANSPARENT);
             stage.setScene(scene);
             stage.show();
         }catch (Exception e){

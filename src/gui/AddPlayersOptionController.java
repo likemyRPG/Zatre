@@ -7,8 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import static persistence.language.rb;
 
@@ -123,6 +125,7 @@ public class AddPlayersOptionController extends Pane {
             Scene scene = new Scene(register, 600, 400);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
+            scene.setFill(Color.TRANSPARENT);
             stage.setScene(scene);
             stage.show();
         }catch (Exception e)
@@ -137,6 +140,7 @@ public class AddPlayersOptionController extends Pane {
             Scene scene = new Scene(login, 600, 400);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
+            scene.setFill(Color.TRANSPARENT);
             stage.setScene(scene);
             stage.show();
         }catch (Exception e)
@@ -151,6 +155,7 @@ public class AddPlayersOptionController extends Pane {
             Scene scene = new Scene(StartMenu, 600, 400);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
+            scene.setFill(Color.TRANSPARENT);
             stage.setScene(scene);
             stage.show();
         }catch (Exception e)

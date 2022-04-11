@@ -3,6 +3,7 @@ package gui;
 import domein.DomeinController;
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -16,6 +17,8 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
+import javafx.stage.StageStyle;
+
 import java.io.File;
 import java.util.List;
 import java.util.Random;
@@ -54,7 +57,6 @@ public class GameBoardController extends Pane {
 
     private void buildGUI() {
         getStyleClass().add("bg-style");
-
         //region Create Gameboard
         ImageView Title = new ImageView(new Image(
                 getClass().getResourceAsStream
@@ -172,28 +174,31 @@ public class GameBoardController extends Pane {
         Button btnQuitGame = new Button("Quit game!");
         btnQuitGame.setMaxWidth(Double.MAX_VALUE);
         btnQuitGame.setOnAction(this::onClickButtonQuitGame);
+        btnQuitGame.setMinWidth(100);
+        btnQuitGame.setMinHeight(50);
 
-        btnQuitGame.setLayoutX(900 - btnQuitGame.getMaxWidth() - 10);
-        btnQuitGame.setLayoutY(645 - btnQuitGame.getMaxHeight() - 10);
+        btnQuitGame.setLayoutX(900 - btnQuitGame.getMinWidth() - 22);
+        btnQuitGame.setLayoutY(645 - btnQuitGame.getMinHeight() - 10);
+        //endregion
+
+        //region Music button
+        ImageView imgMusic = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/pause.png")));
+        imgMusic.setFitWidth(20);
+        imgMusic.setFitHeight(20);
+        imgMusic.setLayoutX(870);
+        imgMusic.setLayoutY(560);
+        imgMusic.setOnMouseClicked(this::clickMusic);
         //endregion
 
         //region create sliderVolume
         sliderVolume = new Slider();
+        sliderVolume.setOrientation(Orientation.VERTICAL);
         sliderVolume.setMin(0);
         sliderVolume.setMax(100);
-        sliderVolume.setValue(50);
-        sliderVolume.setLayoutX(760);
-        sliderVolume.setLayoutY(610);
+        sliderVolume.setValue(3);
+        sliderVolume.setLayoutX(imgMusic.getLayoutX() + 3);
+        sliderVolume.setLayoutY(imgMusic.getLayoutY() - 140);
         sliderVolume.setOnMouseClicked(this::changeMusicVolume);
-        //endregion
-
-        //region Music button
-        ImageView imgMusic = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/Music.png")));
-        imgMusic.setFitWidth(20);
-        imgMusic.setFitHeight(20);
-        imgMusic.setLayoutX(740);
-        imgMusic.setLayoutY(608);
-        imgMusic.setOnMouseClicked(this::clickMusic);
         //endregion
 
         //region Add To Gameboard
@@ -354,6 +359,11 @@ public class GameBoardController extends Pane {
         SpelbordGrid.setHalignment(image, HPos.CENTER);
         SpelbordGrid.setValignment(image, VPos.CENTER);
         valueOfSelectedPiece = 0;
+        Media sound = new Media(getClass().getResource("/gui/resources/zatre_Tile_Place.mp3").toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setVolume(0.2);
+        mediaPlayer.play();
+        mediaPlayer.setCycleCount(1);
         updateToolbar();
     }
 
@@ -413,10 +423,12 @@ public class GameBoardController extends Pane {
 
     public void onClickButtonQuitGame(ActionEvent event) {
         try {
+            mediaPlayer.stop();
             StartMenuController StartMenu = new StartMenuController(dc); // <1>
             Scene scene = new Scene(StartMenu, 600, 400);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
+            scene.setFill(Color.TRANSPARENT);
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
@@ -432,6 +444,7 @@ public class GameBoardController extends Pane {
         int randomNumber = random.nextInt(musicFiles.length);
         String musicFile = musicFiles[randomNumber].getAbsolutePath();
         mediaPlayer = new MediaPlayer(new Media(new File(musicFile).toURI().toString()));
+        mediaPlayer.setVolume(0.03);
         mediaPlayer.setAutoPlay(true);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
     }
@@ -445,13 +458,13 @@ public class GameBoardController extends Pane {
             mediaPlayer.pause();
             //set Imageview to play
             ImageView imgMusic = (ImageView) event.getSource();
-            imgMusic.setImage(new Image(getClass().getResourceAsStream("/gui/resources/Music2.png")));
+            imgMusic.setImage(new Image(getClass().getResourceAsStream("/gui/resources/play.png")));
         }
         else {
             mediaPlayer.play();
             //set Imageview to pause
             ImageView imgMusic = (ImageView) event.getSource();
-            imgMusic.setImage(new Image(getClass().getResourceAsStream("/gui/resources/Music.png")));
+            imgMusic.setImage(new Image(getClass().getResourceAsStream("/gui/resources/pause.png")));
         }
     }
 
