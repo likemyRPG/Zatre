@@ -1,13 +1,8 @@
 package domein;
 
-import exceptions.OutOfRangeException;
-import persistence.MyJDBC;
-import persistence.language;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.*;
-import java.util.ResourceBundle;
 
 public class PieceRepository {
 
@@ -53,6 +48,10 @@ public class PieceRepository {
             randomPieces.add(piece.getValue());
         }
         return randomPieces;
+    }
+
+    public void addPiece(Piece piece){
+        pieces.add(piece);
     }
 
     public String giveValues() {

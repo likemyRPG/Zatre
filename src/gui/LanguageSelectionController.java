@@ -60,7 +60,11 @@ public class LanguageSelectionController extends GridPane {
         languageComboBox.setMaxWidth(Double.MAX_VALUE);
         languageComboBox.getSelectionModel().selectFirst();
         languageComboBox.getStyleClass().add("combo-box");
+        languageComboBox.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
+        languageComboBox.setStyle("-fx-background-color: transparent;");
+        languageComboBox.setStyle("-fx-border-color: transparent;");
         add(languageComboBox, 1, 4);
+
 
         btnContinue = new Button("Select");
         btnContinue.setMaxWidth(Double.MAX_VALUE);
