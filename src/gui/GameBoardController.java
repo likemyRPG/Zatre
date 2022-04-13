@@ -286,7 +286,7 @@ public class GameBoardController extends Pane {
         //return true if the value of sumOfContinousFollowingValuesH and the value of sumOfContinousFollowingValuesS are less than or equal to 12
         System.out.println("sumOfContinousFollowingValuesH: " + sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece));
         System.out.println("sumOfContinousFollowingValuesV: " + sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece));
-        return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) <= 12 || sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) == valueOfSelectedPiece) && (sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) <= 12) || sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) == valueOfSelectedPiece);
+        return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) <= 12 || sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) == valueOfSelectedPiece) && ((sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) <= 12) || sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) == valueOfSelectedPiece));
     }
 
     private int sumOfContinousFollowingValuesH(int row, int column, int valueOfSelectedPiece) {
