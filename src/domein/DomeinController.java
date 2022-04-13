@@ -63,6 +63,10 @@ public class DomeinController{
 		return pieceRepository.giveRandomPieces(value);
 	}
 
+	public void voegPieceToe(int value) {
+		pieceRepository.addPiece(new Piece(value));
+	}
+
 	public String geefSteentjesWeer(){
 		return pieceRepository.giveValues();
 	}

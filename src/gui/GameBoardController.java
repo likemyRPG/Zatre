@@ -1,6 +1,8 @@
 package gui;
 
 import domein.DomeinController;
+import domein.Piece;
+import exceptions.OutOfRangeException;
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
@@ -194,6 +196,16 @@ public class GameBoardController extends Pane {
         imgMusic.setOnMouseClicked(this::clickMusic);
         //endregion
 
+
+        //add Button to give back the pieces
+        Button btnGiveBack = new Button("Surrender");
+        btnGiveBack.setMaxWidth(Double.MAX_VALUE);
+        btnGiveBack.setOnAction(this::onClickButtonSurrender);
+        btnGiveBack.setMinWidth(100);
+        btnGiveBack.setMinHeight(50);
+        btnGiveBack.setLayoutX(900 - btnQuitGame.getMinWidth() - 150);
+        btnGiveBack.setLayoutY(645 - btnQuitGame.getMinHeight() - 10);
+
         //region create sliderVolume
         sliderVolume = new Slider();
         sliderVolume.setOrientation(Orientation.VERTICAL);
@@ -207,12 +219,28 @@ public class GameBoardController extends Pane {
 
         //region Add To Gameboard
         this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, btnQuitGame, imgMusic);
+        this.getChildren().addAll(btnGiveBack, Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer1, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, btnQuitGame, imgMusic);
         //endregion
     }
 
     private String geefSpelerAanBeurt() {
         spelerAanBeurt++;
         return dc.geefSpelersNaam().split(System.lineSeparator())[(spelerAanBeurt % dc.geefSpelersNaam().split(System.lineSeparator()).length)];
+    }
+
+    private void onClickButtonSurrender(ActionEvent event) {
+        //get the ids of the buttons in the toolbar
+        int[] ids = new int[tbSelectionPiece.getItems().size()];
+        for (int i = 0; i < tbSelectionPiece.getItems().size(); i++) {
+            ids[i] = Integer.parseInt(tbSelectionPiece.getItems().get(i).getId());
+        }
+        //use dc.voegPieceToe() with the ids of the buttons in the toolbar with a for loop
+        for (int i = 0; i < ids.length; i++) {
+            dc.voegPieceToe(ids[i]);
+        }
+        //delte the buttons in the toolbar
+        tbSelectionPiece.getItems().clear();
+        updateToolbar();
     }
 
     private void clickLeftArrow(MouseEvent mouseEvent) {
@@ -231,6 +259,8 @@ public class GameBoardController extends Pane {
             }
             System.out.println();
         }
+        System.out.println("--------------------------------------------------------------------------------");
+        System.out.println("dc.getAantalSteentjes() = " + dc.geefAantalSteentjes());
         System.out.println("--------------------------------------------------------------------------------");
         System.out.println();
     }
@@ -377,13 +407,13 @@ public class GameBoardController extends Pane {
         mediaPlayer.setVolume(0.2);
         mediaPlayer.play();
         mediaPlayer.setCycleCount(1);
+        tbSelectionPiece.getItems().remove(index);
+        amountOfPieces--;
         updateToolbar();
     }
 
     private void updateToolbar() {
         //If toolbar has no elements, add all pieces
-        tbSelectionPiece.getItems().remove(index);
-        amountOfPieces--;
         lblAantalSteentjes.setText("x" + amountOfPieces);
         if (tbSelectionPiece.getItems().isEmpty() && amountOfPieces > 0){
             if(!firstPiece) firstRound=false;
