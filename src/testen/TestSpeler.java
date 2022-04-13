@@ -1,4 +1,4 @@
-package testen;
+/*package testen;
 
 import java.util.InputMismatchException;
 import java.util.Locale;
@@ -60,3 +60,4 @@ class TestSpeler {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {new Speler(GELDIGE_NAAM,GELDIGE_GEBOORTE, a);});
     }
 }
+*/

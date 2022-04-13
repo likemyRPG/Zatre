@@ -41,6 +41,10 @@ public class GameBoardController extends Pane {
     private int[][] ownPieces = new int[15][15];
     MediaPlayer mediaPlayer;
     Button btnSettings;
+    ImageView imgRightArrow;
+    ImageView imgLeftArrow;
+    TextField txtPlayer;
+    int spelerAanBeurt=-1;
     //endregion
 
     public GameBoardController(DomeinController dc) {
@@ -135,29 +139,29 @@ public class GameBoardController extends Pane {
         //endregion
 
         //region Players
-        TextField txtPlayer1 = new TextField("Player 1");
-        txtPlayer1.getStyleClass().add("txtPlayer");
-        txtPlayer1.setAlignment(Pos.CENTER);
-        txtPlayer1.setEditable(false);
-        txtPlayer1.setMinWidth(150);
-        txtPlayer1.setPrefWidth(150);
-        txtPlayer1.setMinHeight(20);
-        txtPlayer1.setLayoutX(Scoreboard.getLayoutX() + Scoreboard.getMinWidth() / 2 - txtPlayer1.getMinWidth() / 2);
-        txtPlayer1.setLayoutY(Scoreboard.getLayoutY() - (txtPlayer1.getMinHeight() + 5));
+        txtPlayer = new TextField(geefSpelerAanBeurt());
+        txtPlayer.getStyleClass().add("txtPlayer");
+        txtPlayer.setAlignment(Pos.CENTER);
+        txtPlayer.setEditable(false);
+        txtPlayer.setMinWidth(150);
+        txtPlayer.setPrefWidth(150);
+        txtPlayer.setMinHeight(20);
+        txtPlayer.setLayoutX(Scoreboard.getLayoutX() + Scoreboard.getMinWidth() / 2 - txtPlayer.getMinWidth() / 2);
+        txtPlayer.setLayoutY(Scoreboard.getLayoutY() - (txtPlayer.getMinHeight() + 5));
 
-        ImageView imgLeftArrow = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/left_arrow.png")));
+        imgLeftArrow = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/left_arrow.png")));
         //scale image to fit the size of the textfield
         imgLeftArrow.setFitWidth(20);
-        imgLeftArrow.setFitHeight(txtPlayer1.getMinHeight());
-        imgLeftArrow.setLayoutX(txtPlayer1.getLayoutX() - imgLeftArrow.getFitWidth() - 5);
-        imgLeftArrow.setLayoutY(txtPlayer1.getLayoutY() + (txtPlayer1.getMinHeight() / 2) + 2 - imgLeftArrow.getFitHeight() / 2);
+        imgLeftArrow.setFitHeight(txtPlayer.getMinHeight());
+        imgLeftArrow.setLayoutX(txtPlayer.getLayoutX() - imgLeftArrow.getFitWidth() - 5);
+        imgLeftArrow.setLayoutY(txtPlayer.getLayoutY() + (txtPlayer.getMinHeight() / 2) + 2 - imgLeftArrow.getFitHeight() / 2);
         imgLeftArrow.setOnMouseClicked(this::clickLeftArrow);
 
-        ImageView imgRightArrow = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/right_arrow.png")));
+        imgRightArrow = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/right_arrow.png")));
         imgRightArrow.setFitWidth(20);
-        imgRightArrow.setFitHeight(txtPlayer1.getMinHeight());
-        imgRightArrow.setLayoutX(txtPlayer1.getLayoutX() + txtPlayer1.getMinWidth() + 5);
-        imgRightArrow.setLayoutY(txtPlayer1.getLayoutY() + (txtPlayer1.getMinHeight() / 2) + 2 - imgRightArrow.getFitHeight() / 2);
+        imgRightArrow.setFitHeight(txtPlayer.getMinHeight());
+        imgRightArrow.setLayoutX(txtPlayer.getLayoutX() + txtPlayer.getMinWidth() + 5);
+        imgRightArrow.setLayoutY(txtPlayer.getLayoutY() + (txtPlayer.getMinHeight() / 2) + 2 - imgRightArrow.getFitHeight() / 2);
         imgRightArrow.setOnMouseClicked(this::clickRightArrow);
         //endregion
 
@@ -202,14 +206,21 @@ public class GameBoardController extends Pane {
         //endregion
 
         //region Add To Gameboard
-        this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer1, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, btnQuitGame, imgMusic);
+        this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, btnQuitGame, imgMusic);
         //endregion
+    }
+
+    private String geefSpelerAanBeurt() {
+        spelerAanBeurt++;
+        return dc.geefSpelersNaam().split(System.lineSeparator())[(spelerAanBeurt % dc.geefSpelersNaam().split(System.lineSeparator()).length)];
     }
 
     private void clickLeftArrow(MouseEvent mouseEvent) {
     }
 
     private void clickRightArrow(MouseEvent mouseEvent) {
+        txtPlayer.setText(geefSpelerAanBeurt());
+
     }
 
     private void onClickButtonRandom(ActionEvent actionEvent) {
@@ -268,13 +279,15 @@ public class GameBoardController extends Pane {
 
     private boolean checkSpecialTileAllowed(int row, int column, int valueOfSelectedPiece) {
         if(checkSpecialTile(row, column)) {
-            return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) >= 10 || sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) == valueOfSelectedPiece) && (sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) >= 10 || sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) == valueOfSelectedPiece));
+            return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) >= 10 ) || (sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) >= 10 ));
         }else return true;
     }
 
     private boolean checkSpecialTile(int row, int column) {
         if(row ==column) return true;
-        else if((row == 0 || row == 14) && (column == 6 || column == 8))
+        else if((row == 0) && (column == 6 || column == 8))
+            return true;
+        else if((row == 14) && (column == 5 || column == 8))
             return true;
         else if((column == 0 || column == 14) && (row == 6 || row == 8))
             return true;
@@ -286,7 +299,7 @@ public class GameBoardController extends Pane {
         //return true if the value of sumOfContinousFollowingValuesH and the value of sumOfContinousFollowingValuesS are less than or equal to 12
         System.out.println("sumOfContinousFollowingValuesH: " + sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece));
         System.out.println("sumOfContinousFollowingValuesV: " + sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece));
-        return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) <= 12 || sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) == valueOfSelectedPiece) && ((sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) <= 12) || sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) == valueOfSelectedPiece));
+        return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) <= 12 ) && (sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) <= 12));
     }
 
     private int sumOfContinousFollowingValuesH(int row, int column, int valueOfSelectedPiece) {
