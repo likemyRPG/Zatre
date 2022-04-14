@@ -42,11 +42,11 @@ public class GameBoardController extends Pane {
     private int[][] spelBord = new int[15][15];
     private int[][] ownPieces = new int[15][15];
     MediaPlayer mediaPlayer;
-    Button btnSettings;
     ImageView imgRightArrow;
     ImageView imgLeftArrow;
     TextField txtPlayer;
     int spelerAanBeurt=-1;
+    Button btnSettings;
     //endregion
 
     public GameBoardController(DomeinController dc) {
@@ -152,6 +152,8 @@ public class GameBoardController extends Pane {
         txtPlayer.setLayoutY(Scoreboard.getLayoutY() - (txtPlayer.getMinHeight() + 5));
 
         imgLeftArrow = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/left_arrow.png")));
+
+        ImageView imgLeftArrow = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/left_arrow.png")));
         //scale image to fit the size of the textfield
         imgLeftArrow.setFitWidth(20);
         imgLeftArrow.setFitHeight(txtPlayer.getMinHeight());
@@ -166,6 +168,15 @@ public class GameBoardController extends Pane {
         imgRightArrow.setLayoutY(txtPlayer.getLayoutY() + (txtPlayer.getMinHeight() / 2) + 2 - imgRightArrow.getFitHeight() / 2);
         imgRightArrow.setOnMouseClicked(this::clickRightArrow);
         //endregion
+
+        //add Button to give back the pieces
+        Button btnGiveBack = new Button("Surrender");
+        btnGiveBack.setMaxWidth(Double.MAX_VALUE);
+        btnGiveBack.setOnAction(this::onClickButtonSurrender);
+        btnGiveBack.setMinWidth(100);
+        btnGiveBack.setMinHeight(50);
+        btnGiveBack.setLayoutX(900 - btnGiveBack.getMinWidth() - 150);
+        btnGiveBack.setLayoutY(645 - btnGiveBack.getMinHeight() - 10);
 
         //region Random Button
 
@@ -196,16 +207,6 @@ public class GameBoardController extends Pane {
         imgMusic.setOnMouseClicked(this::clickMusic);
         //endregion
 
-
-        //add Button to give back the pieces
-        Button btnGiveBack = new Button("Surrender");
-        btnGiveBack.setMaxWidth(Double.MAX_VALUE);
-        btnGiveBack.setOnAction(this::onClickButtonSurrender);
-        btnGiveBack.setMinWidth(100);
-        btnGiveBack.setMinHeight(50);
-        btnGiveBack.setLayoutX(900 - btnQuitGame.getMinWidth() - 150);
-        btnGiveBack.setLayoutY(645 - btnQuitGame.getMinHeight() - 10);
-
         //region create sliderVolume
         sliderVolume = new Slider();
         sliderVolume.setOrientation(Orientation.VERTICAL);
@@ -218,14 +219,7 @@ public class GameBoardController extends Pane {
         //endregion
 
         //region Add To Gameboard
-        this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, btnQuitGame, imgMusic);
-        this.getChildren().addAll(btnGiveBack, Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer1, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, btnQuitGame, imgMusic);
-        //endregion
-    }
-
-    private String geefSpelerAanBeurt() {
-        spelerAanBeurt++;
-        return dc.geefSpelersNaam().split(System.lineSeparator())[(spelerAanBeurt % dc.geefSpelersNaam().split(System.lineSeparator()).length)];
+        this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, btnQuitGame, imgMusic, btnGiveBack);        //endregion
     }
 
     private void onClickButtonSurrender(ActionEvent event) {
@@ -243,12 +237,16 @@ public class GameBoardController extends Pane {
         updateToolbar();
     }
 
+    private String geefSpelerAanBeurt() {
+        spelerAanBeurt++;
+        return dc.geefSpelersNaam().split(System.lineSeparator())[(spelerAanBeurt % dc.geefSpelersNaam().split(System.lineSeparator()).length)];
+    }
+
     private void clickLeftArrow(MouseEvent mouseEvent) {
     }
 
     private void clickRightArrow(MouseEvent mouseEvent) {
         txtPlayer.setText(geefSpelerAanBeurt());
-
     }
 
     private void onClickButtonRandom(ActionEvent actionEvent) {
@@ -309,15 +307,13 @@ public class GameBoardController extends Pane {
 
     private boolean checkSpecialTileAllowed(int row, int column, int valueOfSelectedPiece) {
         if(checkSpecialTile(row, column)) {
-            return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) >= 10 ) || (sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) >= 10 ));
+            return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) >= 10 || sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) == valueOfSelectedPiece) && (sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) >= 10 || sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) == valueOfSelectedPiece));
         }else return true;
     }
 
     private boolean checkSpecialTile(int row, int column) {
         if(row ==column) return true;
-        else if((row == 0) && (column == 6 || column == 8))
-            return true;
-        else if((row == 14) && (column == 5 || column == 8))
+        else if((row == 0 || row == 14) && (column == 6 || column == 8))
             return true;
         else if((column == 0 || column == 14) && (row == 6 || row == 8))
             return true;
@@ -329,7 +325,7 @@ public class GameBoardController extends Pane {
         //return true if the value of sumOfContinousFollowingValuesH and the value of sumOfContinousFollowingValuesS are less than or equal to 12
         System.out.println("sumOfContinousFollowingValuesH: " + sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece));
         System.out.println("sumOfContinousFollowingValuesV: " + sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece));
-        return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) <= 12 ) && (sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) <= 12));
+        return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) <= 12 || sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) == valueOfSelectedPiece) && ((sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) <= 12) || sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) == valueOfSelectedPiece));
     }
 
     private int sumOfContinousFollowingValuesH(int row, int column, int valueOfSelectedPiece) {
@@ -348,7 +344,7 @@ public class GameBoardController extends Pane {
         while (spelBord[j][i] != 0 && spelBord[j][i] != 7) {
             sum2 += spelBord[j][i];
             if(i != 0)
-                 i--;
+                i--;
             else break;
         }
         spelBord[row][column] = 0;
