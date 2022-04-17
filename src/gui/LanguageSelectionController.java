@@ -20,6 +20,7 @@ import javafx.stage.StageStyle;
 import main.Main;
 import persistence.language;
 
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class LanguageSelectionController extends GridPane {
@@ -28,6 +29,7 @@ public class LanguageSelectionController extends GridPane {
     private Button btnContinue;
     language ln = new language();
     ResourceBundle rb;
+    HashMap<String, String> languageShort;
     ObservableList<String> options =
             FXCollections.observableArrayList(
                     "Nederlands",
@@ -77,16 +79,9 @@ public class LanguageSelectionController extends GridPane {
         {
             language ln = new language();
             String language = (String) languageComboBox.getValue();
-            switch (language){
-                case "Nederlands": language = "nl";
-                break;
-                case "English": language = "en";
-                break;
-                case "Français": language = "fr";
-                break;
-                default:language = "nl";
-            }
-            ln.setGekozenTaal(language);
+            languageShort = new HashMap<>();
+            hashMapAddValue();
+            ln.setGekozenTaal(languageShort.get(language));
             ln.taal();
             StartMenuController startMenu = new StartMenuController(dc);
             Scene scene = new Scene(startMenu, 600, 400);
@@ -98,5 +93,11 @@ public class LanguageSelectionController extends GridPane {
         }catch (Exception e){
             System.out.println(e);
         }
+    }
+
+    private void hashMapAddValue() {
+        languageShort.put("Nederlands", "nl");
+        languageShort.put("English", "en");
+        languageShort.put("Français", "fr");
     }
 }
