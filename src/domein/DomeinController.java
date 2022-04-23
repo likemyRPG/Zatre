@@ -33,7 +33,7 @@ public class DomeinController{
 		return spelerRepository.alToegevoegd(gebruikersnaam, geboortejaar);
 	}
 
-	public void startSpel(){
+	public void startSpel()	{
 		spel = new Spel();
 		spelerRepository.shufflePlayers();
 		spelerRepository.verminderSpeelkansen();
