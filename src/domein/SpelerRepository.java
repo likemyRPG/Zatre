@@ -82,7 +82,7 @@ public class SpelerRepository {
 
     public String geefSpelersNaam() {
         if(spelers.isEmpty())
-            return String.format(language.rb.getString("noPlayersYet"));
+            return null;
         String resultaat = "";
 
         for(Speler gekozenSpelers : spelers)

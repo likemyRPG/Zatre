@@ -4,19 +4,25 @@ import exceptions.OutOfRangeException;
 
 import java.util.List;
 
-import domein.Piece;
-
 public class DomeinController{
-
-	SpelerRepository spelerRepository;
+    SpelerRepository spelerRepository;
 	PieceRepository pieceRepository;
 	Speler speler;
 	Spel spel;
-	Piece piece;
+
+	public void startSpel(){
+		spelerRepository.shufflePlayers();
+		spelerRepository.verminderSpeelkansen();
+		spel = new Spel(spelerRepository.getSpelers());
+	}
 
 	public DomeinController(){
 		spelerRepository = new SpelerRepository();
 		pieceRepository = new PieceRepository();
+	}
+
+	public boolean checkPlacement(int row, int column, boolean firstRound, int valueOfSelectedPiece){
+		 return spel.checkPlacement(row, column, firstRound, valueOfSelectedPiece);
 	}
 
 	public void registreerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
@@ -33,18 +39,8 @@ public class DomeinController{
 		return spelerRepository.alToegevoegd(gebruikersnaam, geboortejaar);
 	}
 
-	public void startSpel()	{
-		spel = new Spel();
-		spelerRepository.shufflePlayers();
-		spelerRepository.verminderSpeelkansen();
-	}
-
 	public String geefSpelers(){
 		return spelerRepository.geefSpelers();
-	}
-
-	public String geefSpelersNaam(){
-		return spelerRepository.geefSpelersNaam();
 	}
 
 	public String geefSpelerKansen(){
@@ -72,4 +68,58 @@ public class DomeinController{
 	}
 
 	public int geefAantalSteentjes(){ return pieceRepository.getAmountOfPieces();}
+
+	public void clearOwnPieces() {
+		spel.clearOwnPieces();
+	}
+
+	public void setValuesGameBoard(int row, int column, int valueOfSelectedPiece) {
+		spel.setValuesGameBoard(row, column, valueOfSelectedPiece);
+	}
+
+	public String geefSpelersNaam() {
+		return spelerRepository.geefSpelersNaam();
+	}
+
+	public void printSpelBord() {
+		spel.printSpelBord();
+	}
+
+	//region Players (Class: Spel)
+	public Speler getNextPlayer(){
+		return spel.getNextPlayer();
+	}
+
+	public Speler getPreviousPlayer(){
+		return spel.getPreviousPlayer();
+	}
+
+	public Speler getCurrentPlayer() {
+		return spel.getCurrentPlayer();
+	}
+
+	public void setNextPlayer() {
+		spel.setNextPlayer();
+	}
+
+	public void printScore() {
+		spel.printScore();
+	}
+
+	public void calculateScore(int row, int column, int valueOfSelectedPiece, int round, boolean endOfRound) {
+		spel.calculateScore(row, column, valueOfSelectedPiece, round);
+	}
+
+	public Scoreblad getScoreblad(){
+		return spel.getScoreBlad();
+	}
+
+	public void addScore(int round){
+		spel.addScore(round);
+	}
+
+	public int[][] getGameBoard() {
+		return spel.getGameBoard();
+	}
+	//endregion
 }

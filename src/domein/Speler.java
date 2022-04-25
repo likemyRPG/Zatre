@@ -10,7 +10,9 @@ public class Speler {
     private int geboortejaar;
     private String gebruikersnaam;
     private int aantalKansen;
+    private boolean[][] score;
     public static final int MIN_LEEFTIJD = 6;
+    Scoreblad scoreblad;
 
     language ln = new language();
     ResourceBundle rb = ln.taal();
@@ -21,7 +23,9 @@ public class Speler {
         setGebruikersnaam(gebruikersnaam);
         setGeboortejaar(geboortejaar);
         this.aantalKansen = aantalKansen;
+        scoreblad = new Scoreblad();
     }
+
     //endregion
 
     //region Getters And Setters
@@ -61,7 +65,12 @@ public class Speler {
         return this.gebruikersnaam;
     }
 
+    // Getter scoreblad
+    public Scoreblad getScoreblad() {
+        return this.scoreblad;
+    }
     // Getter aantalKansen
+
     public int getAantalKansen() {
         return this.aantalKansen;
     }
@@ -76,6 +85,10 @@ public class Speler {
 
     public void wijzigSpeelkansen() {
         this.aantalKansen-=1;
+    }
+
+    public void setScoreblad(Scoreblad scoreblad) {
+
     }
     //endregion
 }

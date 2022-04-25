@@ -1,7 +1,8 @@
 package gui;
 
-import com.sun.javafx.tk.Toolkit;
 import domein.DomeinController;
+import domein.Score;
+import domein.Scoreblad;
 import javafx.event.ActionEvent;
 import javafx.geometry.*;
 import javafx.scene.Node;
@@ -13,10 +14,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import persistence.language;
-import com.sun.javafx.scene.control.skin.Utils;
 
 import java.io.File;
 import java.util.List;
@@ -36,30 +38,40 @@ public class GameBoardController extends Pane {
     private int i = 0;
     private int piece = 0;
     private int valueOfSelectedPiece = 0;
-    private boolean firstPiece = true, firstRound = true;
-    private int[][] spelBord = new int[15][15];
-    private int[][] ownPieces = new int[15][15];
+    private boolean firstPiece = true, firstRound = true, endOfRound = false;
     MediaPlayer mediaPlayer;
     ImageView imgRightArrow;
     ImageView imgLeftArrow;
+    GridPane Scoreboard;
     TextField txtPlayer;
     int spelerAanBeurt=-1;
     Button btnSettings;
     language ln = new language();
     ResourceBundle rb = ln.taal();
+    int round=0;
     //endregion
 
     public GameBoardController(DomeinController dc) {
         try {
             this.dc = dc;
             buildGUI();
-            addNonUsableTiles();
             generateButtons(3);
+            setScoreBoardLayout();
             addMusic();
-
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    private void setScoreBoardLayout() {
+        Scoreboard.add(new Label("x2"), 0,  0);
+        Scoreboard.add(new Label("10 (1pt)"), 1, 0);
+        Scoreboard.add(new Label("11 (2pt)"), 2, 0);
+        Scoreboard.add(new Label("12 (4pt)"), 3, 0);
+        Scoreboard.add(new Label("Bonus"), 4,  0);
+        Scoreboard.add(new Label("Total"), 5,  0);
+
+
     }
 
     private void buildGUI() {
@@ -131,7 +143,7 @@ public class GameBoardController extends Pane {
         //endregion
 
         //region Scoreboard
-        GridPane Scoreboard = new GridPane();
+        Scoreboard = new GridPane();
         Scoreboard.setLayoutX(580);
         Scoreboard.setLayoutY(100);
         int width = 250;
@@ -244,33 +256,36 @@ public class GameBoardController extends Pane {
         }
         //use dc.voegPieceToe() with the ids of the buttons in the toolbar with a for loop
         for (int i = 0; i < ids.length; i++) {
-            dc.voegPieceToe(ids[i]);
+            System.out.println(ids[i]);
+            //Get the last number of the id
+            int lastNumber = ids[i] % 10;
+            dc.voegPieceToe(lastNumber);
         }
         //delte the buttons in the toolbar
+
         tbSelectionPiece.getItems().clear();
+        txtPlayer.setText(dc.getCurrentPlayer().getGebruikersnaam());
+        dc.addScore(round);
         updateToolbar();
     }
 
     private String geefSpelerAanBeurt() {
         spelerAanBeurt++;
-        return dc.geefSpelersNaam().split(System.lineSeparator())[(spelerAanBeurt % dc.geefSpelersNaam().split(System.lineSeparator()).length)];
+        System.out.println(dc.getNextPlayer().getGebruikersnaam());
+        return dc.getCurrentPlayer().getGebruikersnaam().split(System.lineSeparator())[(spelerAanBeurt % dc.getCurrentPlayer().getGebruikersnaam().split(System.lineSeparator()).length)];
     }
 
     private void clickLeftArrow(MouseEvent mouseEvent) {
+        txtPlayer.setText(dc.getPreviousPlayer().getGebruikersnaam());
     }
 
     private void clickRightArrow(MouseEvent mouseEvent) {
-        txtPlayer.setText(geefSpelerAanBeurt());
+        txtPlayer.setText(dc.getNextPlayer().getGebruikersnaam());
     }
 
     private void onClickButtonRandom(ActionEvent actionEvent) {
         //print the values of spelBord in console
-        for (int i = 0; i < spelBord.length; i++) {
-            for (int j = 0; j < spelBord[i].length; j++) {
-                System.out.print(spelBord[i][j] + " ");
-            }
-            System.out.println();
-        }
+        dc.printSpelBord();
         System.out.println("--------------------------------------------------------------------------------");
         System.out.println("dc.getAantalSteentjes() = " + dc.geefAantalSteentjes());
         System.out.println("--------------------------------------------------------------------------------");
@@ -310,96 +325,14 @@ public class GameBoardController extends Pane {
                 }
             } else {
                 if (isEmpty) {
-                    if (valueOfSelectedPiece != 0 && !alreadyUsed(row, column) && allowedPlacement(row, column) && allowedPlacementSum(row, column, valueOfSelectedPiece) && checkSpecialTileAllowed(row, column, valueOfSelectedPiece)) {
+                    if (dc.checkPlacement(row, column, firstRound, valueOfSelectedPiece)) {
+                        dc.calculateScore(row, column, valueOfSelectedPiece, round, endOfRound);
                         placePiece(row, column);
+                        txtPlayer.setText(dc.getCurrentPlayer().getGebruikersnaam());
                     }
                 }
             }
         }
-    }
-
-
-    private boolean checkSpecialTileAllowed(int row, int column, int valueOfSelectedPiece) {
-        if(checkSpecialTile(row, column)) {
-            return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) >= 10 || sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) == valueOfSelectedPiece) && (sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) >= 10 || sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) == valueOfSelectedPiece));
-        }else return true;
-    }
-
-    private boolean checkSpecialTile(int row, int column) {
-        if(row ==column) return true;
-        else if((row == 0 || row == 14) && (column == 6 || column == 8))
-            return true;
-        else if((column == 0 || column == 14) && (row == 6 || row == 8))
-            return true;
-        return (column == 14-row);
-
-    }
-
-    private boolean allowedPlacementSum(int row, int column, int valueOfSelectedPiece) {
-        //return true if the value of sumOfContinousFollowingValuesH and the value of sumOfContinousFollowingValuesS are less than or equal to 12
-        System.out.println("sumOfContinousFollowingValuesH: " + sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece));
-        System.out.println("sumOfContinousFollowingValuesV: " + sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece));
-        return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) <= 12 || sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) == valueOfSelectedPiece) && ((sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) <= 12) || sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) == valueOfSelectedPiece));
-    }
-
-    private int sumOfContinousFollowingValuesH(int row, int column, int valueOfSelectedPiece) {
-        int sum1 = 0, sum2 = 0;
-        int i = column;
-        int j = row;
-        spelBord[row][column] = valueOfSelectedPiece;
-        while (spelBord[j][i] != 0 && spelBord[j][i] != 7) {
-            sum1 += spelBord[j][i];
-            if(i != 14)
-                i++;
-            else break;
-        }
-        i = column;
-        j = row;
-        while (spelBord[j][i] != 0 && spelBord[j][i] != 7) {
-            sum2 += spelBord[j][i];
-            if(i != 0)
-                i--;
-            else break;
-        }
-        spelBord[row][column] = 0;
-        return (sum1 + sum2) - valueOfSelectedPiece;
-    }
-
-    private int sumOfContinousFollowingValuesV(int row, int column, int valueOfSelectedPiece) {
-        int sum1 = 0, sum2 = 0;
-        int i = column;
-        int j = row;
-        spelBord[row][column] = valueOfSelectedPiece;
-        while (spelBord[j][i] != 0 && spelBord[j][i] != 7) {
-            sum1 += spelBord[j][i];
-            if(j != 14)
-                j++;
-            else break;
-        }
-        i = column;
-        j = row;
-        while (spelBord[j][i] != 0 && spelBord[j][i] != 7) {
-            sum2 += spelBord[j][i];
-            if(j != 0)
-                j--;
-            else break;
-        }
-        spelBord[row][column] = 0;
-        return (sum1 + sum2) - valueOfSelectedPiece;
-    }
-
-    private boolean allowedPlacement(int row, int column) {
-        if(column != 14 && (spelBord[row][column+1]!=0 && spelBord[row][column+1]!= 7 && (ownPieces[row][column+1] == 0 || firstRound)))
-            return true;
-        else if(column != 0 && (spelBord[row][column-1]!=0 && spelBord[row][column-1]!=7 && (ownPieces[row][column-1] == 0 || firstRound)))
-            return true;
-        else if(row !=14 && spelBord[row+1][column]!=0 && spelBord[row+1][column]!=7 && (ownPieces[row+1][column] == 0 || firstRound))
-            return true;
-        else return row != 0 && ( spelBord[row-1][column] != 0 && spelBord[row-1][column] != 7 && (ownPieces[row-1][column] == 0 || firstRound));
-    }
-
-    private boolean alreadyUsed(int row, int column){
-        return spelBord[row][column] != 0;
     }
 
     private void placePiece(int row, int column){
@@ -407,8 +340,7 @@ public class GameBoardController extends Pane {
         image.setFitWidth(26);
         image.setFitHeight(26);
         SpelbordGrid.add(image, column, row); //add image to grid
-        spelBord[row][column] = valueOfSelectedPiece;
-        ownPieces[row][column] = valueOfSelectedPiece;
+        dc.setValuesGameBoard(row, column, valueOfSelectedPiece);
         SpelbordGrid.setHalignment(image, HPos.CENTER);
         SpelbordGrid.setValignment(image, VPos.CENTER);
         valueOfSelectedPiece = 0;
@@ -421,25 +353,48 @@ public class GameBoardController extends Pane {
         amountOfPieces--;
         updateToolbar();
     }
+    private void updateScore() {
+        int i = 1;
+        //delete values of the scoreboard
+        Node node = Scoreboard.getChildren().get(0);
+        Scoreboard.getChildren().clear();
+        Scoreboard.getChildren().add(0,node);
+        setScoreBoardLayout();
+
+        for (Score score : dc.getScoreblad().getScores()) {
+            Scoreboard.add(new Label(String.format("%s", score.isDoubleScore() ? "x" : " ")), 0, i);
+            Scoreboard.add(new Label(String.format("%s", printX(score.amountP10()))), 1, i);
+            Scoreboard.add(new Label(String.format("%s", printX(score.amountP11()))), 2,i);
+            Scoreboard.add(new Label(String.format("%s", printX(score.amountP12()))), 3, i);
+            Scoreboard.add(new Label(String.format("%s", score.getBonus())), 4, i);
+            Scoreboard.add(new Label(String.format("%s", score.getScore())), 5, i);
+            i++;
+        }
+    }
+
+    private String printX(int amount){
+        String x = "";
+        for(int i = 0; i < amount; i++){
+            if(amount!=0) x+="x";
+        }
+        return x;
+    }
 
     private void updateToolbar() {
         //If toolbar has no elements, add all pieces
         lblAantalSteentjes.setText("x" + amountOfPieces);
         if (tbSelectionPiece.getItems().isEmpty() && amountOfPieces > 0){
             if(!firstPiece) firstRound=false;
-            clearOwnPieces();
+            dc.clearOwnPieces();
             generateButtons(2);
+            round++;
+            dc.addScore(round);
+            dc.setNextPlayer();
+            dc.printScore();
+            updateScore();
         }
         else if(amountOfPieces==0)
             System.out.println(rb.getString("gameEnd"));
-    }
-
-    private void clearOwnPieces() {
-        for (int col = 0; col < ownPieces.length; col++) {
-            for (int row = 0; row < ownPieces.length; row++) {
-                ownPieces[row][col] = 0;
-            }
-        }
     }
 
     private void generateButtons(int amount){
@@ -519,41 +474,6 @@ public class GameBoardController extends Pane {
             ImageView imgMusic = (ImageView) event.getSource();
             imgMusic.setImage(new Image(getClass().getResourceAsStream("/gui/resources/pause.png")));
         }
-    }
-
-    private void addNonUsableTiles(){
-        spelBord[0][0]=7;
-        spelBord[0][1]=7;
-        spelBord[0][2]=7;
-        spelBord[0][3]=7;
-        spelBord[0][7]=7;
-        spelBord[0][11]=7;
-        spelBord[0][12]=7;
-        spelBord[0][13]=7;
-        spelBord[0][14]=7;
-        spelBord[1][0]=7;
-        spelBord[1][14]=7;
-        spelBord[2][0]=7;
-        spelBord[2][14]=7;
-        spelBord[3][0]=7;
-        spelBord[3][14]=7;
-        spelBord[7][0]=7;
-        spelBord[7][14]=7;
-        spelBord[11][0]=7;
-        spelBord[11][14]=7;
-        spelBord[12][0]=7;
-        spelBord[12][14]=7;
-        spelBord[13][0]=7;
-        spelBord[13][14]=7;
-        spelBord[14][0]=7;
-        spelBord[14][1]=7;
-        spelBord[14][2]=7;
-        spelBord[14][3]=7;
-        spelBord[14][7]=7;
-        spelBord[14][11]=7;
-        spelBord[14][12]=7;
-        spelBord[14][13]=7;
-        spelBord[14][14]=7;
     }
     //endregion
 }
