@@ -146,8 +146,8 @@ public class GameBoardController extends Pane {
         Scoreboard = new GridPane();
         Scoreboard.setLayoutX(580);
         Scoreboard.setLayoutY(100);
-        int width = 250;
-        int height = 450;
+        int width = 230;
+        int height = 420;
         Scoreboard.setMinWidth(width);
         Scoreboard.setMinHeight(height);
         //make cells use all available space
@@ -163,6 +163,7 @@ public class GameBoardController extends Pane {
         for (int i = 0; i < amountOfRows; i++) {
             Scoreboard.getRowConstraints().add(new RowConstraints(height / amountOfRows));
         }
+        Scoreboard.getStyleClass().add("grdScoreBord");
 
         //endregion
 

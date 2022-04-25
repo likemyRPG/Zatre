@@ -66,3 +66,7 @@
     -fx-style: bold;
     -fx-alignment: center;
 }
+.grdScoreBord
+{
+    -fx-background-color: white;
+}
