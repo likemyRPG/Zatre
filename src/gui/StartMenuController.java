@@ -120,6 +120,7 @@ public class StartMenuController extends GridPane {
             scene.setFill(Color.TRANSPARENT);
             stage.setScene(scene);
             stage.show();
+            System.out.println(rb);
         }catch (Exception e)
         {
             System.out.println(e);

@@ -27,4 +27,8 @@ public class language {
         this.gekozenTaal = gekozenTaal;
         rb = null;
     }
+
+    public String getGekozenTaal(){
+        return gekozenTaal;
+    }
 }

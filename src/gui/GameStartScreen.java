@@ -62,7 +62,7 @@ public class GameStartScreen extends Pane {
         lblPlayersKansen.setLayoutY(100);
         lblPlayersKansen.setLayoutX(400);
 
-        Label lblTitel = new Label("Active Players");
+        Label lblTitel = new Label(rb.getString("activePlayers"));
         lblTitel.setLayoutX(175);
         lblTitel.setLayoutY(40);
         lblTitel.getStyleClass().add("lblTitel");

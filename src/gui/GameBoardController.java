@@ -1,13 +1,9 @@
 package gui;
 
+import com.sun.javafx.tk.Toolkit;
 import domein.DomeinController;
-import domein.Piece;
-import exceptions.OutOfRangeException;
 import javafx.event.ActionEvent;
-import javafx.geometry.HPos;
-import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
+import javafx.geometry.*;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,11 +15,13 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
-import javafx.stage.StageStyle;
+import persistence.language;
+import com.sun.javafx.scene.control.skin.Utils;
 
 import java.io.File;
 import java.util.List;
 import java.util.Random;
+import java.util.ResourceBundle;
 
 
 public class GameBoardController extends Pane {
@@ -47,6 +45,8 @@ public class GameBoardController extends Pane {
     TextField txtPlayer;
     int spelerAanBeurt=-1;
     Button btnSettings;
+    language ln = new language();
+    ResourceBundle rb = ln.taal();
     //endregion
 
     public GameBoardController(DomeinController dc) {
@@ -56,6 +56,7 @@ public class GameBoardController extends Pane {
             addNonUsableTiles();
             generateButtons(3);
             addMusic();
+
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -64,22 +65,25 @@ public class GameBoardController extends Pane {
     private void buildGUI() {
         getStyleClass().add("bg-style");
         //region Create Gameboard
-        ImageView Title = new ImageView(new Image(
-                getClass().getResourceAsStream
-                        ("/gui/resources/Zatre_Spelbord_Title.png")));
-        Title.setLayoutX(132);
-        Title.setLayoutY(10);
-        Title.setFitWidth(337);
-        Title.setFitHeight(58);
 
         ImageView Spelbord = new ImageView(new Image(
                 getClass().getResourceAsStream
                         ("/gui/resources/Zatre_gameBoard_V2.png")));
         Spelbord.setLayoutX(75);
         Spelbord.setLayoutY(75);
+        Spelbord.setScaleX(1.0063);
+        Spelbord.setScaleY(1.0063);
 
-        SpelbordGrid.setLayoutX(75);
-        SpelbordGrid.setLayoutY(75);
+        //in commentaar staat de waardes voor 100% scaling
+/*        Spelbord.setScaleX(1.0063);
+        Spelbord.setScaleY(1.0063);*/
+
+        //in commentaar staat de waardes voor 100% scaling
+/*        SpelbordGrid.setLayoutX(Spelbord.getLayoutX());
+        SpelbordGrid.setLayoutY(Spelbord.getLayoutY());*/
+
+        SpelbordGrid.setLayoutX(Spelbord.getLayoutX()-3);
+        SpelbordGrid.setLayoutY(Spelbord.getLayoutY()-3);
         SpelbordGrid.setGridLinesVisible(false);
         GridPane.setColumnSpan(SpelbordGrid, 15);
         GridPane.setRowSpan(SpelbordGrid, 15);
@@ -92,6 +96,16 @@ public class GameBoardController extends Pane {
         SpelbordGrid.toFront();
         SpelbordGrid.setOnMouseClicked(this::clickGrid);
         //endregion
+
+
+        TextField Title = new TextField(rb.getString("title_gameboard"));
+        Title.getStyleClass().add("Title");
+
+        Title.setPrefWidth(Title.getText().length() * 28);
+        //get the value of the center of the screen
+        Title.setLayoutX(450 - Title.getPrefWidth() / 2);
+        Title.setEditable(false);
+        Title.setFocusTraversable(false);
 
         //region Configure ToolBar
         tbSelectionPiece = new ToolBar();
@@ -219,7 +233,7 @@ public class GameBoardController extends Pane {
         //endregion
 
         //region Add To Gameboard
-        this.getChildren().addAll(Title, Spelbord, SpelbordGrid, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, btnQuitGame, imgMusic, btnGiveBack);        //endregion
+        this.getChildren().addAll(Spelbord, SpelbordGrid, Title, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, btnQuitGame, imgMusic, btnGiveBack);        //endregion
     }
 
     private void onClickButtonSurrender(ActionEvent event) {
@@ -417,7 +431,7 @@ public class GameBoardController extends Pane {
             generateButtons(2);
         }
         else if(amountOfPieces==0)
-            System.out.println("Game ended");
+            System.out.println(rb.getString("gameEnd"));
     }
 
     private void clearOwnPieces() {
