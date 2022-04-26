@@ -50,6 +50,10 @@ public class Spel {
 
     public void addScore(int round){
         currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, round, this.isDouble));
+        p10=0;
+        p11=0;
+        p12=0;
+        isDouble = false;
     }
 
     public void printScore(){
@@ -205,11 +209,34 @@ public class Spel {
         }
     }
 
+    public List<Speler> determineWinner(){
+        //determine the leaderboard of the game and print it
+        List<Speler> leaderboard = new ArrayList<>();
+        Speler firstPlace = null, secondPlace = null, thirdPlace = null, fourthPlace = null;
+        for(Speler spelers : currentPlayers){
+                if(firstPlace == null || spelers.getScoreblad().getTotalScore() > firstPlace.getScoreblad().getTotalScore()){
+                    fourthPlace = thirdPlace;
+                    thirdPlace = secondPlace;
+                    secondPlace = firstPlace;
+                    firstPlace = spelers;
+                }
+                else if(secondPlace == null || spelers.getScoreblad().getTotalScore() > secondPlace.getScoreblad().getTotalScore()){
+                    fourthPlace = thirdPlace;
+                    thirdPlace = secondPlace;
+                    secondPlace = spelers;
+                }
+                else if(thirdPlace == null || spelers.getScoreblad().getTotalScore() > thirdPlace.getScoreblad().getTotalScore()){
+                    fourthPlace = thirdPlace;
+                    thirdPlace = spelers;
+                }
+                else if(fourthPlace == null || spelers.getScoreblad().getTotalScore() > fourthPlace.getScoreblad().getTotalScore()){
+                    fourthPlace = spelers;
+                }
+        }
+        return leaderboard;
+    }
+
     public void calculateScore(int row, int column, int valueOfSelectedPiece, int round){
-        p10=0;
-        p11=0;
-        p12=0;
-        isDouble = false;
         int sumH = sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece);
         int sumV = sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece);
         if(sumH == 10 || sumV == 10) p10++;
@@ -221,5 +248,6 @@ public class Spel {
     public int[][] getGameBoard() {
         return spelBord;
     }
+
     //endregion
 }

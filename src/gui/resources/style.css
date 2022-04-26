@@ -10,6 +10,11 @@
     -fx-background-color: lightgrey;
 }
 
+/*Set the text in all the lables centered*/
+.label{
+-fx-alignment:center;
+}
+
 .button:hover{
     -fx-background-color: white;
     -fx-text-fill: #1d1d1d;
@@ -21,6 +26,12 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
+
+.totalScore{
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
 .Test{
     -fx-background-color: none;
 }

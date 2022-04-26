@@ -66,6 +66,7 @@ public class Score {
     public Integer getScore(){
         return score;
     }
+
     private void setBonusRound(){
         BonusList = new ArrayList<>();
         int points = 3;

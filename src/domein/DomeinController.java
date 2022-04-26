@@ -63,6 +63,10 @@ public class DomeinController{
 		pieceRepository.addPiece(new Piece(value));
 	}
 
+	public List<Speler> determineWinner(){
+		return spel.determineWinner();
+	}
+
 	public String geefSteentjesWeer(){
 		return pieceRepository.giveValues();
 	}
@@ -106,7 +110,7 @@ public class DomeinController{
 		spel.printScore();
 	}
 
-	public void calculateScore(int row, int column, int valueOfSelectedPiece, int round, boolean endOfRound) {
+	public void calculateScore(int row, int column, int valueOfSelectedPiece, int round) {
 		spel.calculateScore(row, column, valueOfSelectedPiece, round);
 	}
 

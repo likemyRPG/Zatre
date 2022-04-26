@@ -42,9 +42,11 @@ public class GameBoardController extends Pane {
     MediaPlayer mediaPlayer;
     ImageView imgRightArrow;
     ImageView imgLeftArrow;
+    Button btnGiveBack;
     GridPane Scoreboard;
-    TextField txtPlayer;
-    int spelerAanBeurt=-1;
+    TextField txtPlayer,totalScore;
+    boolean surrender = false;
+    int spelerAanBeurt=-1, move = 0;
     Button btnSettings;
     language ln = new language();
     ResourceBundle rb = ln.taal();
@@ -57,27 +59,42 @@ public class GameBoardController extends Pane {
             buildGUI();
             generateButtons(3);
             setScoreBoardLayout();
+            disableSurrender(true);
             addMusic();
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    private void setScoreBoardLayout() {
-        Scoreboard.add(new Label("x2"), 0,  0);
-        Scoreboard.add(new Label("10 (1pt)"), 1, 0);
-        Scoreboard.add(new Label("11 (2pt)"), 2, 0);
-        Scoreboard.add(new Label("12 (4pt)"), 3, 0);
-        Scoreboard.add(new Label("Bonus"), 4,  0);
-        Scoreboard.add(new Label("Total"), 5,  0);
+    private void disableSurrender(boolean choice) {
+        btnGiveBack.setDisable(choice);
+    }
 
+    private void setScoreBoardLayout() {
+        Label label1 = new Label("x2");
+        Label label2 = new Label("10\n (1pt)");
+        Label label3 = new Label("11\n (2pt)");
+        Label label4 = new Label("12\n (4pt)");
+        Label label5 = new Label("Bonus");
+        Label label6 = new Label("Total");
+        Scoreboard.add(label1, 0,  0);
+        Scoreboard.add(label2, 1, 0);
+        Scoreboard.add(label3, 2, 0);
+        Scoreboard.add(label4, 3, 0);
+        Scoreboard.add(label5, 4,  0);
+        Scoreboard.add(label6, 5,  0);
+        GridPane.setHalignment(label1, HPos.CENTER);
+        GridPane.setHalignment(label2, HPos.CENTER);
+        GridPane.setHalignment(label3, HPos.CENTER);
+        GridPane.setHalignment(label4, HPos.CENTER);
+        GridPane.setHalignment(label5, HPos.CENTER);
+        GridPane.setHalignment(label6, HPos.CENTER);
 
     }
 
     private void buildGUI() {
         getStyleClass().add("bg-style");
         //region Create Gameboard
-
         ImageView Spelbord = new ImageView(new Image(
                 getClass().getResourceAsStream
                         ("/gui/resources/Zatre_gameBoard_V2.png")));
@@ -112,6 +129,20 @@ public class GameBoardController extends Pane {
 
         TextField Title = new TextField(rb.getString("title_gameboard"));
         Title.getStyleClass().add("Title");
+
+        totalScore = new TextField(String.format("%d", dc.getCurrentPlayer().getScoreblad().getTotalScore()));
+        totalScore.getStyleClass().add("totalScore");
+        totalScore.setEditable(false);
+        totalScore.setFocusTraversable(false);
+        totalScore.setLayoutX(760);
+        totalScore.setLayoutY(550);
+        totalScore.setMaxWidth(50);
+
+        Label lblScore = new Label("Score: ");
+        lblScore.getStyleClass().add("lblText");
+        lblScore.setFocusTraversable(false);
+        lblScore.setLayoutX(700);
+        lblScore.setLayoutY(550);
 
         Title.setPrefWidth(Title.getText().length() * 28);
         //get the value of the center of the screen
@@ -163,6 +194,8 @@ public class GameBoardController extends Pane {
         for (int i = 0; i < amountOfRows; i++) {
             Scoreboard.getRowConstraints().add(new RowConstraints(height / amountOfRows));
         }
+        //set the first row its height 2 times the height of the other rows
+        Scoreboard.getRowConstraints().get(0).setPrefHeight(2 * height / amountOfRows);
         Scoreboard.getStyleClass().add("grdScoreBord");
 
         //endregion
@@ -197,13 +230,22 @@ public class GameBoardController extends Pane {
         //endregion
 
         //add Button to give back the pieces
-        Button btnGiveBack = new Button("Surrender");
+        btnGiveBack = new Button("Surrender");
         btnGiveBack.setMaxWidth(Double.MAX_VALUE);
         btnGiveBack.setOnAction(this::onClickButtonSurrender);
         btnGiveBack.setMinWidth(100);
         btnGiveBack.setMinHeight(50);
         btnGiveBack.setLayoutX(900 - btnGiveBack.getMinWidth() - 150);
         btnGiveBack.setLayoutY(645 - btnGiveBack.getMinHeight() - 10);
+
+        //button to end the game
+        Button btnEndGame = new Button("End Game");
+        btnEndGame.setMaxWidth(Double.MAX_VALUE);
+        btnEndGame.setOnAction(this::onClickButtonEndGame);
+        btnEndGame.setMinWidth(100);
+        btnEndGame.setMinHeight(50);
+        btnEndGame.setLayoutX(900 - btnGiveBack.getMinWidth() - 280);
+        btnEndGame.setLayoutY(645 - btnGiveBack.getMinHeight() - 10);
 
         //region Random Button
 
@@ -246,7 +288,19 @@ public class GameBoardController extends Pane {
         //endregion
 
         //region Add To Gameboard
-        this.getChildren().addAll(Spelbord, SpelbordGrid, Title, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, btnQuitGame, imgMusic, btnGiveBack);        //endregion
+        this.getChildren().addAll(Spelbord, lblScore, totalScore, btnEndGame, SpelbordGrid, Title, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, btnQuitGame, imgMusic, btnGiveBack);        //endregion
+    }
+
+    private void onClickButtonEndGame(ActionEvent event) {
+        //get an allert that asks if the player wants to end the game
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("End Game");
+        alert.setHeaderText("End Game");
+        alert.setContentText("Are you sure you want to end the game? The results will be ");
+        alert.showAndWait();
+        //When the user clicks ok, the game ends
+        if (alert.getResult() == ButtonType.OK) gameOver();
+
     }
 
     private void onClickButtonSurrender(ActionEvent event) {
@@ -263,10 +317,8 @@ public class GameBoardController extends Pane {
             dc.voegPieceToe(lastNumber);
         }
         //delte the buttons in the toolbar
-
         tbSelectionPiece.getItems().clear();
-        txtPlayer.setText(dc.getCurrentPlayer().getGebruikersnaam());
-        dc.addScore(round);
+        txtPlayer.setText(dc.getNextPlayer().getGebruikersnaam());
         updateToolbar();
     }
 
@@ -327,9 +379,10 @@ public class GameBoardController extends Pane {
             } else {
                 if (isEmpty) {
                     if (dc.checkPlacement(row, column, firstRound, valueOfSelectedPiece)) {
-                        dc.calculateScore(row, column, valueOfSelectedPiece, round, endOfRound);
+                        dc.calculateScore(row, column, valueOfSelectedPiece, round);
                         placePiece(row, column);
                         txtPlayer.setText(dc.getCurrentPlayer().getGebruikersnaam());
+                        totalScore.setText(String.format(("%d"), dc.getCurrentPlayer().getScoreblad().getTotalScore()));
                     }
                 }
             }
@@ -354,6 +407,7 @@ public class GameBoardController extends Pane {
         amountOfPieces--;
         updateToolbar();
     }
+
     private void updateScore() {
         int i = 1;
         //delete values of the scoreboard
@@ -363,12 +417,24 @@ public class GameBoardController extends Pane {
         setScoreBoardLayout();
 
         for (Score score : dc.getScoreblad().getScores()) {
-            Scoreboard.add(new Label(String.format("%s", score.isDoubleScore() ? "x" : " ")), 0, i);
-            Scoreboard.add(new Label(String.format("%s", printX(score.amountP10()))), 1, i);
-            Scoreboard.add(new Label(String.format("%s", printX(score.amountP11()))), 2,i);
-            Scoreboard.add(new Label(String.format("%s", printX(score.amountP12()))), 3, i);
-            Scoreboard.add(new Label(String.format("%s", score.getBonus())), 4, i);
-            Scoreboard.add(new Label(String.format("%s", score.getScore())), 5, i);
+            Label label1 =new Label(String.format("%s", score.isDoubleScore() ? "x" : " "));
+            Label label2 =new Label(String.format("%s", printX(score.amountP10())));
+            Label label3 =new Label(String.format("%s", printX(score.amountP11())));
+            Label label4 =new Label(String.format("%s", printX(score.amountP12())));
+            Label label5 =new Label(String.format("%s", score.getBonus()));
+            Label label6 =new Label(String.format("%s", score.getScore()));
+            Scoreboard.add(label1, 0, i);
+            Scoreboard.add(label2, 1, i);
+            Scoreboard.add(label3, 2,i);
+            Scoreboard.add(label4, 3, i);
+            Scoreboard.add(label5, 4, i);
+            Scoreboard.add(label6, 5, i);
+            GridPane.setHalignment(label1, HPos.CENTER);
+            GridPane.setHalignment(label2, HPos.CENTER);
+            GridPane.setHalignment(label3, HPos.CENTER);
+            GridPane.setHalignment(label4, HPos.CENTER);
+            GridPane.setHalignment(label5, HPos.CENTER);
+            GridPane.setHalignment(label6, HPos.CENTER);
             i++;
         }
     }
@@ -385,17 +451,33 @@ public class GameBoardController extends Pane {
         //If toolbar has no elements, add all pieces
         lblAantalSteentjes.setText("x" + amountOfPieces);
         if (tbSelectionPiece.getItems().isEmpty() && amountOfPieces > 0){
-            if(!firstPiece) firstRound=false;
+            if(!firstPiece){
+                firstRound=false;
+                disableSurrender(false);
+            }
             dc.clearOwnPieces();
             generateButtons(2);
-            round++;
+            move++;
+            if(move%dc.geefAantalSpelers()==0) round++;
             dc.addScore(round);
             dc.setNextPlayer();
             dc.printScore();
             updateScore();
         }
-        else if(amountOfPieces==0)
-            System.out.println(rb.getString("gameEnd"));
+        else if(amountOfPieces==0) gameOver();
+    }
+
+    private void gameOver() {
+        //print the leaderbord
+        System.out.println(dc.determineWinner().get(0).getGebruikersnaam());
+        System.out.println(dc.determineWinner().get(1).getGebruikersnaam());
+        System.out.println(dc.determineWinner().get(2).getGebruikersnaam());
+        System.out.println(dc.determineWinner().get(3).getGebruikersnaam());
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText(null);
+        alert.setContentText("Speler " + dc.determineWinner().get(0).getGebruikersnaam() + " heeft gewonnen!");
+        alert.showAndWait();
     }
 
     private void generateButtons(int amount){
