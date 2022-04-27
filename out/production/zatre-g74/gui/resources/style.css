@@ -1,0 +1,83 @@
+@font-face {
+  src: url("showcard.woff");
+}
+.button{
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1d1d1d;
+    -fx-border-style: none;
+    -fx-label-padding: 4px;
+    -fx-background-color: lightgrey;
+}
+
+/*Set the text in all the lables centered*/
+.label{
+-fx-alignment:center;
+}
+
+.button:hover{
+    -fx-background-color: white;
+    -fx-text-fill: #1d1d1d;
+    -fx-cursor: hand;
+}
+
+.lblTitel{
+    -fx-font-size: 36px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.totalScore{
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.Test{
+    -fx-background-color: none;
+}
+
+.combo-box .list-cell
+{
+    -fx-background: white;
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-padding: 3 0 2 7;
+    -fx-cell-size: 1.66667em;
+}
+
+.lblLogin{
+    -fx-text-fill: red;
+}
+
+.lblText{
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.frontImage{
+    -fx-alignment: center;
+}
+.bg-style{
+    -fx-background-color: #1d1d1d;
+    -fx-background-radius: 10;
+}
+.Title{
+    -fx-font-family: "Showcard Gothic";
+    -fx-font-size: 40px;
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+
+.txtPlayer
+{
+    -fx-font-family: "Microsoft YaHei UI";
+    -fx-font-size: 12px;
+    -fx-style: bold;
+    -fx-alignment: center;
+}
+.grdScoreBord
+{
+    -fx-background-color: white;
+}
