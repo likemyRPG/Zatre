@@ -44,7 +44,8 @@ public class GameBoardController extends Pane {
     ImageView imgLeftArrow;
     Button btnGiveBack;
     GridPane Scoreboard;
-    TextField txtPlayer,totalScore;
+    TextField txtPlayer;
+    Label totalScore;
     boolean surrender = false;
     int spelerAanBeurt=-1, move = 0;
     Button btnSettings;
@@ -130,16 +131,15 @@ public class GameBoardController extends Pane {
         TextField Title = new TextField(rb.getString("title_gameboard"));
         Title.getStyleClass().add("Title");
 
-        totalScore = new TextField(String.format("%d", dc.getCurrentPlayer().getScoreblad().getTotalScore()));
+        totalScore = new Label(String.format("%d", dc.getCurrentPlayer().getScoreblad().getTotalScore()));
         totalScore.getStyleClass().add("totalScore");
-        totalScore.setEditable(false);
         totalScore.setFocusTraversable(false);
         totalScore.setLayoutX(760);
         totalScore.setLayoutY(550);
         totalScore.setMaxWidth(50);
 
         Label lblScore = new Label("Score: ");
-        lblScore.getStyleClass().add("lblText");
+        lblScore.getStyleClass().add("totalScore");
         lblScore.setFocusTraversable(false);
         lblScore.setLayoutX(700);
         lblScore.setLayoutY(550);
@@ -469,10 +469,9 @@ public class GameBoardController extends Pane {
 
     private void gameOver() {
         //print the leaderbord
-        System.out.println(dc.determineWinner().get(0).getGebruikersnaam());
-        System.out.println(dc.determineWinner().get(1).getGebruikersnaam());
-        System.out.println(dc.determineWinner().get(2).getGebruikersnaam());
-        System.out.println(dc.determineWinner().get(3).getGebruikersnaam());
+        for(int i =0; i < dc.geefAantalSpelers(); i++){
+            System.out.println(dc.determineWinner().get(i).getGebruikersnaam());
+        }
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Game Over");
         alert.setHeaderText(null);
@@ -481,6 +480,9 @@ public class GameBoardController extends Pane {
     }
 
     private void generateButtons(int amount){
+        if(dc.geefAantalSteentjes() < amount){
+            gameOver();
+        }
         List<Integer> pieces = dc.getRandomPieces(amount);
         int nrButton=1;
         for (Integer piece : pieces) {

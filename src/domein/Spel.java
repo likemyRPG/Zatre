@@ -210,30 +210,28 @@ public class Spel {
     }
 
     public List<Speler> determineWinner(){
-        //determine the leaderboard of the game and print it
-        List<Speler> leaderboard = new ArrayList<>();
-        Speler firstPlace = null, secondPlace = null, thirdPlace = null, fourthPlace = null;
-        for(Speler spelers : currentPlayers){
-                if(firstPlace == null || spelers.getScoreblad().getTotalScore() > firstPlace.getScoreblad().getTotalScore()){
-                    fourthPlace = thirdPlace;
-                    thirdPlace = secondPlace;
+        //Get the player with the highest score
+        List leaderBoard = new ArrayList<>();
+        Speler firstPlace = null, secondPlace = null, thirdPlace = null;
+        for (int i = 0; i < currentPlayers.size(); i++) {
+            if(firstPlace == null || currentPlayers.get(i).getScoreblad().getTotalScore() > firstPlace.getScoreblad().getTotalScore()){
+                Speler temp = null;
+                if(firstPlace != null){
+                    temp = secondPlace;
                     secondPlace = firstPlace;
-                    firstPlace = spelers;
                 }
-                else if(secondPlace == null || spelers.getScoreblad().getTotalScore() > secondPlace.getScoreblad().getTotalScore()){
-                    fourthPlace = thirdPlace;
-                    thirdPlace = secondPlace;
-                    secondPlace = spelers;
-                }
-                else if(thirdPlace == null || spelers.getScoreblad().getTotalScore() > thirdPlace.getScoreblad().getTotalScore()){
-                    fourthPlace = thirdPlace;
-                    thirdPlace = spelers;
-                }
-                else if(fourthPlace == null || spelers.getScoreblad().getTotalScore() > fourthPlace.getScoreblad().getTotalScore()){
-                    fourthPlace = spelers;
-                }
+                firstPlace = currentPlayers.get(i);
+               if(temp != null) thirdPlace = temp;
+            }
+            else if(secondPlace == null || currentPlayers.get(i).getScoreblad().getTotalScore() > secondPlace.getScoreblad().getTotalScore()){
+                secondPlace = currentPlayers.get(i);
+                if(thirdPlace!=null) thirdPlace = secondPlace;
+            }else if(thirdPlace == null || currentPlayers.get(i).getScoreblad().getTotalScore() > thirdPlace.getScoreblad().getTotalScore()) thirdPlace = currentPlayers.get(i);
         }
-        return leaderboard;
+        leaderBoard.add(firstPlace);
+        leaderBoard.add(secondPlace);
+        leaderBoard.add(thirdPlace);
+        return leaderBoard;
     }
 
     public void calculateScore(int row, int column, int valueOfSelectedPiece, int round){
