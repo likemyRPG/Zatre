@@ -1,5 +1,3 @@
-package testen;
-
 import domein.Spel;
 import domein.Speler;
 import org.junit.jupiter.api.Assertions;
@@ -15,8 +13,8 @@ import java.util.List;
 
 public class TestSpel {
 
-    private static final Speler p1 = new Speler("azert",2003,5);
-    private static final Speler p2 = new Speler("aeef",2003,5);
+    private static Speler p1;
+    private static Speler p2;
 
     language ln = new language();
     // static final int GELDIGE_KANSEN = 5;
@@ -25,17 +23,47 @@ public class TestSpel {
     public void BeforeEach() {
         ln.setGekozenTaal("nl");
         ln.taal();
+        p1 = new Speler("azehrt",2003,5);
+        p2 = new Speler("aeeygtf",2003,5);
         List<Speler> spelers = new ArrayList<>();
         spelers.add(p1);
         spelers.add(p2);
         spel = new Spel(spelers);
     }
-/*
     @Test
-    public void maakSpeler_geldigeNaam_geldigeGeboorte_maaktSpeler() {
-        Assertions.assertEquals(GELDIGE_NAAM,speler.getGebruikersnaam());
-        Assertions.assertEquals(GELDIGE_GEBOORTE,speler.getGeboortejaar());
+    public void setNextPlayer_selectsNextPlayer() {
+        spel.setNextPlayer();
+        Speler prevPlayer = spel.getPreviousPlayer();
+        Speler currentPlayer = spel.getCurrentPlayer();
+        Assertions.assertEquals(p1 ,prevPlayer);
+        Assertions.assertEquals(p2,currentPlayer);
     }
+
+    @Test
+    public void getCurrentPlayer_givesCurrentPlayer() {
+        Speler currentP = spel.getCurrentPlayer();
+        Assertions.assertEquals(p1 ,currentP);
+    }
+
+    @Test
+    public void getNextPlayer_givesNextPlayer() {
+        spel.setNextPlayer();
+        Speler currentP = spel.getCurrentPlayer();
+        Assertions.assertEquals(p2 ,currentP);
+    }
+
+    @Test
+    public void getPreviousPlayer_givesNextPlayer() {
+        spel.setNextPlayer();
+        Speler prevP = spel.getPreviousPlayer();
+        Assertions.assertEquals(p1 ,prevP);
+    }
+
+
+
+}
+/*
+
 
     @ParameterizedTest
     @NullAndEmptySource
@@ -62,5 +90,3 @@ public class TestSpel {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {new Speler(GELDIGE_NAAM,GELDIGE_GEBOORTE, a);});
     }
     */
-
-}
