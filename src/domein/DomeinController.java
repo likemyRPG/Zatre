@@ -125,5 +125,9 @@ public class DomeinController{
 	public int[][] getGameBoard() {
 		return spel.getGameBoard();
 	}
+
+	public void checkRegister(String text, Integer value) throws OutOfRangeException {
+		spelerRepository.checkRegister(text, value);
+	}
 	//endregion
 }

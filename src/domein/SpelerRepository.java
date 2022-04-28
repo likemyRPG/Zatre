@@ -20,6 +20,12 @@ public class SpelerRepository {
         spelers = new ArrayList<>();
     }
 
+    public void checkRegister(String username, int birthyear) throws OutOfRangeException {
+        if(username.length() < 5 || username.length() > 45) throw new IllegalArgumentException(language.rb.getString("minLengthUsername"));
+        if(birthyear < 6 ) throw new IllegalArgumentException(language.rb.getString("minage"));
+        if(alToegevoegd(username, birthyear)) throw new IllegalArgumentException("Speler is al toegevoegd!");
+        registreerSpeler(username, birthyear); throw new OutOfRangeException();
+    }
     public void registreerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
         aantalSpelers = spelers.size();
         if(aantalSpelers <= 3){

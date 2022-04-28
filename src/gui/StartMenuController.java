@@ -31,8 +31,6 @@ public class StartMenuController extends GridPane {
     language ln = new language();
     ResourceBundle rb = ln.taal();
 
-    private int aantalSpelers;
-
     public StartMenuController(DomeinController dc) {
         try
         {
@@ -40,7 +38,6 @@ public class StartMenuController extends GridPane {
             dc.selecteerSpeler("Larss",2003);
             dc.selecteerSpeler("Jochen",2003);
             buildGUI();
-            aantalSpelers = dc.geefAantalSpelers();
             buttonDisabled();
 
         }catch (Exception e){
@@ -49,8 +46,8 @@ public class StartMenuController extends GridPane {
     }
 
     private void buttonDisabled() {
-        if(aantalSpelers < 2) btnStartGame.setDisable(true);
-        if(aantalSpelers == 4) btnSelectPlayers.setDisable(true);
+        if(dc.geefAantalSpelers() < 2) btnStartGame.setDisable(true);
+        if(dc.geefAantalSpelers() == 4) btnSelectPlayers.setDisable(true);
     }
 
     private void buildGUI() {

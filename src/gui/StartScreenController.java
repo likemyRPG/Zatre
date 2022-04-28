@@ -2,26 +2,16 @@ package gui;
 
 import domein.DomeinController;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-import java.io.File;
-import java.io.IOException;
-import java.math.BigDecimal;
-
+//The first screen that the user sees when the game starts.
 public class StartScreenController extends Pane {
     private DomeinController dc;
     private Button btnStartProgram;

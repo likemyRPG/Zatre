@@ -1,6 +1,7 @@
 package gui;
 
 import domein.DomeinController;
+import exceptions.OutOfRangeException;
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -22,7 +23,9 @@ import static persistence.language.rb;
 
 public class RegisterController extends GridPane {
 
+    //Variables
     private DomeinController dc;
+    //Elements
     private Label usernameLabel;
     private Label birthyearLabel;
     private TextField usernameTextField;
@@ -30,11 +33,13 @@ public class RegisterController extends GridPane {
     private Label messageLabel;
     private Button registerButton;
     private Button cancelButton;
+    ComboBox<Integer> birthyearComboBox;
 
     public RegisterController(DomeinController dc) {
         try{
             this.dc = dc;
             buildGUI();
+            addBirthyearToComboBox();
         }
         catch(Exception e) {
             System.out.println(e);
@@ -76,15 +81,15 @@ public class RegisterController extends GridPane {
         birthyearLabel.getStyleClass().add("lblText");
         add(birthyearLabel, 0, 3);
 
+        //Let the user choose their birthyear by a combobox
+        birthyearComboBox = new ComboBox<>();
+        birthyearComboBox.setMaxWidth(Double.MAX_VALUE);
+        add(birthyearComboBox, 1, 3);
+
         usernameTextField = new TextField();
         usernameTextField.setMaxWidth(Double.MAX_VALUE);
         add(usernameTextField, 1, 2);
         usernameTextField.setPromptText(rb.getString("username"));
-
-        birthyearTextField = new TextField();
-        birthyearTextField.setMaxWidth(Double.MAX_VALUE);
-        add(birthyearTextField, 1, 3);
-        birthyearTextField.setPromptText(rb.getString("birthyear"));
 
         messageLabel = new Label();
         messageLabel.setMaxWidth(Double.MAX_VALUE);
@@ -93,43 +98,16 @@ public class RegisterController extends GridPane {
         GridPane.setColumnSpan(messageLabel, 2);
     }
 
+    private void addBirthyearToComboBox() {
+        Calendar cal = Calendar.getInstance();
+        for(int i = cal.get(Calendar.YEAR - 6); i >= 1900; i--) {
+            birthyearComboBox.getItems().add(i);
+        }
+    }
+
     public void registerButtonOnAction(ActionEvent event) {
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-
-        if (usernameTextField.getText().isBlank() == false && birthyearTextField.getText().isBlank() == false)
-                checkRegister();
-        else {
-            messageLabel.setText(rb.getString("Username&Birthday"));
-        }
-    }
-
-    public void checkRegister() {
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        String gebruikersnaam = usernameTextField.getText();
-        int geboortejaar = Integer.parseInt(birthyearTextField.getText());
-        boolean valid = true;
-
-        if(valid) {
-            if (usernameTextField.getText().length() < 5 || usernameTextField.getText().length() > 45)
-                messageLabel.setText(rb.getString("minLengthUsername"));
-            else if (year - Integer.parseInt(birthyearTextField.getText()) < 6 || year - Integer.parseInt(birthyearTextField.getText()) > 120)
-                messageLabel.setText(rb.getString("minAge"));
-            else {
-                try {
-                    dc.registreerSpeler(gebruikersnaam, geboortejaar);
-                } catch (Exception e) {
-                    valid = false;
-                    messageLabel.setText(rb.getString("Exception"));
-                    System.out.println(e);
-                }
-                if(valid) continueRegister();
-            }
-        }
-
-    }
-
-    private void continueRegister() {
-        try {
+        try{
+            dc.checkRegister(usernameLabel.getText(), birthyearComboBox.getValue());
             PlayerInformationController PlayerInformation = new PlayerInformationController(dc);
             Scene scene = new Scene(PlayerInformation, 600, 400);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
@@ -137,9 +115,12 @@ public class RegisterController extends GridPane {
             scene.setFill(Color.TRANSPARENT);
             stage.setScene(scene);
             stage.show();
-        }catch (Exception e)
-        {
-            System.out.println(e);
+        }catch (IllegalArgumentException e){
+            messageLabel.setText("Fill in all the requirements!");
+        } catch (OutOfRangeException e) {
+            messageLabel.setText("String.valueOf(e)");
+        }catch (NullPointerException e){
+            messageLabel.setText("Choose your birthdate");
         }
     }
 
@@ -158,6 +139,4 @@ public class RegisterController extends GridPane {
             System.out.println(e);
         }
     }
-
-
 }
