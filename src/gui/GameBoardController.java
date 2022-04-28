@@ -127,7 +127,7 @@ public class GameBoardController extends Pane {
         SpelbordGrid.setOnMouseClicked(this::clickGrid);
         //endregion
 
-
+//test est test et s f
         TextField Title = new TextField(rb.getString("title_gameboard"));
         Title.getStyleClass().add("Title");
 

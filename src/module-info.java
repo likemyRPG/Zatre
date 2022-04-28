@@ -6,10 +6,9 @@ module gui {
     requires javafx.graphics;
     requires java.sql;
     requires javafx.fxml;
-
-    requires javafx.media;
+    requires org.junit.jupiter.api;
     requires org.junit.jupiter.params;
-
+    requires javafx.media;
 
     opens gui to javafx.graphics, javafx.fxml;
     opens main to javafx.graphics, javafx.fxml;
