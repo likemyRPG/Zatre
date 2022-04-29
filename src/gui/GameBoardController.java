@@ -337,12 +337,18 @@ public class GameBoardController extends Pane {
     }
 
     private void onClickButtonRandom(ActionEvent actionEvent) {
-        //print the values of spelBord in console
-        dc.printSpelBord();
-        System.out.println("--------------------------------------------------------------------------------");
-        System.out.println("dc.getAantalSteentjes() = " + dc.geefAantalSteentjes());
-        System.out.println("--------------------------------------------------------------------------------");
-        System.out.println();
+        try {
+            mediaPlayer.stop();
+            LeaderbordController Leaderbord = new LeaderbordController(dc); // <1>
+            Scene scene = new Scene(Leaderbord, 600, 400);
+            scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
+            Stage stage = (Stage) this.getScene().getWindow();
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     private void clickGrid(MouseEvent e) {
