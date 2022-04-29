@@ -81,3 +81,12 @@
 {
     -fx-background-color: white;
 }
+.txt-style
+{
+    -fx-font-family: "Microsoft YaHei UI";
+    -fx-font-size: 16px;
+    -fx-style: bold;
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
