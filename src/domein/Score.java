@@ -52,13 +52,21 @@ public class Score {
     public int amountP10() {
         return p10;
     }
-
     public int amountP11() {
         return p11;
     }
-
     public int amountP12() {
         return p12;
+    }
+
+    public void setP10(int p10) {
+        this.p10 = p10;
+    }
+    public void setP11(int p11) {
+        this.p11 = p11;
+    }
+    public void setP12(int p12) {
+        this.p12 = p12;
     }
 
     public int getBonus(){ return bonus; }
