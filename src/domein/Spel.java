@@ -9,6 +9,8 @@ public class Spel {
     private int[][] ownPieces;
     private List<Speler> currentPlayers;
     private byte currentPlayer = 0;
+    Scoreblad scoreblad = new Scoreblad();
+    private List<Score> scores  = scoreblad.getScores();
 
     int p10=0, p11=0, p12=0;
     boolean isDouble = false;
@@ -49,6 +51,15 @@ public class Spel {
     }
 
     public void addScore(int round){
+        for(Score s : scores){
+            if(s.amountP10() == 0){
+                s.setP10(s.amountP10()+1);
+            }else if (s.amountP11() == 0) {
+                s.setP11(s.amountP11() + 1);
+            }else if(s.amountP12() == 0){
+                s.setP12(s.amountP12() + 1);
+            }
+        }
         currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, round, this.isDouble));
         p10=0;
         p11=0;
