@@ -14,6 +14,10 @@ public class Scoreblad {
         scores.add(score);
     }
 
+    public void setScore(){
+        scores.forEach(score -> score.setScore());
+    }
+
     public List<Score> getScores(){
         return scores;
     }

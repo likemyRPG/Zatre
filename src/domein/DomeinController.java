@@ -108,16 +108,12 @@ public class DomeinController{
 		spel.printScore();
 	}
 
-	public void calculateScore(int row, int column, int valueOfSelectedPiece, int round) {
-		spel.calculateScore(row, column, valueOfSelectedPiece, round);
+	public void calculateScore(int row, int column, int valueOfSelectedPiece) {
+		spel.calculateScore(row, column, valueOfSelectedPiece);
 	}
 
 	public Scoreblad getScoreblad(){
 		return spel.getScoreBlad();
-	}
-
-	public void addScore(int round){
-		spel.addScore(round);
 	}
 
 	public int[][] getGameBoard() {
@@ -126,6 +122,10 @@ public class DomeinController{
 
 	public void checkRegister(String text, Integer value) {
 		spelerRepository.checkRegister(text, value);
+	}
+
+	public void verwijderSpeler(int i) {
+		spelerRepository.verwijderSpeler(i);
 	}
 	//endregion
 }

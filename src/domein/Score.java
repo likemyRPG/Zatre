@@ -13,14 +13,16 @@ public class Score {
     private int score;
     private boolean earnedBonus;
     List<Integer> BonusList;
+    int row = 0;
 
-    public Score(int p10, int p11, int p12, int round, boolean doubleScore) {
+    public Score(int p10, int p11, int p12, boolean doubleScore) {
         setBonusRound();
         this.p10 = p10;
         this.p11 = p11;
         this.p12 = p12;
         setDoubleScore(doubleScore);
-        setBonus(round);
+        row++;
+        setBonus(row);
         setScore();
     }
 
@@ -29,8 +31,9 @@ public class Score {
         else this.isDoubleScore = false;
     }
 
-    private void setScore() {
-        score +=(1*p10)+(2*p11)+(4*p12);
+    public void setScore() {
+        score=0;
+        score +=(1*amountP10())+(2*amountP11())+(4*amountP12());
         checkEarnedBonus();
         if(earnedBonus) score += this.bonus;
         if(isDoubleScore) score *=2;
@@ -41,8 +44,8 @@ public class Score {
         else earnedBonus = false;
     }
 
-    private void setBonus(int round) {
-        bonus = BonusList.get(round);
+    private void setBonus(int row) {
+        bonus = BonusList.get(row);
     }
 
     public boolean isDoubleScore() {
@@ -78,7 +81,7 @@ public class Score {
     private void setBonusRound(){
         BonusList = new ArrayList<>();
         int points = 3;
-        for(int i = 0; i < 4; i++){
+        for(int i = 0; i <= 4; i++){
             for(int j = 0; j <= 4; j++){
                 BonusList.add(points);
             }

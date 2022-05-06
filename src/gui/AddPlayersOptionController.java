@@ -19,7 +19,7 @@ public class AddPlayersOptionController extends Pane {
     private DomeinController dc;
 
 
-    Button btnReturn, btnLogin, btnRegister;
+    Button btnReturn, btnLogin, btnRegister, btnDelete1, btnDelete2, btnDelete3, btnDelete4;
 
     Label lblKansen, lblPlayersNaam, lblPlayersKansen, lblPlayers;
 
@@ -29,6 +29,8 @@ public class AddPlayersOptionController extends Pane {
         try
         {
             this.dc = dc;
+            dc.selecteerSpeler("Jochen", 2003);
+            dc.selecteerSpeler("Larss", 2003);
             buildGUI();
             aantalSpelers = dc.geefAantalSpelers();
             buttonDisabled();
@@ -41,7 +43,39 @@ public class AddPlayersOptionController extends Pane {
     private void buttonDisabled() {
         if(aantalSpelers == 4){
             btnLogin.setDisable(true);
-            btnRegister.setDisable(false);
+            btnRegister.setDisable(true);
+        }
+
+        //Disable buttons dependig on the amount of players
+        if(dc.geefAantalSpelers() == 0){
+            btnDelete1.setDisable(true);
+            btnDelete2.setDisable(true);
+            btnDelete3.setDisable(true);
+            btnDelete4.setDisable(true);
+        }
+        else if(dc.geefAantalSpelers() == 1){
+            btnDelete1.setDisable(false);
+            btnDelete2.setDisable(true);
+            btnDelete3.setDisable(true);
+            btnDelete4.setDisable(true);
+        }
+        else if(dc.geefAantalSpelers() == 2){
+            btnDelete1.setDisable(false);
+            btnDelete2.setDisable(false);
+            btnDelete3.setDisable(true);
+            btnDelete4.setDisable(true);
+        }
+        else if(dc.geefAantalSpelers() == 3){
+            btnDelete1.setDisable(false);
+            btnDelete2.setDisable(false);
+            btnDelete3.setDisable(false);
+            btnDelete4.setDisable(true);
+        }
+        else if(dc.geefAantalSpelers() == 4){
+            btnDelete1.setDisable(false);
+            btnDelete2.setDisable(false);
+            btnDelete3.setDisable(false);
+            btnDelete4.setDisable(false);
         }
     }
 
@@ -66,6 +100,44 @@ public class AddPlayersOptionController extends Pane {
         btnRegister.setFont(Font.font ("Berlin Sans FB", 24));
         btnRegister.setLayoutX(173.0);
         btnRegister.setLayoutY(94.0);
+
+        //Add 4 buttons to the pane to delete the player from the list of players
+        btnDelete1 = new Button("-");
+        btnDelete1.setMaxWidth(Double.MAX_VALUE);
+        btnDelete1.setMaxHeight(20);
+        btnDelete1.setOnAction(this::onClickDelete1);
+        btnDelete1.setPadding(new Insets(0));
+        btnDelete1.setFont(Font.font ("Berlin Sans FB", 8));
+        btnDelete1.setLayoutX(360);
+        btnDelete1.setLayoutY(250);
+
+        btnDelete2 = new Button("-");
+        btnDelete2.setMaxWidth(Double.MAX_VALUE);
+        btnDelete2.setMaxHeight(20);
+        btnDelete2.setOnAction(this::onClickDelete2);
+        btnDelete2.setPadding(new Insets(0));
+        btnDelete2.setFont(Font.font ("Berlin Sans FB", 8));
+        btnDelete2.setLayoutX(360);
+        btnDelete2.setLayoutY(275);
+
+        btnDelete3 = new Button("-");
+        btnDelete3.setMaxWidth(Double.MAX_VALUE);
+        btnDelete3.setMaxHeight(20);
+        btnDelete3.setOnAction(this::onClickDelete3);
+        btnDelete3.setPadding(new Insets(0));
+        btnDelete3.setFont(Font.font ("Berlin Sans FB", 8));
+        btnDelete3.setLayoutX(360);
+        btnDelete3.setLayoutY(300);
+
+        btnDelete4 = new Button("-");
+        btnDelete4.setMaxWidth(Double.MAX_VALUE);
+        btnDelete4.setMaxHeight(20);
+        btnDelete4.setOnAction(this::onClickDelete4);
+        btnDelete4.setPadding(new Insets(0));
+        btnDelete4.setFont(Font.font ("Berlin Sans FB", 8));
+        btnDelete4.setLayoutX(360);
+        btnDelete4.setLayoutY(325);
+
 
         //----------------------------//
         btnReturn = new Button("←");
@@ -116,7 +188,35 @@ public class AddPlayersOptionController extends Pane {
 
         //endRegion
 
-        this.getChildren().addAll(btnRegister, btnLogin, btnReturn, lblKansen, lblPlayersNaam, lblPlayersKansen, lblPlayers);
+        this.getChildren().addAll(btnDelete1, btnDelete2, btnDelete3, btnDelete4, btnRegister, btnLogin, btnReturn, lblKansen, lblPlayersNaam, lblPlayersKansen, lblPlayers);
+    }
+
+    private void onClickDelete2(ActionEvent event) {
+        dc.verwijderSpeler(1);
+        lblPlayersKansen.setText(dc.geefSpelerKansen());
+        lblPlayersNaam.setText(dc.geefSpelersNaam());
+        buttonDisabled();
+    }
+
+    private void onClickDelete3(ActionEvent event) {
+        dc.verwijderSpeler(2);
+        lblPlayersKansen.setText(dc.geefSpelerKansen());
+        lblPlayersNaam.setText(dc.geefSpelersNaam());
+        buttonDisabled();
+    }
+
+    private void onClickDelete4(ActionEvent event) {
+        dc.verwijderSpeler(3);
+        lblPlayersKansen.setText(dc.geefSpelerKansen());
+        lblPlayersNaam.setText(dc.geefSpelersNaam());
+        buttonDisabled();
+    }
+
+    private void onClickDelete1(ActionEvent event) {
+        dc.verwijderSpeler(0);
+        lblPlayersKansen.setText(dc.geefSpelerKansen());
+        lblPlayersNaam.setText(dc.geefSpelersNaam());
+        buttonDisabled();
     }
 
     private void onClickRegister(ActionEvent event) {

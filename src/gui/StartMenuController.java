@@ -31,6 +31,7 @@ public class StartMenuController extends GridPane {
     language ln = new language();
     ResourceBundle rb = ln.taal();
 
+
     public StartMenuController(DomeinController dc) {
         try
         {

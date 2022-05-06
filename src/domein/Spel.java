@@ -9,12 +9,11 @@ public class Spel {
     private int[][] ownPieces;
     private List<Speler> currentPlayers;
     private byte currentPlayer = 0;
-    Scoreblad scoreblad = new Scoreblad();
-    private List<Score> scores  = scoreblad.getScores();
 
     int p10=0, p11=0, p12=0;
     boolean isDouble = false;
 
+    //region Spelers
     public Spel(List<Speler> spelerList) {
         currentPlayers = new ArrayList<>(spelerList);
         spelBord = new int[15][15];
@@ -22,7 +21,6 @@ public class Spel {
         addNonUsableTiles();
     }
 
-    //region Player Management
     public Speler setNextPlayer(){
         if(currentPlayers.size() -1 == currentPlayer) currentPlayer = 0;
         else currentPlayer++;
@@ -49,22 +47,59 @@ public class Spel {
     public Speler getCurrentPlayer(){
         return currentPlayers.get(currentPlayer);
     }
-
-    public void addScore(int round){
-        for(Score s : scores){
-            if(s.amountP10() == 0){
-                s.setP10(s.amountP10()+1);
-            }else if (s.amountP11() == 0) {
-                s.setP11(s.amountP11() + 1);
-            }else if(s.amountP12() == 0){
-                s.setP12(s.amountP12() + 1);
+    //endregion
+    public void addScore(){
+        if(currentPlayers.get(currentPlayer).getScoreblad().getScores().isEmpty()){
+            currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, this.isDouble));
+        }
+        else{
+            Score sc = currentPlayers.get(currentPlayer).getScoreblad().getScores().get(currentPlayers.get(currentPlayer).getScoreblad().getScores().size()-1);
+            if(sc.amountP10() > 0 && sc.amountP11() > 0 && sc.amountP12() > 0){
+                currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, false));
+                for(Score score : currentPlayers.get(currentPlayer).getScoreblad().getScores()){
+                    if(isDouble && !score.isDoubleScore()){
+                        score.isDoubleScore();
+                    }
+                }
+            }
+            else{
+                for(Score s : getCurrentPlayer().getScoreblad().getScores()){
+                    if(p10!=0 || p11!=0 || p12!=0){
+                        if(p10 != 0 && s.amountP10() == 0){
+                            s.setP10(s.amountP10() + 1);
+                            p10--;
+                        }else if (p11 != 0 && s.amountP11() == 0) {
+                            s.setP11(s.amountP11() + 1);
+                            p11--;
+                        }else if(p12 != 0 && s.amountP12() == 0){
+                            s.setP12(s.amountP12() + 1);
+                            p12--;
+                        }
+                    }
+                    if(isDouble && !s.isDoubleScore()){
+                        s.isDoubleScore();
+                    }
+                }
+                if(p10!=0 || p11!=0 || p12!=0){
+                    currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, false));
+                }
             }
         }
-        currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, round, this.isDouble));
         p10=0;
         p11=0;
         p12=0;
         isDouble = false;
+        setScore();
+    }
+
+    public void calculateScore(int row, int column, int valueOfSelectedPiece){
+        int sumH = sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece);
+        int sumV = sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece);
+        if(sumH == 10 || sumV == 10) p10++;
+        if(sumH == 11 || sumV == 11 ) p11++;
+        if(sumH == 12 || sumV == 12) p12++;
+        if(checkSpecialTile(row, column)) isDouble = true;
+        addScore();
     }
 
     public void printScore(){
@@ -90,7 +125,8 @@ public class Spel {
     }
 
     private boolean checkSpecialTile(int row, int column) {
-        if(row ==column) return true;
+        if(row ==7 && column == 7) return false;
+        else if(row == column) return true;
         else if((row == 0 || row == 14) && (column == 6 || column == 8))
             return true;
         else if((column == 0 || column == 14) && (row == 6 || row == 8))
@@ -245,17 +281,15 @@ public class Spel {
         return leaderBoard;
     }
 
-    public void calculateScore(int row, int column, int valueOfSelectedPiece, int round){
-        int sumH = sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece);
-        int sumV = sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece);
-        if(sumH == 10 || sumV == 10) p10++;
-        if(sumH == 11 || sumV == 11 ) p11++;
-        if(sumH == 12 || sumV == 12) p12++;
-        if(checkSpecialTile(row, column)) isDouble = true;
-    }
-
     public int[][] getGameBoard() {
         return spelBord;
+    }
+
+    public void setScore(){
+        for (int i = 0; i < currentPlayers.size(); i++) {
+                    currentPlayers.get(i).getScoreblad().setScore();
+        }
+
     }
 
     //endregion

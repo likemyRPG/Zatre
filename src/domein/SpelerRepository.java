@@ -121,4 +121,8 @@ public class SpelerRepository {
     public int getAantalSpelers() {
         return spelers.size();
     }
+
+    public void verwijderSpeler(int i) {
+        spelers.remove(i);
+    }
 }

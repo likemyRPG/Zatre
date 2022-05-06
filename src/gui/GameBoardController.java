@@ -51,7 +51,6 @@ public class GameBoardController extends Pane {
     Button btnSettings;
     language ln = new language();
     ResourceBundle rb = ln.taal();
-    int round=0;
     //endregion
 
     public GameBoardController(DomeinController dc) {
@@ -319,7 +318,7 @@ public class GameBoardController extends Pane {
         //delte the buttons in the toolbar
         tbSelectionPiece.getItems().clear();
         txtPlayer.setText(dc.getNextPlayer().getGebruikersnaam());
-        updateToolbar();
+        updateToolbarScoreBoard();
     }
 
     private String geefSpelerAanBeurt() {
@@ -379,20 +378,25 @@ public class GameBoardController extends Pane {
             }
             if (firstPiece) {
                 if (column == 7 && row == 7) {
-                    placePiece(row, column);
                     firstPiece = false;
+                    score(row, column);
                 }
             } else {
                 if (isEmpty) {
                     if (dc.checkPlacement(row, column, firstRound, valueOfSelectedPiece)) {
-                        dc.calculateScore(row, column, valueOfSelectedPiece, round);
-                        placePiece(row, column);
+                        score(row, column);
                         txtPlayer.setText(dc.getCurrentPlayer().getGebruikersnaam());
                         totalScore.setText(String.format(("%d"), dc.getCurrentPlayer().getScoreblad().getTotalScore()));
                     }
                 }
             }
         }
+    }
+
+    private void score(int row, int column){
+        dc.calculateScore(row, column, valueOfSelectedPiece);
+        placePiece(row, column);
+        updateScore();
     }
 
     private void placePiece(int row, int column){
@@ -411,7 +415,7 @@ public class GameBoardController extends Pane {
         mediaPlayer.setCycleCount(1);
         tbSelectionPiece.getItems().remove(index);
         amountOfPieces--;
-        updateToolbar();
+        updateToolbarScoreBoard();
     }
 
     private void updateScore() {
@@ -453,7 +457,7 @@ public class GameBoardController extends Pane {
         return x;
     }
 
-    private void updateToolbar() {
+    private void updateToolbarScoreBoard() {
         //If toolbar has no elements, add all pieces
         lblAantalSteentjes.setText("x" + amountOfPieces);
         if (tbSelectionPiece.getItems().isEmpty() && amountOfPieces > 0){
@@ -464,8 +468,6 @@ public class GameBoardController extends Pane {
             dc.clearOwnPieces();
             generateButtons(2);
             move++;
-            if(move%dc.geefAantalSpelers()==0) round++;
-            dc.addScore(round);
             dc.setNextPlayer();
             dc.printScore();
             updateScore();
