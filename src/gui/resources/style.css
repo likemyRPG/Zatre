@@ -1,7 +1,13 @@
-@font-face {
+@fnt-fce {
   src: url("showcard.woff");
 }
-.button{
+
+@font-face {
+    font-family: 'Arcade';
+    src: url("font.ttf") format("truetype");
+}
+
+.oldbutton {
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: #1d1d1d;
@@ -10,34 +16,53 @@
     -fx-background-color: lightgrey;
 }
 
+.button {
+        -fx-font-family: "OCR A Extended";
+        -fx-font-size: 16px;
+        -fx-font-weight: bold;
+        -fx-text-fill: #1d1d1d;
+        -fx-border-style: none;
+        -fx-label-padding: 4px;
+        -fx-background-color: #b78c5d;
+}
+
 /*Set the text in all the lables centered*/
-.label{
+.label {
 -fx-alignment:center;
 }
 
-.button:hover{
-    -fx-background-color: white;
+.button:hover {
+    -fx-background-color: #cecccc;
     -fx-text-fill: #1d1d1d;
     -fx-cursor: hand;
 }
 
-.lblTitel{
+.button-start {
+        -fx-font-size: 27px;
+        -fx-font-family: "OCR A Extended";
+        -fx-font-weight: bold;
+}
+
+.button-quit {
+        -fx-font-family: "OCR A Extended";
+}
+
+.lblTitel {
     -fx-font-size: 36px;
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
 
-.totalScore{
+.totalScore {
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
 
-.Test{
+.Test {
     -fx-background-color: none;
 }
 
-.combo-box .list-cell
-{
+.combo-box .list-cell {
     -fx-background: white;
     -fx-background-color: transparent;
     -fx-text-fill: -fx-text-base-color;
@@ -45,24 +70,27 @@
     -fx-cell-size: 1.66667em;
 }
 
-.lblLogin{
+.lblLogin {
     -fx-text-fill: red;
 }
 
-.lblText{
+.lblText {
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
 }
 
-.frontImage{
+.frontImage {
     -fx-alignment: center;
 }
-.bg-style{
+
+.bg-style {
     -fx-background-color: #1d1d1d;
     -fx-background-radius: 10;
+    -fx-background-i
 }
-.Title{
+
+.Title {
     -fx-font-family: "Showcard Gothic";
     -fx-font-size: 40px;
     -fx-text-fill: white;
@@ -70,23 +98,29 @@
     -fx-alignment: center;
 }
 
-.txtPlayer
-{
+.txtPlayer {
     -fx-font-family: "Microsoft YaHei UI";
     -fx-font-size: 12px;
     -fx-style: bold;
     -fx-alignment: center;
 }
-.grdScoreBord
-{
+
+.grdScoreBord {
     -fx-background-color: white;
 }
-.txt-style
-{
+
+.txt-style {
     -fx-font-family: "Microsoft YaHei UI";
     -fx-font-size: 16px;
     -fx-style: bold;
     -fx-alignment: center;
     -fx-background-color: transparent;
     -fx-text-fill: white;
+}
+
+.bg-image {
+-fx-background-image: url('background.jpg');
+-fx-background-repeat: no-repeat;
+-fx-background-size: stretch;
+-fx-background-position: center center;
 }

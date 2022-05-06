@@ -28,7 +28,7 @@ public class PlayerInformationController extends Pane {
 
     private void buildGUI() {
         setPadding(new Insets(10));
-        getStyleClass().add("bg-style");
+        getStyleClass().add("bg-image");
 
         btnOk = new Button("Ok");
         btnOk.setMaxWidth(Double.MAX_VALUE);
@@ -53,7 +53,7 @@ public class PlayerInformationController extends Pane {
     private void onClickButtonOk(ActionEvent event) {
         try {
             AddPlayersOptionController AddPlayer = new AddPlayersOptionController(dc);
-            Scene scene = new Scene(AddPlayer, 600, 400);
+            Scene scene = new Scene(AddPlayer, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);

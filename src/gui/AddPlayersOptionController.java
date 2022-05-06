@@ -47,7 +47,7 @@ public class AddPlayersOptionController extends Pane {
 
     private void buildGUI() {
         setPadding(new Insets(10));
-        getStyleClass().add("bg-style");
+        getStyleClass().add("bg-image");
 
         btnLogin = new Button(rb.getString("login"));
         btnLogin.setMaxWidth(Double.MAX_VALUE);
@@ -122,7 +122,7 @@ public class AddPlayersOptionController extends Pane {
     private void onClickRegister(ActionEvent event) {
         try {
             RegisterController register = new RegisterController(dc); // <1>
-            Scene scene = new Scene(register, 600, 400);
+            Scene scene = new Scene(register, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);
@@ -137,7 +137,7 @@ public class AddPlayersOptionController extends Pane {
     private void onClickLogin(ActionEvent event) {
         try {
             LoginController login = new LoginController(dc); // <1>
-            Scene scene = new Scene(login, 600, 400);
+            Scene scene = new Scene(login, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);
@@ -152,7 +152,7 @@ public class AddPlayersOptionController extends Pane {
     private void onClickReturn(ActionEvent event) {
         try {
             StartMenuController StartMenu = new StartMenuController(dc); // <1>
-            Scene scene = new Scene(StartMenu, 600, 400);
+            Scene scene = new Scene(StartMenu, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);

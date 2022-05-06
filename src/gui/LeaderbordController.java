@@ -34,7 +34,7 @@ public class LeaderbordController extends Pane {
 
 
     private void buildGUI() {
-        getStyleClass().add("bg-style");
+        getStyleClass().add("bg-image");
 
         TextField txtTitle = new TextField("Leaderbord");
         txtTitle.getStyleClass().add("Title");
@@ -47,9 +47,9 @@ public class LeaderbordController extends Pane {
         ImageView confetti = new ImageView(new Image(
                 getClass().getResourceAsStream
                         ("/gui/resources/confetti.gif")));
-        confetti.setFitWidth(getWidth());
-        confetti.setFitHeight(getHeight());
-        confetti.setLayoutX(50);
+        confetti.setFitWidth(900);
+        confetti.setFitHeight(645);
+        confetti.setLayoutX(0);
 
         Button btnQuit = new Button("Quit");
         btnQuit.setOnAction(this::OnClickBtnQuit);
@@ -141,7 +141,7 @@ public class LeaderbordController extends Pane {
     private void OnClickBtnQuit(ActionEvent actionEvent) {
         try {
             StartMenuController startMenu = new StartMenuController(dc);
-            Scene scene = new Scene(startMenu, 600, 400);
+            Scene scene = new Scene(startMenu, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);
