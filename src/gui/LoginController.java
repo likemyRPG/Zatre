@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
 import java.util.ResourceBundle;
 
 import static persistence.language.rb;
@@ -27,14 +28,14 @@ public class LoginController extends GridPane {
     private Label birthYearLabel;
     private Label lblLoginMessage;
     private TextField usernameTextField;
-    private TextField birthYearTextField;
-    private ComboBox birthYear;
+    private ComboBox birthyearComboBox;
     private Button btnLogin;
 
     public LoginController(DomeinController dc) {
         try{
             this.dc = dc;
             buildGUI();
+            addBirthyearToComboBox();
         }catch( Exception e){
             System.out.println(e);
         }
@@ -74,10 +75,9 @@ public class LoginController extends GridPane {
         add(usernameTextField, 1, 2);
         usernameTextField.setPromptText(rb.getString("username"));
 
-        birthYearTextField = new TextField();
-        birthYearTextField.setMaxWidth(Double.MAX_VALUE);
-        add(birthYearTextField, 1, 3);
-        birthYearTextField.setPromptText(rb.getString("birthyear"));
+        birthyearComboBox = new ComboBox<>();
+        birthyearComboBox.setMaxWidth(Double.MAX_VALUE);
+        add(birthyearComboBox, 1, 3);
 
         lblLoginMessage = new Label();
         lblLoginMessage.setMaxWidth(Double.MAX_VALUE);
@@ -108,13 +108,20 @@ public class LoginController extends GridPane {
     }
 
     private void onClickLogin(ActionEvent event) {
-        if(usernameTextField.getText().isBlank() == false && birthYearTextField.getText().isBlank() == false) checkLogin();
+        if(usernameTextField.getText().isBlank() == false && birthyearComboBox.getValue() != null) checkLogin();
         else lblLoginMessage.setText(rb.getString("Username&Birthday"));
+    }
+
+    private void addBirthyearToComboBox() {
+        Calendar cal = Calendar.getInstance();
+        for(int i = cal.get(Calendar.YEAR)-6; i >= 1900; i--) {
+            birthyearComboBox.getItems().add(i);
+        }
     }
 
     public void checkLogin(){
         String gebruikersnaam = usernameTextField.getText();
-        int geboortejaar = Integer.parseInt(birthYearTextField.getText());
+        int geboortejaar = (int) birthyearComboBox.getValue();
         boolean succes = true;
         boolean alToegevoegd = dc.alToegevoegd(gebruikersnaam, geboortejaar);
         if(alToegevoegd) lblLoginMessage.setText("Speler is al toegevoegd!");
@@ -127,7 +134,6 @@ public class LoginController extends GridPane {
             }
             if(succes) continueLogin();
         }
-
     }
 
     private void continueLogin() {

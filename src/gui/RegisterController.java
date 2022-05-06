@@ -115,6 +115,8 @@ public class RegisterController extends GridPane {
             stage.show();
         }catch (NullPointerException e) {
             messageLabel.setText("Choose your birthdate");
+        }catch (Exception e) {
+            messageLabel.setText(e.getMessage());
         }
     }
 
