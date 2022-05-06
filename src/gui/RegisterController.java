@@ -50,7 +50,7 @@ public class RegisterController extends GridPane {
         setVgap(20);
         setHgap(10);
         setPadding(new Insets(10));
-        getStyleClass().add("bg-style");
+        getStyleClass().add("bg-image");
 
         ColumnConstraints col1 = new ColumnConstraints();
         ColumnConstraints col2 = new ColumnConstraints();
@@ -109,7 +109,7 @@ public class RegisterController extends GridPane {
         try{
             dc.checkRegister(usernameLabel.getText(), birthyearComboBox.getValue());
             PlayerInformationController PlayerInformation = new PlayerInformationController(dc);
-            Scene scene = new Scene(PlayerInformation, 600, 400);
+            Scene scene = new Scene(PlayerInformation, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);
@@ -127,7 +127,7 @@ public class RegisterController extends GridPane {
     public void cancelButtonOnAction(ActionEvent event) {
         try {
             AddPlayersOptionController AddPlayer = new AddPlayersOptionController(dc);
-            Scene scene = new Scene(AddPlayer, 600, 400);
+            Scene scene = new Scene(AddPlayer, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);

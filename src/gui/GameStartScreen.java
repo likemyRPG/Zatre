@@ -35,7 +35,7 @@ public class GameStartScreen extends Pane {
 
     private void buildGUI() {
         setPadding(new Insets(10));
-        getStyleClass().add("bg-style");
+        getStyleClass().add("bg-image");
 
         btnOk = new Button("Ok");
         btnOk.setMaxWidth(Double.MAX_VALUE);

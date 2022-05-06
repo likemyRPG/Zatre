@@ -54,17 +54,23 @@ public class StartMenuController extends GridPane {
         setVgap(20);
         setHgap(10);
         setPadding(new Insets(10));
-          ColumnConstraints col1 = new ColumnConstraints();
+        ColumnConstraints col1 = new ColumnConstraints();
         ColumnConstraints col2 = new ColumnConstraints();
-        getStyleClass().add("bg-style");
+        ColumnConstraints col3 = new ColumnConstraints();
+
+        col1.setPercentWidth(8);
+        col2.setPercentWidth(54);
+        col3.setPercentWidth(38);
+
+        getStyleClass().add("bg-image");
 
         col1.setHalignment(HPos.RIGHT);
         col2.setHgrow(Priority.ALWAYS);
-        getColumnConstraints().addAll(col1, col2);
+        getColumnConstraints().addAll(col1, col2, col3);
 
         btnSelectPlayers = new Button(rb.getString("players"));
         btnSelectPlayers.setMaxWidth(Double.MAX_VALUE);
-        add(btnSelectPlayers, 1,3);
+        add(btnSelectPlayers, 1,9);
         btnSelectPlayers.setOnAction(this::onClickSelectPlayers);
         btnSelectPlayers.getStyleClass().add("buttons");
 
@@ -75,7 +81,7 @@ public class StartMenuController extends GridPane {
         //----------------------------//
         btnStartGame = new Button(rb.getString("startGame"));
         btnStartGame.setMaxWidth(Double.MAX_VALUE);
-        add(btnStartGame, 1,4);
+        add(btnStartGame, 1,10);
         btnStartGame.setOnAction(this::onClickStartGame);
 
         btnStartGame.setFont(Font.font ("Berlin Sans FB", 24));
@@ -85,7 +91,7 @@ public class StartMenuController extends GridPane {
         //----------------------------//
         btnQuit = new Button(rb.getString("quit"));
         btnQuit.setMaxWidth(Double.MAX_VALUE);
-        add(btnQuit, 1,5);
+        add(btnQuit, 1,11);
         btnQuit.setOnAction(this::onClickQuit);
 
         btnQuit.setFont(Font.font ("Berlin Sans FB", 24));
@@ -97,7 +103,7 @@ public class StartMenuController extends GridPane {
         try
         {
             AddPlayersOptionController AddPlayer = new AddPlayersOptionController(dc); // <1>
-            Scene scene = new Scene(AddPlayer, 600, 400);
+            Scene scene = new Scene(AddPlayer, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);
@@ -111,7 +117,7 @@ public class StartMenuController extends GridPane {
     public void onClickStartGame(ActionEvent event) {
         try {
             GameStartScreen GameStart = new GameStartScreen(dc);
-            Scene scene = new Scene(GameStart, 600, 400);
+            Scene scene = new Scene(GameStart, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);

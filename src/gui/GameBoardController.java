@@ -94,7 +94,7 @@ public class GameBoardController extends Pane {
     }
 
     private void buildGUI() {
-        getStyleClass().add("bg-style");
+        getStyleClass().add("bg-image");
         //region Create Gameboard
         ImageView Spelbord = new ImageView(new Image(
                 getClass().getResourceAsStream
@@ -340,7 +340,7 @@ public class GameBoardController extends Pane {
         try {
             mediaPlayer.stop();
             LeaderbordController Leaderbord = new LeaderbordController(dc); // <1>
-            Scene scene = new Scene(Leaderbord, 600, 400);
+            Scene scene = new Scene(Leaderbord, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);
@@ -524,7 +524,7 @@ public class GameBoardController extends Pane {
         try {
             mediaPlayer.stop();
             StartMenuController StartMenu = new StartMenuController(dc); // <1>
-            Scene scene = new Scene(StartMenu, 600, 400);
+            Scene scene = new Scene(StartMenu, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);
