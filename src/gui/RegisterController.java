@@ -1,7 +1,6 @@
 package gui;
 
 import domein.DomeinController;
-import exceptions.OutOfRangeException;
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -29,7 +28,6 @@ public class RegisterController extends GridPane {
     private Label usernameLabel;
     private Label birthyearLabel;
     private TextField usernameTextField;
-    private TextField birthyearTextField;
     private Label messageLabel;
     private Button registerButton;
     private Button cancelButton;
@@ -81,7 +79,6 @@ public class RegisterController extends GridPane {
         birthyearLabel.getStyleClass().add("lblText");
         add(birthyearLabel, 0, 3);
 
-        //Let the user choose their birthyear by a combobox
         birthyearComboBox = new ComboBox<>();
         birthyearComboBox.setMaxWidth(Double.MAX_VALUE);
         add(birthyearComboBox, 1, 3);
@@ -100,14 +97,15 @@ public class RegisterController extends GridPane {
 
     private void addBirthyearToComboBox() {
         Calendar cal = Calendar.getInstance();
-        for(int i = cal.get(Calendar.YEAR - 6); i >= 1900; i--) {
+        for(int i = cal.get(Calendar.YEAR)-6; i >= 1900; i--) {
             birthyearComboBox.getItems().add(i);
         }
     }
 
     public void registerButtonOnAction(ActionEvent event) {
         try{
-            dc.checkRegister(usernameLabel.getText(), birthyearComboBox.getValue());
+            System.out.println(usernameTextField.getText() + birthyearComboBox.getValue());
+            dc.checkRegister(usernameTextField.getText(), birthyearComboBox.getValue());
             PlayerInformationController PlayerInformation = new PlayerInformationController(dc);
             Scene scene = new Scene(PlayerInformation, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
@@ -115,11 +113,7 @@ public class RegisterController extends GridPane {
             scene.setFill(Color.TRANSPARENT);
             stage.setScene(scene);
             stage.show();
-        }catch (IllegalArgumentException e){
-            messageLabel.setText("Fill in all the requirements!");
-        } catch (OutOfRangeException e) {
-            messageLabel.setText("String.valueOf(e)");
-        }catch (NullPointerException e){
+        }catch (NullPointerException e) {
             messageLabel.setText("Choose your birthdate");
         }
     }

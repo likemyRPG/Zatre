@@ -35,8 +35,6 @@ public class StartMenuController extends GridPane {
         try
         {
             this.dc = dc;
-            dc.selecteerSpeler("Larss",2003);
-            dc.selecteerSpeler("Jochen",2003);
             buildGUI();
             buttonDisabled();
 

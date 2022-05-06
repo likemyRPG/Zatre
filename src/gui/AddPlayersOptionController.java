@@ -100,7 +100,7 @@ public class AddPlayersOptionController extends Pane {
         lblKansen.setLayoutY(230);
         lblKansen.setUnderline(true);
         lblKansen.getStyleClass().add("lblText");
-
+    
         lblPlayersNaam = new Label(dc.geefSpelersNaam());
 
         lblPlayersNaam.setLayoutX(50);

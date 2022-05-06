@@ -1,6 +1,5 @@
 package domein;
 
-import exceptions.OutOfRangeException;
 import persistence.MyJDBC;
 import persistence.language;
 
@@ -20,14 +19,15 @@ public class SpelerRepository {
         spelers = new ArrayList<>();
     }
 
-    public void checkRegister(String username, int birthyear) throws OutOfRangeException {
+    public void checkRegister(String username, int birthyear){
         if(username.length() < 5 || username.length() > 45) throw new IllegalArgumentException(language.rb.getString("minLengthUsername"));
         if(birthyear < 6 ) throw new IllegalArgumentException(language.rb.getString("minage"));
         if(alToegevoegd(username, birthyear)) throw new IllegalArgumentException("Speler is al toegevoegd!");
-        registreerSpeler(username, birthyear); throw new OutOfRangeException();
+        registreerSpeler(username, birthyear);
     }
-    public void registreerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
+    public void registreerSpeler(String gebruikersnaam, int geboortejaar) {
         aantalSpelers = spelers.size();
+        System.out.println(aantalSpelers);
         if(aantalSpelers <= 3){
             // Controleren of een speler al bestaat
             boolean alBestaand = sql.zoekProfiel(gebruikersnaam, geboortejaar);
@@ -42,7 +42,7 @@ public class SpelerRepository {
         else throw new IllegalArgumentException("Het maximum aantal spelers is bereikt!");
     }
 
-    public void selecteerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
+    public void selecteerSpeler(String gebruikersnaam, int geboortejaar) {
         aantalSpelers = spelers.size();
         if(aantalSpelers <= 3)
         {

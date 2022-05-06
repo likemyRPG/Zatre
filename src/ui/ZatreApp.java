@@ -2,8 +2,6 @@ package ui;
 import domein.DomeinController;
 import java.util.*;
 
-
-import exceptions.OutOfRangeException;
 import persistence.language;
 
 public class ZatreApp {
@@ -22,7 +20,7 @@ public class ZatreApp {
         this.dc = dc;
     }
 
-    public void start() throws OutOfRangeException {
+    public void start(){
         ln.keuze();
         rb = ln.taal();
         verwelkoming();
@@ -49,7 +47,7 @@ public class ZatreApp {
 
                     System.out.println(dc.geefOverzicht());
 
-                } catch (OutOfRangeException e) {
+                } catch (IllegalArgumentException e) {
                     System.out.println(e.getMessage());
                 }
             }while (isFout) ;
@@ -74,7 +72,7 @@ public class ZatreApp {
                 aantalActieveSpelers++;
                 System.out.println(dc.geefOverzicht());
 
-            } catch (OutOfRangeException e) {
+            } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
         }while (isFout) ;
@@ -120,7 +118,7 @@ public class ZatreApp {
         return keuze;
     }
 
-    private void inleiding() throws OutOfRangeException {
+    private void inleiding(){
         int keuze = keuzeMenu();
         do{
             do{
@@ -133,7 +131,7 @@ public class ZatreApp {
                         else if(inlogKeuze == 3) break;
                         toonSpelers();
                     }
-                    else throw new OutOfRangeException(rb.getString("maxplayers"));
+                    else throw new IllegalArgumentException(rb.getString("maxplayers"));
 
                 }
                 else if(keuze == 2){

@@ -1,7 +1,5 @@
 package domein;
 
-import exceptions.OutOfRangeException;
-
 import java.util.List;
 
 public class DomeinController{
@@ -25,12 +23,12 @@ public class DomeinController{
 		 return spel.checkPlacement(row, column, firstRound, valueOfSelectedPiece);
 	}
 
-	public void registreerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
+	public void registreerSpeler(String gebruikersnaam, int geboortejaar) {
 		spelerRepository.registreerSpeler(gebruikersnaam, geboortejaar);
 		speler = spelerRepository.getSpelers().get(spelerRepository.getSpelers().size() -1 );
 	}
 
-	public void selecteerSpeler(String gebruikersnaam, int geboortejaar) throws OutOfRangeException {
+	public void selecteerSpeler(String gebruikersnaam, int geboortejaar) {
 		spelerRepository.selecteerSpeler(gebruikersnaam, geboortejaar);
 		speler = spelerRepository.getSpelers().get(spelerRepository.getSpelers().size() -1 );
 	}
@@ -126,7 +124,7 @@ public class DomeinController{
 		return spel.getGameBoard();
 	}
 
-	public void checkRegister(String text, Integer value) throws OutOfRangeException {
+	public void checkRegister(String text, Integer value) {
 		spelerRepository.checkRegister(text, value);
 	}
 	//endregion
