@@ -27,7 +27,7 @@ public class StartMenuController extends GridPane {
     private Button btnQuit;
     private Button btnStartGame;
     private Button btnSelectPlayers;
-
+    private Button btnHowToPlay;
     language ln = new language();
     ResourceBundle rb = ln.taal();
 
@@ -68,7 +68,7 @@ public class StartMenuController extends GridPane {
 
         btnSelectPlayers = new Button(rb.getString("players"));
         btnSelectPlayers.setMaxWidth(Double.MAX_VALUE);
-        add(btnSelectPlayers, 1,9);
+        add(btnSelectPlayers, 1,8);
         btnSelectPlayers.setOnAction(this::onClickSelectPlayers);
         btnSelectPlayers.getStyleClass().add("buttons");
 
@@ -85,7 +85,15 @@ public class StartMenuController extends GridPane {
         btnStartGame.setFont(Font.font ("Berlin Sans FB", 24));
         btnStartGame.setLayoutX(173.0);
         btnStartGame.setLayoutY(94.0);
+        //----------------------------//
+        btnHowToPlay = new Button(rb.getString("howToPlay"));
+        btnHowToPlay.setMaxWidth(Double.MAX_VALUE);
+        add(btnHowToPlay, 1, 9);
+        btnHowToPlay.setOnAction(this::onClickHowToPlay);
 
+        btnHowToPlay.setFont(Font.font ("Berlin Sans FB", 24));
+        btnHowToPlay.setLayoutX(173.0);
+        btnHowToPlay.setLayoutY(94.0);
         //----------------------------//
         btnQuit = new Button(rb.getString("quit"));
         btnQuit.setMaxWidth(Double.MAX_VALUE);
@@ -95,6 +103,21 @@ public class StartMenuController extends GridPane {
         btnQuit.setFont(Font.font ("Berlin Sans FB", 24));
         btnQuit.setLayoutX(173.0);
         btnQuit.setLayoutY(94.0);
+    }
+
+    private void onClickHowToPlay(ActionEvent actionEvent) {
+        try {
+            HowToPlayController howToPlay = new HowToPlayController(dc);
+            Scene scene = new Scene(howToPlay, 600,400);
+            scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
+            Stage stage = (Stage) this.getScene().getWindow();
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.show();
+
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
 
     public void onClickSelectPlayers(ActionEvent event) {
