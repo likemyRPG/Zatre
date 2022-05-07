@@ -7,6 +7,7 @@ module gui {
     requires java.sql;
     requires javafx.fxml;
     requires javafx.media;
+    requires java.desktop;
 
     opens gui to javafx.graphics, javafx.fxml;
     opens main to javafx.graphics, javafx.fxml;

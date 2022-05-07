@@ -45,6 +45,7 @@ public class GameBoardController extends Pane {
     Button btnGiveBack;
     GridPane Scoreboard;
     TextField txtPlayer;
+    ImageView Spelbord;
     Label totalScore;
     boolean surrender = false;
     int spelerAanBeurt=-1, move = 0;
@@ -57,12 +58,34 @@ public class GameBoardController extends Pane {
         try {
             this.dc = dc;
             buildGUI();
+            setSpelbordScaling();
             generateButtons(3);
             setScoreBoardLayout();
             disableSurrender(true);
             addMusic();
         } catch (Exception e) {
             System.out.println(e);
+        }
+    }
+
+    private void setSpelbordScaling() {
+        int scaling = java.awt.Toolkit.getDefaultToolkit().getScreenResolution();
+        if(scaling == 96) {
+            Spelbord.setScaleX(1.0063);
+            Spelbord.setScaleY(1.0063);
+
+            SpelbordGrid.setLayoutX(Spelbord.getLayoutX());
+            SpelbordGrid.setLayoutY(Spelbord.getLayoutY());
+        } else if(scaling == 120) {
+            Spelbord.setScaleX(1.0063);
+            Spelbord.setScaleY(1.0063);
+
+            SpelbordGrid.setLayoutX(Spelbord.getLayoutX()-3);
+            SpelbordGrid.setLayoutY(Spelbord.getLayoutY()-3);
+        } else if(scaling == 144) {
+            SpelbordGrid.setScaleX(1);
+            SpelbordGrid.setScaleY(1);
+        } else if(scaling == 192) {
         }
     }
 
@@ -95,13 +118,17 @@ public class GameBoardController extends Pane {
     private void buildGUI() {
         getStyleClass().add("bg-image");
         //region Create Gameboard
-        ImageView Spelbord = new ImageView(new Image(
+        Spelbord = new ImageView(new Image(
                 getClass().getResourceAsStream
                         ("/gui/resources/Zatre_gameBoard_V2.png")));
         Spelbord.setLayoutX(75);
         Spelbord.setLayoutY(75);
+
         Spelbord.setScaleX(1.0063);
         Spelbord.setScaleY(1.0063);
+
+        SpelbordGrid.setLayoutX(Spelbord.getLayoutX()-3);
+        SpelbordGrid.setLayoutY(Spelbord.getLayoutY()-3);
 
         //in commentaar staat de waardes voor 100% scaling
 /*        Spelbord.setScaleX(1.0063);
@@ -111,8 +138,7 @@ public class GameBoardController extends Pane {
 /*        SpelbordGrid.setLayoutX(Spelbord.getLayoutX());
         SpelbordGrid.setLayoutY(Spelbord.getLayoutY());*/
 
-        SpelbordGrid.setLayoutX(Spelbord.getLayoutX()-3);
-        SpelbordGrid.setLayoutY(Spelbord.getLayoutY()-3);
+
         SpelbordGrid.setGridLinesVisible(false);
         GridPane.setColumnSpan(SpelbordGrid, 15);
         GridPane.setRowSpan(SpelbordGrid, 15);
@@ -338,6 +364,7 @@ public class GameBoardController extends Pane {
     private void onClickButtonRandom(ActionEvent actionEvent) {
         try {
             mediaPlayer.stop();
+            System.out.println(java.awt.Toolkit.getDefaultToolkit().getScreenResolution());
             LeaderbordController Leaderbord = new LeaderbordController(dc); // <1>
             Scene scene = new Scene(Leaderbord, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());

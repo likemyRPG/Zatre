@@ -50,7 +50,7 @@ public class Spel {
     //endregion
     public void addScore(){
         if(currentPlayers.get(currentPlayer).getScoreblad().getScores().isEmpty()){
-            currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, this.isDouble));
+            currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, isDouble));
         }
         else{
             Score sc = currentPlayers.get(currentPlayer).getScoreblad().getScores().get(currentPlayers.get(currentPlayer).getScoreblad().getScores().size()-1);
@@ -59,6 +59,7 @@ public class Spel {
                 for(Score score : currentPlayers.get(currentPlayer).getScoreblad().getScores()){
                     if(isDouble && !score.isDoubleScore()){
                         score.isDoubleScore();
+                        isDouble = false;
                     }
                 }
             }
@@ -78,10 +79,11 @@ public class Spel {
                     }
                     if(isDouble && !s.isDoubleScore()){
                         s.isDoubleScore();
+                        isDouble = false;
                     }
                 }
-                if(p10!=0 || p11!=0 || p12!=0){
-                    currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, false));
+                if(p10!=0 || p11!=0 || p12!=0 || isDouble){
+                    currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, isDouble));
                 }
             }
         }
