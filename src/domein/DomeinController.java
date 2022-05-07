@@ -1,5 +1,6 @@
 package domein;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class DomeinController{
@@ -112,6 +113,10 @@ public class DomeinController{
 		spel.calculateScore(row, column, valueOfSelectedPiece);
 	}
 
+	public void giveReward(Speler speler) {
+		spelerRepository.giveReward(speler);
+	}
+
 	public Scoreblad getScoreblad(){
 		return spel.getScoreBlad();
 	}
@@ -126,6 +131,18 @@ public class DomeinController{
 
 	public void verwijderSpeler(int i) {
 		spelerRepository.verwijderSpeler(i);
+	}
+
+	public void getLeaderboard(String pathToFile) {
+		spel.makeScoreBoardImage(pathToFile);
+	}
+
+	public String getImageName() {
+		return spel.getImageName();
+	}
+
+	public void clearPlayers() {
+		spelerRepository.clearPlayers();
 	}
 	//endregion
 }

@@ -90,5 +90,9 @@ public class Speler {
     public void setScoreblad(Scoreblad scoreblad) {
 
     }
+
+    public void giveReward() {
+        this.aantalKansen+=2;
+    }
     //endregion
 }

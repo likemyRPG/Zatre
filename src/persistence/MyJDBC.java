@@ -13,8 +13,7 @@ public class MyJDBC {
     // SQL-commando voor het zoeken of een speler account bestaat
     public static boolean zoekProfiel(String gebruikersnaam, int geboortedatum){
         // Gebruik maken van Try with Resources om er voor te zorgen dat de connectie altijd gesloten wordt
-        try(Connection connection = DriverManager.getConnection(url, user, password);
-            Statement statement = connection.createStatement();)
+        try(Connection connection = DriverManager.getConnection(url, user, password);)
         {
             // Prepare statement van het SQL commando
             PreparedStatement pstmt = connection.prepareStatement(SQLCommands.zoekProfiel);
@@ -34,8 +33,7 @@ public class MyJDBC {
 
     // SQL-commando voor het aantal speelkansen van een bepaalde gebruiker te zoeken
     public static int getAantalKansenBestaandeSpeler(String gebruikersnaam, int geboortedatum){
-        try(Connection connection = DriverManager.getConnection(url, user, password);
-            Statement statement = connection.createStatement();)
+        try(Connection connection = DriverManager.getConnection(url, user, password);)
         {
             PreparedStatement pstmt = connection.prepareStatement(SQLCommands.getAantalKansenBestaandeSpeler);
 
@@ -46,7 +44,6 @@ public class MyJDBC {
             while (resultSet.next()) {
                 return resultSet.getInt(1);
             }
-
         }catch(Exception e) {
             e.printStackTrace();
         }
@@ -55,30 +52,42 @@ public class MyJDBC {
 
     // SQL-commando voor een nieuw account aan te maken
     public static void maakProfiel(String gebruikersnaam, int geboortedatum, int aantalKansen){
-        try(Connection connection = DriverManager.getConnection(url, user, password);
-            Statement statement = connection.createStatement();)
+        try(Connection connection = DriverManager.getConnection(url, user, password);)
         {
             PreparedStatement pstmt = connection.prepareStatement(SQLCommands.maakProfiel);
             pstmt.setString(1, gebruikersnaam);
             pstmt.setInt(2, geboortedatum);
             pstmt.setInt(3, aantalKansen);
 
-            boolean resultSet = pstmt.execute();
+            pstmt.execute();
         }catch(Exception e) {
             e.printStackTrace();
         }
     }
 
     public static void verminderSpeelkansen(String gebruikersnaam, int geboortedatum, int kansen) {
-        try(Connection connection = DriverManager.getConnection(url, user, password);
-            Statement statement = connection.createStatement();)
+        try(Connection connection = DriverManager.getConnection(url, user, password);)
         {
             PreparedStatement pstmt = connection.prepareStatement(SQLCommands.verminderSpeelkansen);
             pstmt.setString(2, gebruikersnaam);
             pstmt.setInt(3, geboortedatum);
             pstmt.setInt(1, kansen);
 
-            boolean resultSet = pstmt.execute();
+            pstmt.execute();
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void giveAward(String gebruikersnaam, int geboortejaar, int aantalKansen) {
+        try(Connection connection = DriverManager.getConnection(url, user, password);)
+        {
+            PreparedStatement pstmt = connection.prepareStatement(SQLCommands.vermeerderSpeelkansen);
+            pstmt.setString(2, gebruikersnaam);
+            pstmt.setInt(3, geboortejaar);
+            pstmt.setInt(1, aantalKansen);
+
+            pstmt.execute();
         }catch(Exception e) {
             e.printStackTrace();
         }

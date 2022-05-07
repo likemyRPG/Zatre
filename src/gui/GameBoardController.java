@@ -3,11 +3,16 @@ package gui;
 import domein.DomeinController;
 import domein.Score;
 import domein.Scoreblad;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -16,42 +21,40 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
+import javafx.util.Duration;
 import persistence.language;
 
 import java.io.File;
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class GameBoardController extends Pane {
 
     //region Variables
+
+    language ln = new language();
+    ResourceBundle rb = ln.taal();
     private DomeinController dc;
-    GridPane SpelbordGrid = new GridPane(); //Het spelbord
-    ToolBar tbSelectionPiece; //De toolbar voor het selecteren van een stuk
-    Label lblAantalSteentjes; //Het label voor het aantal steentjes dat nog over is
-    Slider sliderVolume; //De slider voor het volume
-    int index, amountOfPieces = 121; //Het aantal steentjes dat nog over is
     private int i = 0;
     private int piece = 0;
     private int valueOfSelectedPiece = 0;
     private boolean firstPiece = true, firstRound = true, endOfRound = false;
-    MediaPlayer mediaPlayer;
-    ImageView imgRightArrow;
-    ImageView imgLeftArrow;
-    Button btnGiveBack;
+
+    int index, amountOfPieces = 121, spelerAanBeurt=-1, move = 0;
+
+    GridPane SpelbordGrid = new GridPane(); //Het spelbord
     GridPane Scoreboard;
+    ToolBar tbSelectionPiece; //De toolbar voor het selecteren van een stuk
+    Label lblAantalSteentjes, totalScore,txtTimer;
+    Slider sliderVolume; //De slider voor het volume
+    MediaPlayer mediaPlayer;
+    ImageView imgLeftArrow, Spelbord,imgRightArrow;
+    Button btnGiveBack, btnEndGame;
+
     TextField txtPlayer;
-    ImageView Spelbord;
-    Label totalScore;
-    boolean surrender = false;
-    int spelerAanBeurt=-1, move = 0;
-    Button btnSettings;
-    language ln = new language();
-    ResourceBundle rb = ln.taal();
     //endregion
 
     public GameBoardController(DomeinController dc) {
@@ -68,53 +71,6 @@ public class GameBoardController extends Pane {
         }
     }
 
-    private void setSpelbordScaling() {
-        int scaling = java.awt.Toolkit.getDefaultToolkit().getScreenResolution();
-        if(scaling == 96) {
-            Spelbord.setScaleX(1.0063);
-            Spelbord.setScaleY(1.0063);
-
-            SpelbordGrid.setLayoutX(Spelbord.getLayoutX());
-            SpelbordGrid.setLayoutY(Spelbord.getLayoutY());
-        } else if(scaling == 120) {
-            Spelbord.setScaleX(1.0063);
-            Spelbord.setScaleY(1.0063);
-
-            SpelbordGrid.setLayoutX(Spelbord.getLayoutX()-3);
-            SpelbordGrid.setLayoutY(Spelbord.getLayoutY()-3);
-        } else if(scaling == 144) {
-            SpelbordGrid.setScaleX(1);
-            SpelbordGrid.setScaleY(1);
-        } else if(scaling == 192) {
-        }
-    }
-
-    private void disableSurrender(boolean choice) {
-        btnGiveBack.setDisable(choice);
-    }
-
-    private void setScoreBoardLayout() {
-        Label label1 = new Label("x2");
-        Label label2 = new Label("10\n (1pt)");
-        Label label3 = new Label("11\n (2pt)");
-        Label label4 = new Label("12\n (4pt)");
-        Label label5 = new Label("Bonus");
-        Label label6 = new Label("Total");
-        Scoreboard.add(label1, 0,  0);
-        Scoreboard.add(label2, 1, 0);
-        Scoreboard.add(label3, 2, 0);
-        Scoreboard.add(label4, 3, 0);
-        Scoreboard.add(label5, 4,  0);
-        Scoreboard.add(label6, 5,  0);
-        GridPane.setHalignment(label1, HPos.CENTER);
-        GridPane.setHalignment(label2, HPos.CENTER);
-        GridPane.setHalignment(label3, HPos.CENTER);
-        GridPane.setHalignment(label4, HPos.CENTER);
-        GridPane.setHalignment(label5, HPos.CENTER);
-        GridPane.setHalignment(label6, HPos.CENTER);
-
-    }
-
     private void buildGUI() {
         getStyleClass().add("bg-image");
         //region Create Gameboard
@@ -123,22 +79,10 @@ public class GameBoardController extends Pane {
                         ("/gui/resources/Zatre_gameBoard_V2.png")));
         Spelbord.setLayoutX(75);
         Spelbord.setLayoutY(75);
-
         Spelbord.setScaleX(1.0063);
         Spelbord.setScaleY(1.0063);
-
         SpelbordGrid.setLayoutX(Spelbord.getLayoutX()-3);
         SpelbordGrid.setLayoutY(Spelbord.getLayoutY()-3);
-
-        //in commentaar staat de waardes voor 100% scaling
-/*        Spelbord.setScaleX(1.0063);
-        Spelbord.setScaleY(1.0063);*/
-
-        //in commentaar staat de waardes voor 100% scaling
-/*        SpelbordGrid.setLayoutX(Spelbord.getLayoutX());
-        SpelbordGrid.setLayoutY(Spelbord.getLayoutY());*/
-
-
         SpelbordGrid.setGridLinesVisible(false);
         GridPane.setColumnSpan(SpelbordGrid, 15);
         GridPane.setRowSpan(SpelbordGrid, 15);
@@ -152,7 +96,6 @@ public class GameBoardController extends Pane {
         SpelbordGrid.setOnMouseClicked(this::clickGrid);
         //endregion
 
-//test est test et s f
         TextField Title = new TextField(rb.getString("title_gameboard"));
         Title.getStyleClass().add("Title");
 
@@ -170,7 +113,6 @@ public class GameBoardController extends Pane {
         lblScore.setLayoutY(550);
 
         Title.setPrefWidth(Title.getText().length() * 28);
-        //get the value of the center of the screen
         Title.setLayoutX(450 - Title.getPrefWidth() / 2);
         Title.setEditable(false);
         Title.setFocusTraversable(false);
@@ -182,6 +124,16 @@ public class GameBoardController extends Pane {
         tbSelectionPiece.setMinWidth(175);
         tbSelectionPiece.setMinHeight(50);
         //endregion
+
+        txtTimer = new Label();
+        txtTimer.setText("3");
+        txtTimer.setVisible(false);
+        txtTimer.setTextFill(Color.GOLD);
+        txtTimer.setFont(new Font("Arial", 50));
+        txtTimer.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+        txtTimer.setEffect(new DropShadow(+25d, 0d, 0d, Color.RED));
+        txtTimer.setLayoutX(tbSelectionPiece.getLayoutX() + tbSelectionPiece.getMinWidth() + 10);
+        txtTimer.setLayoutY(tbSelectionPiece.getLayoutY() + tbSelectionPiece.getMinHeight() / 2 - txtTimer.getPrefHeight() / 2);
 
         //region Aantal Steentjes
         ImageView imageAmountOfPieces = new ImageView(new Image(
@@ -264,13 +216,13 @@ public class GameBoardController extends Pane {
         btnGiveBack.setLayoutY(645 - btnGiveBack.getMinHeight() - 10);
 
         //button to end the game
-        Button btnEndGame = new Button("End Game");
+        btnEndGame = new Button("End Game");
         btnEndGame.setMaxWidth(Double.MAX_VALUE);
         btnEndGame.setOnAction(this::onClickButtonEndGame);
         btnEndGame.setMinWidth(100);
         btnEndGame.setMinHeight(50);
-        btnEndGame.setLayoutX(900 - btnGiveBack.getMinWidth() - 280);
-        btnEndGame.setLayoutY(645 - btnGiveBack.getMinHeight() - 10);
+        btnEndGame.setLayoutX(900 - btnEndGame.getMinWidth() - 22);
+        btnEndGame.setLayoutY(645 - btnEndGame.getMinHeight() - 10);
 
         //region Random Button
 
@@ -281,16 +233,6 @@ public class GameBoardController extends Pane {
         btnRandom.setOnAction(this::onClickButtonRandom);
         //endregion
 
-        //region Button Quit Game
-        Button btnQuitGame = new Button("Quit game!");
-        btnQuitGame.setMaxWidth(Double.MAX_VALUE);
-        btnQuitGame.setOnAction(this::onClickButtonQuitGame);
-        btnQuitGame.setMinWidth(100);
-        btnQuitGame.setMinHeight(50);
-
-        btnQuitGame.setLayoutX(900 - btnQuitGame.getMinWidth() - 22);
-        btnQuitGame.setLayoutY(645 - btnQuitGame.getMinHeight() - 10);
-        //endregion
 
         //region Music button
         ImageView imgMusic = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/pause.png")));
@@ -313,7 +255,59 @@ public class GameBoardController extends Pane {
         //endregion
 
         //region Add To Gameboard
-        this.getChildren().addAll(Spelbord, lblScore, totalScore, btnEndGame, SpelbordGrid, Title, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, btnQuitGame, imgMusic, btnGiveBack);        //endregion
+        this.getChildren().addAll(Spelbord, txtTimer, lblScore, totalScore, btnEndGame, SpelbordGrid, Title, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, imgMusic, btnGiveBack);        //endregion
+    }
+
+
+    //Get the scaling of the users screen and set the scaling of the gameboard
+    private void setSpelbordScaling() {
+        //Get the scaling of the users screen
+        int scaling = java.awt.Toolkit.getDefaultToolkit().getScreenResolution();
+        //Set the scaling of the gameboard
+        if(scaling == 96) {
+            Spelbord.setScaleX(1.0063);
+            Spelbord.setScaleY(1.0063);
+
+            SpelbordGrid.setLayoutX(Spelbord.getLayoutX());
+            SpelbordGrid.setLayoutY(Spelbord.getLayoutY());
+        } else if(scaling == 120) {
+            Spelbord.setScaleX(1.0063);
+            Spelbord.setScaleY(1.0063);
+
+            SpelbordGrid.setLayoutX(Spelbord.getLayoutX()-3);
+            SpelbordGrid.setLayoutY(Spelbord.getLayoutY()-3);
+        } else if(scaling == 144) {
+            SpelbordGrid.setScaleX(1);
+            SpelbordGrid.setScaleY(1);
+        } else if(scaling == 192) {
+        }
+    }
+
+    //Disable the surrender button
+    private void disableSurrender(boolean choice) {
+        btnGiveBack.setDisable(choice);
+    }
+
+    private void setScoreBoardLayout() {
+        Label label1 = new Label("x2");
+        Label label2 = new Label("10\n (1pt)");
+        Label label3 = new Label("11\n (2pt)");
+        Label label4 = new Label("12\n (4pt)");
+        Label label5 = new Label("Bonus");
+        Label label6 = new Label("Total");
+        Scoreboard.add(label1, 0,  0);
+        Scoreboard.add(label2, 1, 0);
+        Scoreboard.add(label3, 2, 0);
+        Scoreboard.add(label4, 3, 0);
+        Scoreboard.add(label5, 4,  0);
+        Scoreboard.add(label6, 5,  0);
+        GridPane.setHalignment(label1, HPos.CENTER);
+        GridPane.setHalignment(label2, HPos.CENTER);
+        GridPane.setHalignment(label3, HPos.CENTER);
+        GridPane.setHalignment(label4, HPos.CENTER);
+        GridPane.setHalignment(label5, HPos.CENTER);
+        GridPane.setHalignment(label6, HPos.CENTER);
+
     }
 
     private void onClickButtonEndGame(ActionEvent event) {
@@ -362,19 +356,7 @@ public class GameBoardController extends Pane {
     }
 
     private void onClickButtonRandom(ActionEvent actionEvent) {
-        try {
-            mediaPlayer.stop();
-            System.out.println(java.awt.Toolkit.getDefaultToolkit().getScreenResolution());
-            LeaderbordController Leaderbord = new LeaderbordController(dc); // <1>
-            Scene scene = new Scene(Leaderbord, 900, 645);
-            scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
-            Stage stage = (Stage) this.getScene().getWindow();
-            scene.setFill(Color.TRANSPARENT);
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+
     }
 
     private void clickGrid(MouseEvent e) {
@@ -492,26 +474,72 @@ public class GameBoardController extends Pane {
                 firstRound=false;
                 disableSurrender(false);
             }
-            dc.clearOwnPieces();
-            generateButtons(2);
-            move++;
-            dc.setNextPlayer();
-            dc.printScore();
-            updateScore();
+            waitForNextPlayer();
         }
         else if(amountOfPieces==0) gameOver();
     }
 
+    // Wait for next player to play
+    private void waitForNextPlayer(){
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(txtTimer.getText().equals("3")){
+                    txtTimer.setText("2");
+                }
+                else if(txtTimer.getText().equals("2")) {
+                    txtTimer.setText("1");
+                } else if (txtTimer.getText().equals("1")) {
+                    txtTimer.setText("0");
+                } else {
+                    txtTimer.setVisible(false);
+                }
+            }
+        }));
+
+        Timer timer = new Timer();
+        txtTimer.setVisible(true);
+        txtTimer.setText("3");
+        timeline.setCycleCount(3);
+        timeline.play();
+
+        disableSurrender(true);
+        btnEndGame.setDisable(true);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    dc.clearOwnPieces();
+                    generateButtons(2);
+                    move++;
+                    dc.setNextPlayer();
+                    txtPlayer.setText(dc.getCurrentPlayer().getGebruikersnaam());
+                    disableSurrender(false);
+                    btnEndGame.setDisable(false);
+                    txtTimer.setVisible(false);
+                    dc.printScore();
+                    updateScore();
+                });
+            }
+        }, 3000);
+    }
+
     private void gameOver() {
-        //print the leaderbord
-        for(int i =0; i < dc.geefAantalSpelers(); i++){
-            System.out.println(dc.determineWinner().get(i).getGebruikersnaam());
+        dc.determineWinner();
+        dc.giveReward(dc.determineWinner().get(0));
+        try {
+            mediaPlayer.stop();
+            System.out.println(java.awt.Toolkit.getDefaultToolkit().getScreenResolution());
+            LeaderbordController Leaderbord = new LeaderbordController(dc); // <1>
+            Scene scene = new Scene(Leaderbord, 900, 645);
+            scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
+            Stage stage = (Stage) this.getScene().getWindow();
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            System.out.println(e);
         }
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game Over");
-        alert.setHeaderText(null);
-        alert.setContentText("Speler " + dc.determineWinner().get(0).getGebruikersnaam() + " heeft gewonnen!");
-        alert.showAndWait();
     }
 
     private void generateButtons(int amount){
@@ -547,21 +575,6 @@ public class GameBoardController extends Pane {
         }
         //Make button selected
         btnPiece.setStyle("-fx-background-color: white;");
-    }
-
-    public void onClickButtonQuitGame(ActionEvent event) {
-        try {
-            mediaPlayer.stop();
-            StartMenuController StartMenu = new StartMenuController(dc); // <1>
-            Scene scene = new Scene(StartMenu, 900, 645);
-            scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
-            Stage stage = (Stage) this.getScene().getWindow();
-            scene.setFill(Color.TRANSPARENT);
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
     }
 
     //region Music

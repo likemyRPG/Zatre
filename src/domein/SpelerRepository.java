@@ -114,6 +114,11 @@ public class SpelerRepository {
         return false;
     }
 
+    public void giveReward(Speler speler){
+        speler.giveReward();
+        sql.giveAward(speler.getGebruikersnaam(), speler.getGeboortejaar(), speler.getAantalKansen());
+    }
+
     public List<Speler> getSpelers() {
         return spelers;
     }
@@ -124,5 +129,9 @@ public class SpelerRepository {
 
     public void verwijderSpeler(int i) {
         spelers.remove(i);
+    }
+
+    public void clearPlayers() {
+        spelers.clear();
     }
 }

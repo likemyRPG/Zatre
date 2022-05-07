@@ -1,5 +1,10 @@
 package domein;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,17 +59,11 @@ public class Spel {
         }
         else{
             Score sc = currentPlayers.get(currentPlayer).getScoreblad().getScores().get(currentPlayers.get(currentPlayer).getScoreblad().getScores().size()-1);
-            if(sc.amountP10() > 0 && sc.amountP11() > 0 && sc.amountP12() > 0){
-                currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, false));
-                for(Score score : currentPlayers.get(currentPlayer).getScoreblad().getScores()){
-                    if(isDouble && !score.isDoubleScore()){
-                        score.isDoubleScore();
-                        isDouble = false;
-                    }
-                }
+            if(sc.amountP10() > 0 && sc.amountP11() > 0 && sc.amountP12() > 0 && sc.isDoubleScore() == isDouble){
+                currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, isDouble));
             }
             else{
-                for(Score s : getCurrentPlayer().getScoreblad().getScores()){
+                for(Score s : currentPlayers.get(currentPlayer).getScoreblad().getScores()){
                     if(p10!=0 || p11!=0 || p12!=0){
                         if(p10 != 0 && s.amountP10() == 0){
                             s.setP10(s.amountP10() + 1);
@@ -292,6 +291,34 @@ public class Spel {
                     currentPlayers.get(i).getScoreblad().setScore();
         }
 
+    }
+
+    public void makeScoreBoardImage(String pathToImage){
+        BufferedImage image = new BufferedImage(1400, 800, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = image.createGraphics();
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, 1400, 800);
+        g2d.setColor(Color.BLACK);
+        g2d.setFont(new Font("TimesRoman", Font.BOLD, 100));
+        g2d.drawString("Scoreboard", 100, 100);
+        g2d.setFont(new Font("TimesRoman", Font.BOLD, 50));
+        g2d.drawString("Player", 200, 200);
+        g2d.drawString("Score", 800, 200);
+        g2d.setFont(new Font("TimesRoman", Font.BOLD, 30));
+        for (int i = 0; i < currentPlayers.size(); i++) {
+            g2d.drawString(i+1 + "", 150, 250 + i * 100);
+            g2d.drawString(currentPlayers.get(i).getGebruikersnaam(), 200, 250 + i * 100);
+            g2d.drawString(currentPlayers.get(i).getScoreblad().getTotalScore() + "", 800, 250 + i * 100);
+        }
+        try {
+            ImageIO.write(image, "png", new File(pathToImage));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getImageName() {
+        return "LeaderBoard" + System.currentTimeMillis() + ".png";
     }
 
     //endregion

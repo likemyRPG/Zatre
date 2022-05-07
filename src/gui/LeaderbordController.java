@@ -3,6 +3,7 @@ package gui;
 import domein.DomeinController;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -11,7 +12,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 
 public class LeaderbordController extends Pane {
@@ -133,13 +137,44 @@ public class LeaderbordController extends Pane {
         imgBronzeTrophy.setLayoutX(rctThird.getLayoutX() + rctThird.getWidth() / 2 - imgBronzeTrophy.getFitWidth() / 2);
         imgBronzeTrophy.setLayoutY(rctThird.getLayoutY() + rctThird.getHeight() / 2 - imgBronzeTrophy.getFitHeight() / 2);
 
+        Button btnDownload = new Button("Download The Leaderboard");
+        btnDownload.setOnAction(this::OnClickBtnDownload);
+        btnDownload.getStyleClass().add("button");
+        btnDownload.setMinWidth(50);
+        btnDownload.setMinHeight(50);
+        btnDownload.setLayoutX(160);
+        btnDownload.setLayoutY(340);
 
-        getChildren().addAll(txtTitle, btnQuit, Podium, rctFirst, rctSecond, rctThird, txtFirst, txtSecond, txtThird, imgGoldTrophy, imgSilverTrophy, imgBronzeTrophy, confetti);
 
+        getChildren().addAll(txtTitle, btnDownload, btnQuit, Podium, rctFirst, rctSecond, rctThird, txtFirst, txtSecond, txtThird, imgGoldTrophy, imgSilverTrophy, imgBronzeTrophy, confetti);
+
+    }
+
+    private void OnClickBtnDownload(ActionEvent event) {
+        //Let the user choose the location where to save the picture, then save it by using dc.getLeaderboard(filename)
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Leaderboard");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + "/Downloads"));
+        fileChooser.setInitialFileName(dc.getImageName());
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PNG", "*.png"));
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            System.out.println("Saving file to: " + file.getAbsolutePath());
+            dc.getLeaderboard(file.getAbsolutePath());
+
+            //Show a confirmation message
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Saved");
+            alert.setHeaderText("Saved");
+            alert.setContentText("The leaderboard has been saved to " + file.getAbsolutePath());
+            alert.showAndWait();
+        }
     }
 
     private void OnClickBtnQuit(ActionEvent actionEvent) {
         try {
+            dc.clearPlayers();
             StartMenuController startMenu = new StartMenuController(dc);
             Scene scene = new Scene(startMenu, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
