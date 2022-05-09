@@ -14,6 +14,7 @@ public class Spel {
     private int[][] ownPieces;
     private List<Speler> currentPlayers;
     private byte currentPlayer = 0;
+    private String currentPlayerNameAndBirthYear, previousPlayerNameAndBirthYear;
 
     int p10=0, p11=0, p12=0;
     boolean isDouble = false;
@@ -58,33 +59,28 @@ public class Spel {
             currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, isDouble));
         }
         else{
-            Score sc = currentPlayers.get(currentPlayer).getScoreblad().getScores().get(currentPlayers.get(currentPlayer).getScoreblad().getScores().size()-1);
-            if(sc.amountP10() > 0 && sc.amountP11() > 0 && sc.amountP12() > 0 && sc.isDoubleScore() == isDouble){
-                currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, isDouble));
-            }
-            else{
                 for(Score s : currentPlayers.get(currentPlayer).getScoreblad().getScores()){
                     if(p10!=0 || p11!=0 || p12!=0){
-                        if(p10 != 0 && s.amountP10() == 0){
-                            s.setP10(s.amountP10() + 1);
-                            p10--;
-                        }else if (p11 != 0 && s.amountP11() == 0) {
-                            s.setP11(s.amountP11() + 1);
-                            p11--;
-                        }else if(p12 != 0 && s.amountP12() == 0){
-                            s.setP12(s.amountP12() + 1);
-                            p12--;
+                        if(p10 != 0 && (s.amountP10() == 0 )){
+                            s.setP10(s.amountP10() + p10);
+                            p10=0;
+                        }else if (p11 != 0 && (s.amountP11() == 0 ) ) {
+                            s.setP11(s.amountP11() + p11);
+                            p11=0;
+                        }else if(p12 != 0 && (s.amountP12() == 0 )){
+                            s.setP12(s.amountP12() + p12);
+                            p12=0;
                         }
                     }
                     if(isDouble && !s.isDoubleScore()){
-                        s.isDoubleScore();
+                        s.setDoubleScore(true);
                         isDouble = false;
                     }
                 }
                 if(p10!=0 || p11!=0 || p12!=0 || isDouble){
                     currentPlayers.get(currentPlayer).getScoreblad().addScore(new Score(this.p10, this.p11, this.p12, isDouble));
                 }
-            }
+
         }
         p10=0;
         p11=0;
@@ -96,9 +92,12 @@ public class Spel {
     public void calculateScore(int row, int column, int valueOfSelectedPiece){
         int sumH = sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece);
         int sumV = sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece);
-        if(sumH == 10 || sumV == 10) p10++;
-        if(sumH == 11 || sumV == 11 ) p11++;
-        if(sumH == 12 || sumV == 12) p12++;
+        if(sumH == 10) p10++;
+        if(sumV == 10) p10++;
+        if(sumH == 11) p11++;
+        if(sumV == 11) p11++;
+        if(sumH == 12) p12++;
+        if(sumH == 12) p12++;
         if(checkSpecialTile(row, column)) isDouble = true;
         addScore();
     }
@@ -111,6 +110,20 @@ public class Spel {
 
     public Scoreblad getScoreBlad(){
         return currentPlayers.get(currentPlayer).getScoreblad();
+    }
+
+    public int[][] printScoreBoard(){
+        // Create an 2d array of scores stored in ints
+        int[][] scores = new int[currentPlayers.get(currentPlayer).getScoreblad().getScores().size()][6];
+        for(Score s : currentPlayers.get(currentPlayer).getScoreblad().getScores()) {
+            scores[currentPlayers.get(currentPlayer).getScoreblad().getScores().indexOf(s)][0] = s.isDoubleScore() ? 1 : 0;
+            scores[currentPlayers.get(currentPlayer).getScoreblad().getScores().indexOf(s)][1] = s.amountP10();
+            scores[currentPlayers.get(currentPlayer).getScoreblad().getScores().indexOf(s)][2] = s.amountP11();
+            scores[currentPlayers.get(currentPlayer).getScoreblad().getScores().indexOf(s)][3] = s.amountP12();
+            scores[currentPlayers.get(currentPlayer).getScoreblad().getScores().indexOf(s)][4] = s.getBonus();
+            scores[currentPlayers.get(currentPlayer).getScoreblad().getScores().indexOf(s)][5] = s.getScore();
+        }
+        return scores;
     }
     //endregion
 

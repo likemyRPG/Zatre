@@ -55,12 +55,12 @@ public class PieceRepository {
     }
 
     public String giveValues() {
-        // Checken of de lijst van spelers leeg is, wanneer deze leeg is krijg je een gepast bericht
+        // Checken of de lijst van pieces leeg is, wanneer deze leeg is krijg je een gepast bericht
         if (pieces.isEmpty())
             return String.format("There are no pieces left");
-        // String aanmaken voor alle spelers te returnen
+        // String aanmaken voor alle pieces te returnen
         String resultaat = "";
-        // De spelers toevoegen aan de string
+        // De pieces toevoegen aan de string
         for (Piece existingPieces : pieces)
             resultaat += String.format("%4d%n", existingPieces.getValue());
         // De String returnen
