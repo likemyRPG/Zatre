@@ -106,8 +106,8 @@ public class RegisterController extends GridPane {
         try{
             System.out.println(usernameTextField.getText() + birthyearComboBox.getValue());
             dc.checkRegister(usernameTextField.getText(), birthyearComboBox.getValue());
-            PlayerInformationController PlayerInformation = new PlayerInformationController(dc);
-            Scene scene = new Scene(PlayerInformation, 900, 645);
+            AddPlayersOptionController AddPlayersOption = new AddPlayersOptionController(dc);
+            Scene scene = new Scene(AddPlayersOption, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);

@@ -32,7 +32,6 @@ public class SpelerRepository {
     // Method to register a new player and add it to the list
     public void registreerSpeler(String gebruikersnaam, int geboortejaar) {
         aantalSpelers = spelers.size();
-        System.out.println(aantalSpelers);
         // Make sure that the player limit is not reached
         if(aantalSpelers <= 3){
             // Check if the player is already registered
@@ -43,7 +42,6 @@ public class SpelerRepository {
             Speler speler = new Speler(gebruikersnaam, geboortejaar, 5);
             // Add the player to the list
             sql.maakProfiel(gebruikersnaam, geboortejaar, 5);
-            spelers.add(speler);
         }
         else throw new IllegalArgumentException("Het maximum aantal spelers is bereikt!");
     }
