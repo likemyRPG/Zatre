@@ -26,7 +26,7 @@ public class Score {
         setScore();
     }
 
-    private void setDoubleScore(boolean doubleScore) {
+    public void setDoubleScore(boolean doubleScore) {
         if(doubleScore) this.isDoubleScore = true;
         else this.isDoubleScore = false;
     }

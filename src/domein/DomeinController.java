@@ -121,6 +121,10 @@ public class DomeinController{
 		return spel.getScoreBlad();
 	}
 
+	public int[][] printScoreBoard() {
+		return spel.printScoreBoard();
+	}
+
 	public int[][] getGameBoard() {
 		return spel.getGameBoard();
 	}

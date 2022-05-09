@@ -337,7 +337,6 @@ public class GameBoardController extends Pane {
         }
         //delte the buttons in the toolbar
         tbSelectionPiece.getItems().clear();
-        txtPlayer.setText(dc.getNextPlayer().getGebruikersnaam());
         updateToolbarScoreBoard();
     }
 
@@ -435,6 +434,21 @@ public class GameBoardController extends Pane {
         Scoreboard.getChildren().add(0,node);
         setScoreBoardLayout();
 
+        int[][] values = dc.printScoreBoard();
+        for(int j = 0; j < values.length; j++){
+            for(int k = 0; k < values[j].length-2; k++){
+                Label label = new Label(String.format("%s", printX(values[j][k])));
+                Scoreboard.add(label, k, j+1);
+                GridPane.setHalignment(label, HPos.CENTER);
+            }
+            for(int k = values[j].length-2; k < values[j].length; k++){
+                Label label = new Label(String.format("%d", values[j][k]));
+                Scoreboard.add(label, k, j+1);
+                GridPane.setHalignment(label, HPos.CENTER);
+            }
+        }
+        //Oude versie
+        /*
         for (Score score : dc.getScoreblad().getScores()) {
             Label label1 =new Label(String.format("%s", score.isDoubleScore() ? "x" : " "));
             Label label2 =new Label(String.format("%s", printX(score.amountP10())));
@@ -456,6 +470,7 @@ public class GameBoardController extends Pane {
             GridPane.setHalignment(label6, HPos.CENTER);
             i++;
         }
+        */
     }
 
     private String printX(int amount){
@@ -514,6 +529,7 @@ public class GameBoardController extends Pane {
                     move++;
                     dc.setNextPlayer();
                     txtPlayer.setText(dc.getCurrentPlayer().getGebruikersnaam());
+                    totalScore.setText(String.format(("%d"), dc.getCurrentPlayer().getScoreblad().getTotalScore()));
                     disableSurrender(false);
                     btnEndGame.setDisable(false);
                     txtTimer.setVisible(false);
