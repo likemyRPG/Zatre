@@ -6,8 +6,11 @@ import java.util.*;
 
 public class PieceRepository {
 
+    //region Variables
     private List<Piece> pieces;
+    //endregion
 
+    // Constructor
     public PieceRepository() {
         // Een nieuwe list aanmaken van spelers
         pieces = new ArrayList<>();
@@ -15,6 +18,7 @@ public class PieceRepository {
         shufflePieces();
     }
 
+    // method to create the pieces (Value 1-6) in the demanded amount of pieces + Add them to a list
     public void createPieces(){
         for (int i = 1; i <= 6; i++){
             for (int y = 1; y <= 20; y++){
@@ -26,10 +30,12 @@ public class PieceRepository {
         pieces.add(piece);
     }
 
+    // Method to shuffle the pieces
     public void shufflePieces(){
         Collections.shuffle(pieces);
     }
 
+    // Method that returns the values of an X amount of pieces from the list and removes them from the list
     public List<Integer> giveRandomPieces(int amount)
     {
         //Get the first 3 value of the list pieces
@@ -50,27 +56,30 @@ public class PieceRepository {
         return randomPieces;
     }
 
+    // Method to add a piece to the list
     public void addPiece(Piece piece){
         pieces.add(piece);
     }
 
+    // Method to get the list of pieces (String)
     public String giveValues() {
-        // Checken of de lijst van pieces leeg is, wanneer deze leeg is krijg je een gepast bericht
+        // Check if the list is empty
         if (pieces.isEmpty())
             return String.format("There are no pieces left");
-        // String aanmaken voor alle pieces te returnen
         String resultaat = "";
-        // De pieces toevoegen aan de string
+        // Add the values of the pieces to the string
         for (Piece existingPieces : pieces)
             resultaat += String.format("%4d%n", existingPieces.getValue());
-        // De String returnen
+        // Return the string
         return resultaat;
     }
 
+    // Method to get the list of pieces (Piece)
     public List<Piece> getPieces() {
         return pieces;
     }
 
+    // Method that returns the amount of pieces left
     public int getAmountOfPieces() {
         return pieces.size();
     }

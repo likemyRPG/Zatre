@@ -153,7 +153,7 @@ public class LeaderbordController extends Pane {
     private void OnClickBtnDownload(ActionEvent event) {
         //Let the user choose the location where to save the picture, then save it by using dc.getLeaderboard(filename)
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save Leaderboard");
+        fileChooser.setTitle("Save Scoreboard");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + "/Downloads"));
         fileChooser.setInitialFileName(dc.getImageName());
         fileChooser.getExtensionFilters().addAll(
@@ -167,7 +167,7 @@ public class LeaderbordController extends Pane {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Saved");
             alert.setHeaderText("Saved");
-            alert.setContentText("The leaderboard has been saved to " + file.getAbsolutePath());
+            alert.setContentText("The scoreboard has been saved to " + file.getAbsolutePath());
             alert.showAndWait();
         }
     }

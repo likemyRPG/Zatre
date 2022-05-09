@@ -29,8 +29,6 @@ public class AddPlayersOptionController extends Pane {
         try
         {
             this.dc = dc;
-            dc.selecteerSpeler("Jochen", 2003);
-            dc.selecteerSpeler("Larss", 2003);
             buildGUI();
             aantalSpelers = dc.geefAantalSpelers();
             buttonDisabled();

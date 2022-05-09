@@ -124,11 +124,15 @@ public class LoginController extends GridPane {
         int geboortejaar = (int) birthyearComboBox.getValue();
         boolean succes = true;
         boolean alToegevoegd = dc.alToegevoegd(gebruikersnaam, geboortejaar);
-        if(alToegevoegd) lblLoginMessage.setText("Speler is al toegevoegd!");
+        if(alToegevoegd) lblLoginMessage.setText(rb.getString("playerAlreadyAdded"));
         else{
             try {
                 dc.selecteerSpeler(gebruikersnaam, geboortejaar);
-            }catch (Exception e){
+            }catch (StringIndexOutOfBoundsException e){
+                lblLoginMessage.setText(rb.getString("playerDeletedNoLives"));
+                succes=false;
+            }
+            catch (Exception e){
                 lblLoginMessage.setText(rb.getString("Exception"));
                 succes = false;
             }

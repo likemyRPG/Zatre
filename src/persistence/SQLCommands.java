@@ -8,4 +8,5 @@ public class SQLCommands {
     public static final String getAantalKansenBestaandeSpeler = "SELECT aantalKansen FROM speler WHERE gebruikersnaam = ? AND geboortejaar = ?;";
     public static final String verminderSpeelkansen = "UPDATE speler SET aantalKansen=? WHERE gebruikersnaam = ? AND geboortejaar = ?;";
     public static final String vermeerderSpeelkansen = "UPDATE speler SET aantalKansen=? WHERE gebruikersnaam = ? AND geboortejaar = ?;";
+    public static final String verwijderProfiel = "DELETE FROM speler WHERE gebruikersnaam = ? AND geboortejaar = ?;";
 }

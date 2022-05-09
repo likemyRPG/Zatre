@@ -92,4 +92,17 @@ public class MyJDBC {
             e.printStackTrace();
         }
     }
+
+    public static void verwijderProfiel(String gebruikersnaam, int geboortejaar) {
+        try(Connection connection = DriverManager.getConnection(url, user, password);)
+        {
+            PreparedStatement pstmt = connection.prepareStatement(SQLCommands.verwijderProfiel);
+            pstmt.setString(1, gebruikersnaam);
+            pstmt.setInt(2, geboortejaar);
+
+            pstmt.execute();
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

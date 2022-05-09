@@ -19,6 +19,7 @@ public class Speler {
     //endregion
 
     //region Methodes
+    // Constructor
     public Speler(String gebruikersnaam, int geboortejaar, int aantalKansen) {
         setGebruikersnaam(gebruikersnaam);
         setGeboortejaar(geboortejaar);
@@ -30,7 +31,7 @@ public class Speler {
 
     //region Getters And Setters
 
-    // Setter voor geboortejaar
+    // Method to set the birthyear of the player (Check if the player is old enough and the if the birthyear is valid)
     public void setGeboortejaar(int geboortejaar) {
         // Het huidige jaar ophalen
         int jaar = Calendar.getInstance().get(Calendar.YEAR);
@@ -44,7 +45,7 @@ public class Speler {
         this.geboortejaar = geboortejaar;
     }
 
-    // Setter voor gebruikersnaam
+    // Method to set the username of the player (Check if the username is valid)
     public void setGebruikersnaam(String gebruikersnaam) {
         // Wanneer gebruikersnaam leeg of null is -> Throw exception
         if (gebruikersnaam == null || gebruikersnaam.isEmpty())
@@ -55,44 +56,39 @@ public class Speler {
         this.gebruikersnaam = gebruikersnaam;
     }
 
-    // Getter geboortejaar voor testen
+    // Method to get the birthyear of the player (Testing purposes)
     public int getGeboortejaar() {
         return this.geboortejaar;
     }
 
-    // Getter gebruikersnaam voor testen
+    // Method to get the username of the player
     public String getGebruikersnaam() {
         return this.gebruikersnaam;
     }
 
-    // Getter scoreblad
+    // Method to get the scoreboard of the player
     public Scoreblad getScoreblad() {
         return this.scoreblad;
     }
-    // Getter aantalKansen
 
+    // Method to get the amount of lives the player has
     public int getAantalKansen() {
         return this.aantalKansen;
     }
 
-    //endregion
-
-    //region toString methode
+    // To String Method
     @Override
     public String toString(){
         return String.format(rb.getString("userInfo"), this.gebruikersnaam, this.geboortejaar, this.aantalKansen);
     }
 
+    // Method to subtract a life from the player
     public void wijzigSpeelkansen() {
         this.aantalKansen-=1;
     }
 
-    public void setScoreblad(Scoreblad scoreblad) {
-
-    }
-
+    // Method to add 2 lives to the winner
     public void giveReward() {
         this.aantalKansen+=2;
     }
-    //endregion
 }
