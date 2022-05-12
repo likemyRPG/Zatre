@@ -1,15 +1,12 @@
-import domein.Spel;
-import domein.Speler;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.ValueSource;
-import persistence.language;
-
+package testen;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.jupiter.api.Assertions;
+
+import domein.Spel;
+import domein.Speler;
+import persistence.language;
 
 public class TestSpel {
 
@@ -19,7 +16,7 @@ public class TestSpel {
     language ln = new language();
     // static final int GELDIGE_KANSEN = 5;
     private Spel spel;
-    @BeforeEach
+    @org.junit.jupiter.api.BeforeEach
     public void BeforeEach() {
         ln.setGekozenTaal("nl");
         ln.taal();
@@ -30,7 +27,7 @@ public class TestSpel {
         spelers.add(p2);
         spel = new Spel(spelers);
     }
-    @Test
+    @org.junit.jupiter.api.Test
     public void setNextPlayer_selectsNextPlayer() {
         spel.setNextPlayer();
         Speler prevPlayer = spel.getPreviousPlayer();
@@ -39,20 +36,20 @@ public class TestSpel {
         Assertions.assertEquals(p2,currentPlayer);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void getCurrentPlayer_givesCurrentPlayer() {
         Speler currentP = spel.getCurrentPlayer();
         Assertions.assertEquals(p1 ,currentP);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void getNextPlayer_givesNextPlayer() {
         spel.setNextPlayer();
         Speler currentP = spel.getCurrentPlayer();
         Assertions.assertEquals(p2 ,currentP);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void getPreviousPlayer_givesNextPlayer() {
         spel.setNextPlayer();
         Speler prevP = spel.getPreviousPlayer();
