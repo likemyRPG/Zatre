@@ -112,7 +112,6 @@ public class GameBoardController extends Pane {
         lblScore.setLayoutX(700);
         lblScore.setLayoutY(550);
 
-        //Title.setPrefWidth(Title.getText().length() * 28);
         Title.setPrefWidth(370);
         Title.setLayoutX(425 - Title.getPrefWidth() / 2);
         Title.setEditable(false);
@@ -130,7 +129,6 @@ public class GameBoardController extends Pane {
         txtTimer.setText("3");
         txtTimer.setVisible(false);
         txtTimer.setTextFill(Color.color(0.72, 0.55, 0.36));
-        //txtTimer.setFont(new Font("Arial", 50));
         txtTimer.setFont(Font.font("OCR A Extended", FontWeight.BOLD, 20));
         txtTimer.setEffect(new DropShadow(+25d, 0d, 0d, Color.color(0.16, 0.16, 0.17)));
         txtTimer.setLayoutX(tbSelectionPiece.getLayoutX() + tbSelectionPiece.getMinWidth() + 10);

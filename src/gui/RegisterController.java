@@ -67,33 +67,25 @@ public class RegisterController extends GridPane {
         getColumnConstraints().addAll(col1, col2, col3, col4);
 
         registerButton = new Button(rb.getString("register"));
-        //registerButton.setMaxWidth(Double.MAX_VALUE);
         add(registerButton, 1,11);
         registerButton.setMaxWidth(240);
-        //registerButton.setLayoutX(300);
-        //registerButton.setLayoutY(450);
-
-        //registerButton.setAlignment(Pos.CENTER);
 
         GridPane.setColumnSpan(registerButton, 2);
         registerButton.setOnAction(this::registerButtonOnAction);
 
         cancelButton = new Button(rb.getString("back"));
-        //cancelButton.setMaxWidth(Double.MAX_VALUE);
         cancelButton.setMaxWidth(240);
         add(cancelButton, 1,12);
         GridPane.setColumnSpan(cancelButton, 2);
         cancelButton.setOnAction(this::cancelButtonOnAction);
 
         usernameLabel = new Label(rb.getString("fillInUsername"));
-        //usernameLabel.setMaxWidth(Double.MAX_VALUE);
         usernameLabel.getStyleClass().add("lblText");
         usernameLabel.setTextAlignment(TextAlignment.LEFT);
         add(usernameLabel, 1, 4);
         GridPane.setColumnSpan(usernameLabel, 2);
 
         birthyearLabel = new Label(rb.getString("fillInBirthYear"));
-        //birthyearLabel.setMaxWidth(Double.MAX_VALUE);
         birthyearLabel.getStyleClass().add("lblText");
         birthyearLabel.setAlignment(Pos.BOTTOM_RIGHT);
         add(birthyearLabel, 1, 7);

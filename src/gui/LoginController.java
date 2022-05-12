@@ -74,7 +74,6 @@ public class LoginController extends GridPane {
         GridPane.setColumnSpan(UsernameLabel, 2);
 
         birthYearLabel = new Label(rb.getString("fillInBirthYear"));
-        //birthYearLabel.setMaxWidth(Double.MAX_VALUE);
         birthYearLabel.getStyleClass().add("lblText");
         add(birthYearLabel, 1, 7);
         birthYearLabel.setAlignment(Pos.BOTTOM_RIGHT);

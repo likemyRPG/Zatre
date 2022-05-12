@@ -108,14 +108,11 @@ public class AddPlayersOptionController extends GridPane {
 
         getColumnConstraints().addAll(col1, col2, col3, col4, col5, col6, col7);
 
-        AnchorPane anchor = new AnchorPane();
 
         btnLogin = new Button(rb.getString("login"));
         btnLogin.setMaxWidth(240);
         btnLogin.setOnAction(this::onClickLogin);
         btnLogin.getStyleClass().add("buttons");
-
-        //btnLogin.setFont(Font.font ("Berlin Sans FB", 24));
         add(btnLogin, 3, 3);
 
         //----------------------------//
@@ -123,8 +120,6 @@ public class AddPlayersOptionController extends GridPane {
         btnRegister.setMaxWidth(240);
         btnRegister.setMaxHeight(Double.MAX_VALUE);
         btnRegister.setOnAction(this::onClickRegister);
-
-        //btnRegister.setFont(Font.font ("Berlin Sans FB", 24));
         add(btnRegister, 4, 3);
 
         //Add 4 buttons to the pane to delete the player from the list of players
@@ -133,7 +128,6 @@ public class AddPlayersOptionController extends GridPane {
         btnDelete1.setMaxHeight(20);
         btnDelete1.setOnAction(this::onClickDelete1);
         btnDelete1.setPadding(new Insets(0));
-        //btnDelete1.setFont(Font.font ("Berlin Sans FB", 8));
         btnDelete1.setLayoutX(360);
         btnDelete1.setLayoutY(250);
         add(btnDelete1, 5, 7);
@@ -143,7 +137,6 @@ public class AddPlayersOptionController extends GridPane {
         btnDelete2.setMaxHeight(20);
         btnDelete2.setOnAction(this::onClickDelete2);
         btnDelete2.setPadding(new Insets(0));
-        //btnDelete2.setFont(Font.font ("Berlin Sans FB", 8));
         btnDelete2.setLayoutX(360);
         btnDelete2.setLayoutY(275);
         add(btnDelete2, 5, 8);
@@ -153,7 +146,6 @@ public class AddPlayersOptionController extends GridPane {
         btnDelete3.setMaxHeight(20);
         btnDelete3.setOnAction(this::onClickDelete3);
         btnDelete3.setPadding(new Insets(0));
-        //btnDelete3.setFont(Font.font ("Berlin Sans FB", 8));
         btnDelete3.setLayoutX(360);
         btnDelete3.setLayoutY(300);
         add(btnDelete3, 5, 9);
@@ -163,7 +155,6 @@ public class AddPlayersOptionController extends GridPane {
         btnDelete4.setMaxHeight(20);
         btnDelete4.setOnAction(this::onClickDelete4);
         btnDelete4.setPadding(new Insets(0));
-        //btnDelete4.setFont(Font.font ("Berlin Sans FB", 8));
         btnDelete4.setLayoutX(360);
         btnDelete4.setLayoutY(325);
         add(btnDelete4, 5, 10);
@@ -181,18 +172,15 @@ public class AddPlayersOptionController extends GridPane {
         btnReturn.setMaxHeight(Double.MAX_VALUE);
         btnReturn.setOnAction(this::onClickReturn);
 
-        //btnReturn.setFont(Font.font ("Berlin Sans FB", 24));
         btnReturn.setLayoutX(173.0);
         btnReturn.setLayoutY(94.0);
         add(btnReturn, 1, 1);
 
         btnLogin.setLayoutX(50);
         btnLogin.setLayoutY(100);
-        //btnLogin.setMinWidth(500);
 
         btnRegister.setLayoutX(50);
         btnRegister.setLayoutY(150);
-        //btnRegister.setMinWidth(500);
 
         btnReturn.setLayoutY(10);
         btnReturn.setLayoutX(10);
@@ -223,14 +211,11 @@ public class AddPlayersOptionController extends GridPane {
         lblPlayersNaam.setTextAlignment(TextAlignment.LEFT);
         lblPlayersNaam.setStyle("-fx-alignment: top-left");
         add(lblPlayersNaam, 3, 7);
-        //GridPane.setRowSpan(lblPlayersNaam, 4);
 
         lblPlayersKansen = new Label(dc.geefSpelerKansen());
-        //lblPlayersKansen.setLayoutX(300);
-        //lblPlayersKansen.setLayoutY(250);
         lblPlayersKansen.getStyleClass().add("lblText");
         add(lblPlayersKansen, 4, 7);
-        //GridPane.setRowSpan(lblPlayersKansen, 4);
+
 
 
         //endRegion

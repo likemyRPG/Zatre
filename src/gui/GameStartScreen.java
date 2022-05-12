@@ -87,31 +87,17 @@ public class GameStartScreen extends GridPane {
         add(btnOk, 4, 5);
         btnOk.setOnAction(this::onClickButtonOk);
 
-        //btnOk.setLayoutY(230);
-        //btnOk.setLayoutX(200);
-
         lblPlayersNaam = new Label(dc.geefSpelersNaam());
-        //lblPlayersNaam.setLayoutX(50);
-        //lblPlayersNaam.setLayoutY(250);
         lblPlayersNaam.getStyleClass().add("lblText");
         lblPlayersNaam.setMaxHeight(Double.MAX_VALUE);
         add(lblPlayersNaam, 3, 3);
 
         lblPlayersKansen = new Label(dc.geefSpelerKansen());
-        //lblPlayersKansen.setLayoutX(300);
-        //lblPlayersKansen.setLayoutY(250);
         lblPlayersKansen.getStyleClass().add("lblText");
         lblPlayersKansen.setMaxHeight(Double.MAX_VALUE);
         add(lblPlayersKansen, 5,3);
 
-        //lblPlayersNaam.setLayoutY(100);
-        //lblPlayersNaam.setLayoutX(150);
-        //lblPlayersKansen.setLayoutY(100);
-        //lblPlayersKansen.setLayoutX(400);
-
         Label lblTitel = new Label(rb.getString("activePlayers"));
-        //lblTitel.setLayoutX(175);
-        //lblTitel.setLayoutY(40);
         lblTitel.getStyleClass().add("Title");
         lblTitel.setTextAlignment(TextAlignment.CENTER);
         lblTitel.setMaxHeight(Double.MAX_VALUE);
@@ -122,22 +108,18 @@ public class GameStartScreen extends GridPane {
         Label lblopsom1 = new Label("1) ");
         lblopsom1.getStyleClass().add("lblText");
         lblopsom1.setVisible(true);
-        //add(lblopsom1,1, 3);
 
         Label lblopsom2 = new Label("2) ");
         lblopsom2.getStyleClass().add("lblText");
         lblopsom2.setVisible(true);
-        //add(lblopsom2, 1, 4);
 
         Label lblopsom3 = new Label("3) ");
         lblopsom3.getStyleClass().add("lblText");
         lblopsom3.setVisible(false);
-        //add(lblopsom3, 1, 5);
 
         Label lblopsom4 = new Label("4) ");
         lblopsom4.getStyleClass().add("lblText");
         lblopsom4.setVisible(false);
-        //add(lblopsom4, 1, 6);
 
         if(dc.geefAantalSpelers() == 3) {
             lblopsom3.setVisible(true);

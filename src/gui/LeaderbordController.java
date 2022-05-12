@@ -46,7 +46,6 @@ public class LeaderbordController extends Pane {
         txtTitle.getStyleClass().add("Title");
         txtTitle.setEditable(false);
         txtTitle.setFocusTraversable(false);
-        //txtTitle.setMinWidth(Double.MAX_VALUE);
         txtTitle.setPrefWidth(350);  //stond op 320
         txtTitle.setLayoutX(300 - txtTitle.getPrefWidth() / 2);
         txtTitle.toFront();
