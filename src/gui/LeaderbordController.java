@@ -17,6 +17,8 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
+import static persistence.language.rb;
+
 
 public class LeaderbordController extends Pane {
 
@@ -40,12 +42,14 @@ public class LeaderbordController extends Pane {
     private void buildGUI() {
         getStyleClass().add("bg-image");
 
-        TextField txtTitle = new TextField("Leaderbord");
+        TextField txtTitle = new TextField(rb.getString("leaderboard"));
         txtTitle.getStyleClass().add("Title");
         txtTitle.setEditable(false);
         txtTitle.setFocusTraversable(false);
-        txtTitle.setPrefWidth(320);
+        //txtTitle.setMinWidth(Double.MAX_VALUE);
+        txtTitle.setPrefWidth(350);  //stond op 320
         txtTitle.setLayoutX(300 - txtTitle.getPrefWidth() / 2);
+        txtTitle.toFront();
         txtTitle.setLayoutY(getHeight() / 2 - txtTitle.getHeight() / 2);
 
         ImageView confetti = new ImageView(new Image(
@@ -55,13 +59,13 @@ public class LeaderbordController extends Pane {
         confetti.setFitHeight(645);
         confetti.setLayoutX(0);
 
-        Button btnQuit = new Button("Quit");
+        Button btnQuit = new Button(rb.getString("quit"));
         btnQuit.setOnAction(this::OnClickBtnQuit);
         btnQuit.getStyleClass().add("button");
         btnQuit.setMinWidth(50);
         btnQuit.setMinHeight(50);
-        btnQuit.setLayoutX(525);
-        btnQuit.setLayoutY(340);
+        btnQuit.setLayoutX(745);
+        btnQuit.setLayoutY(542);
 
 
         rctFirst.setWidth(100);
@@ -137,7 +141,7 @@ public class LeaderbordController extends Pane {
         imgBronzeTrophy.setLayoutX(rctThird.getLayoutX() + rctThird.getWidth() / 2 - imgBronzeTrophy.getFitWidth() / 2);
         imgBronzeTrophy.setLayoutY(rctThird.getLayoutY() + rctThird.getHeight() / 2 - imgBronzeTrophy.getFitHeight() / 2);
 
-        Button btnDownload = new Button("Download The Leaderboard");
+        Button btnDownload = new Button(rb.getString("download"));
         btnDownload.setOnAction(this::OnClickBtnDownload);
         btnDownload.getStyleClass().add("button");
         btnDownload.setMinWidth(50);

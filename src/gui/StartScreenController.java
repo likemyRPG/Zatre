@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -16,6 +17,7 @@ public class StartScreenController extends Pane {
     private DomeinController dc;
     private Button btnStartProgram;
     private Button btnQuit;
+    private Label lblZatre;
 
     public StartScreenController(DomeinController dc) {
         try
@@ -40,12 +42,19 @@ public class StartScreenController extends Pane {
         frontImage.setLayoutX(120);
         frontImage.setLayoutY(40);
 
+        lblZatre = new Label();
+        lblZatre.setText("zatre");
+        lblZatre.getStyleClass().add("Title");
+        lblZatre.setLayoutX(200);
+        lblZatre.setLayoutY(150);
+
         btnStartProgram = new Button("Start");
         btnStartProgram.setMaxWidth(Double.MAX_VALUE);
         btnStartProgram.setOnAction(this::onClickButtonStartProgram);
 
         btnStartProgram.setLayoutX(225);
         btnStartProgram.setLayoutY(220);
+
 
         btnStartProgram.setMinWidth(150);
         btnStartProgram.setMinHeight(50);

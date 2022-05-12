@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
@@ -49,45 +50,56 @@ public class LoginController extends GridPane {
 
         ColumnConstraints col1 = new ColumnConstraints();
         ColumnConstraints col2 = new ColumnConstraints();
+        ColumnConstraints col3 = new ColumnConstraints();
+        ColumnConstraints col4 = new ColumnConstraints();
 
         col1.setHalignment(HPos.RIGHT);
         col2.setHgrow(Priority.ALWAYS);
-        getColumnConstraints().addAll(col1, col2);
+        col1.setPercentWidth(15);
+        col2.setPercentWidth(30);
+        col3.setPercentWidth(20);
+        col4.setPercentWidth(35);
+        getColumnConstraints().addAll(col1, col2, col3, col4);
 
         btnLogin = new Button(rb.getString("login"));
-        btnLogin.setMaxWidth(Double.MAX_VALUE);
-        add(btnLogin, 0,5);
+        btnLogin.setMaxWidth(240);
+        add(btnLogin, 1,11);
         GridPane.setColumnSpan(btnLogin, 2);
         btnLogin.setOnAction(this::onClickLogin);
 
         UsernameLabel = new Label(rb.getString("fillInUsername"));
-        UsernameLabel.setMaxWidth(Double.MAX_VALUE);
         UsernameLabel.getStyleClass().add("lblText");
-        add(UsernameLabel, 0, 2);
+        add(UsernameLabel, 1, 4);
+        UsernameLabel.setAlignment(Pos.BOTTOM_RIGHT);
+        GridPane.setColumnSpan(UsernameLabel, 2);
 
         birthYearLabel = new Label(rb.getString("fillInBirthYear"));
-        birthYearLabel.setMaxWidth(Double.MAX_VALUE);
+        //birthYearLabel.setMaxWidth(Double.MAX_VALUE);
         birthYearLabel.getStyleClass().add("lblText");
-        add(birthYearLabel, 0, 3);
+        add(birthYearLabel, 1, 7);
+        birthYearLabel.setAlignment(Pos.BOTTOM_RIGHT);
+        GridPane.setColumnSpan(birthYearLabel, 2);
 
         usernameTextField = new TextField();
         usernameTextField.setMaxWidth(Double.MAX_VALUE);
-        add(usernameTextField, 1, 2);
+        add(usernameTextField, 1, 5);
         usernameTextField.setPromptText(rb.getString("username"));
+        GridPane.setColumnSpan(usernameTextField, 2);
 
         birthyearComboBox = new ComboBox<>();
         birthyearComboBox.setMaxWidth(Double.MAX_VALUE);
-        add(birthyearComboBox, 1, 3);
+        add(birthyearComboBox, 1, 8);
+        GridPane.setColumnSpan(birthyearComboBox, 2);
 
         lblLoginMessage = new Label();
         lblLoginMessage.setMaxWidth(Double.MAX_VALUE);
         lblLoginMessage.getStyleClass().add("lblLogin");
-        add(lblLoginMessage, 0, 4);
+        add(lblLoginMessage, 1, 9);
         GridPane.setColumnSpan(lblLoginMessage, 2);
 
         btnCancel = new Button(rb.getString("back"));
-        btnCancel.setMaxWidth(Double.MAX_VALUE);
-        add(btnCancel, 0,6);
+        btnCancel.setMaxWidth(240);
+        add(btnCancel, 1,12);
         GridPane.setColumnSpan(btnCancel, 2);
         btnCancel.setOnAction(this::onClickCancel);
     }

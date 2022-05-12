@@ -108,7 +108,7 @@ public class SpelerRepository {
         String resultaat = "";
 
         for(Speler gekozenSpelers : spelers)
-            resultaat += String.format("%s%n", gekozenSpelers.getGebruikersnaam());
+            resultaat += String.format("%s%n%n", gekozenSpelers.getGebruikersnaam());
         return resultaat;
     }
 
@@ -119,7 +119,7 @@ public class SpelerRepository {
         String resultaat = "";
 
         for(Speler gekozenSpelers : spelers)
-            resultaat += String.format("%4d❤%n", gekozenSpelers.getAantalKansen());
+            resultaat += String.format("%4d❤%n%n", gekozenSpelers.getAantalKansen());
         return resultaat;
     }
 

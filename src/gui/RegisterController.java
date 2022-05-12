@@ -4,6 +4,7 @@ import domein.DomeinController;
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
@@ -12,12 +13,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
+import static javafx.geometry.Pos.BOTTOM_LEFT;
 import static persistence.language.rb;
 
 public class RegisterController extends GridPane {
@@ -52,46 +55,66 @@ public class RegisterController extends GridPane {
 
         ColumnConstraints col1 = new ColumnConstraints();
         ColumnConstraints col2 = new ColumnConstraints();
+        ColumnConstraints col3 = new ColumnConstraints();
+        ColumnConstraints col4 = new ColumnConstraints();
 
         col1.setHalignment(HPos.RIGHT);
         col2.setHgrow(Priority.ALWAYS);
-        getColumnConstraints().addAll(col1, col2);
+        col1.setPercentWidth(15);
+        col2.setPercentWidth(30);
+        col3.setPercentWidth(20);
+        col4.setPercentWidth(35);
+        getColumnConstraints().addAll(col1, col2, col3, col4);
 
         registerButton = new Button(rb.getString("register"));
-        registerButton.setMaxWidth(Double.MAX_VALUE);
-        add(registerButton, 0,5);
+        //registerButton.setMaxWidth(Double.MAX_VALUE);
+        add(registerButton, 1,11);
+        registerButton.setMaxWidth(240);
+        //registerButton.setLayoutX(300);
+        //registerButton.setLayoutY(450);
+
+        //registerButton.setAlignment(Pos.CENTER);
+
         GridPane.setColumnSpan(registerButton, 2);
         registerButton.setOnAction(this::registerButtonOnAction);
 
         cancelButton = new Button(rb.getString("back"));
-        cancelButton.setMaxWidth(Double.MAX_VALUE);
-        add(cancelButton, 0,6);
+        //cancelButton.setMaxWidth(Double.MAX_VALUE);
+        cancelButton.setMaxWidth(240);
+        add(cancelButton, 1,12);
         GridPane.setColumnSpan(cancelButton, 2);
         cancelButton.setOnAction(this::cancelButtonOnAction);
 
         usernameLabel = new Label(rb.getString("fillInUsername"));
-        usernameLabel.setMaxWidth(Double.MAX_VALUE);
+        //usernameLabel.setMaxWidth(Double.MAX_VALUE);
         usernameLabel.getStyleClass().add("lblText");
-        add(usernameLabel, 0, 2);
+        usernameLabel.setTextAlignment(TextAlignment.LEFT);
+        add(usernameLabel, 1, 4);
+        GridPane.setColumnSpan(usernameLabel, 2);
 
         birthyearLabel = new Label(rb.getString("fillInBirthYear"));
-        birthyearLabel.setMaxWidth(Double.MAX_VALUE);
+        //birthyearLabel.setMaxWidth(Double.MAX_VALUE);
         birthyearLabel.getStyleClass().add("lblText");
-        add(birthyearLabel, 0, 3);
+        birthyearLabel.setAlignment(Pos.BOTTOM_RIGHT);
+        add(birthyearLabel, 1, 7);
+        GridPane.setColumnSpan(birthyearLabel, 2);
 
         birthyearComboBox = new ComboBox<>();
         birthyearComboBox.setMaxWidth(Double.MAX_VALUE);
-        add(birthyearComboBox, 1, 3);
+        add(birthyearComboBox, 1, 8);
+        GridPane.setColumnSpan(birthyearComboBox, 2);
 
         usernameTextField = new TextField();
         usernameTextField.setMaxWidth(Double.MAX_VALUE);
-        add(usernameTextField, 1, 2);
+        add(usernameTextField, 1, 5);
+        GridPane.setColumnSpan(usernameTextField, 2);
         usernameTextField.setPromptText(rb.getString("username"));
 
         messageLabel = new Label();
         messageLabel.setMaxWidth(Double.MAX_VALUE);
         messageLabel.getStyleClass().add("lblLogin");
-        add(messageLabel, 0, 4);
+        messageLabel.setAlignment(Pos.BASELINE_LEFT);
+        add(messageLabel, 1, 9);
         GridPane.setColumnSpan(messageLabel, 2);
     }
 
@@ -114,7 +137,7 @@ public class RegisterController extends GridPane {
             stage.setScene(scene);
             stage.show();
         }catch (NullPointerException e) {
-            messageLabel.setText("Choose your birthdate");
+            messageLabel.setText(rb.getString("Username&Birthday"));
         }catch (Exception e) {
             messageLabel.setText(e.getMessage());
         }

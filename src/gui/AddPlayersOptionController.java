@@ -2,19 +2,23 @@ package gui;
 
 import domein.DomeinController;
 import javafx.event.ActionEvent;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import static persistence.language.rb;
 
-public class AddPlayersOptionController extends Pane {
+public class AddPlayersOptionController extends GridPane {
 
     private DomeinController dc;
 
@@ -78,26 +82,50 @@ public class AddPlayersOptionController extends Pane {
     }
 
     private void buildGUI() {
+        setVgap(20);
+        setHgap(10);
         setPadding(new Insets(10));
         getStyleClass().add("bg-image");
 
+        ColumnConstraints col1 = new ColumnConstraints();
+        ColumnConstraints col2 = new ColumnConstraints();
+        ColumnConstraints col3 = new ColumnConstraints();
+        ColumnConstraints col4 = new ColumnConstraints();
+        ColumnConstraints col5 = new ColumnConstraints();
+        ColumnConstraints col6 = new ColumnConstraints();
+        ColumnConstraints col7 = new ColumnConstraints();
+
+        col1.setHalignment(HPos.RIGHT);
+        col2.setHgrow(Priority.ALWAYS);
+
+        col1.setPercentWidth(2);
+        col2.setPercentWidth(5);
+        col3.setPercentWidth(3);
+        col4.setPercentWidth(25);
+        col5.setPercentWidth(25);
+        col6.setPercentWidth(2);
+        col7.setPercentWidth(37);
+
+        getColumnConstraints().addAll(col1, col2, col3, col4, col5, col6, col7);
+
+        AnchorPane anchor = new AnchorPane();
+
         btnLogin = new Button(rb.getString("login"));
-        btnLogin.setMaxWidth(Double.MAX_VALUE);
+        btnLogin.setMaxWidth(240);
         btnLogin.setOnAction(this::onClickLogin);
         btnLogin.getStyleClass().add("buttons");
 
-        btnLogin.setFont(Font.font ("Berlin Sans FB", 24));
-        btnLogin.setLayoutX(173.0);
-        btnLogin.setLayoutY(94.0);
+        //btnLogin.setFont(Font.font ("Berlin Sans FB", 24));
+        add(btnLogin, 3, 3);
 
         //----------------------------//
         btnRegister = new Button(rb.getString("register"));
-        btnRegister.setMaxWidth(Double.MAX_VALUE);
+        btnRegister.setMaxWidth(240);
+        btnRegister.setMaxHeight(Double.MAX_VALUE);
         btnRegister.setOnAction(this::onClickRegister);
 
-        btnRegister.setFont(Font.font ("Berlin Sans FB", 24));
-        btnRegister.setLayoutX(173.0);
-        btnRegister.setLayoutY(94.0);
+        //btnRegister.setFont(Font.font ("Berlin Sans FB", 24));
+        add(btnRegister, 4, 3);
 
         //Add 4 buttons to the pane to delete the player from the list of players
         btnDelete1 = new Button("-");
@@ -105,54 +133,66 @@ public class AddPlayersOptionController extends Pane {
         btnDelete1.setMaxHeight(20);
         btnDelete1.setOnAction(this::onClickDelete1);
         btnDelete1.setPadding(new Insets(0));
-        btnDelete1.setFont(Font.font ("Berlin Sans FB", 8));
+        //btnDelete1.setFont(Font.font ("Berlin Sans FB", 8));
         btnDelete1.setLayoutX(360);
         btnDelete1.setLayoutY(250);
+        add(btnDelete1, 5, 7);
 
         btnDelete2 = new Button("-");
         btnDelete2.setMaxWidth(Double.MAX_VALUE);
         btnDelete2.setMaxHeight(20);
         btnDelete2.setOnAction(this::onClickDelete2);
         btnDelete2.setPadding(new Insets(0));
-        btnDelete2.setFont(Font.font ("Berlin Sans FB", 8));
+        //btnDelete2.setFont(Font.font ("Berlin Sans FB", 8));
         btnDelete2.setLayoutX(360);
         btnDelete2.setLayoutY(275);
+        add(btnDelete2, 5, 8);
 
         btnDelete3 = new Button("-");
         btnDelete3.setMaxWidth(Double.MAX_VALUE);
         btnDelete3.setMaxHeight(20);
         btnDelete3.setOnAction(this::onClickDelete3);
         btnDelete3.setPadding(new Insets(0));
-        btnDelete3.setFont(Font.font ("Berlin Sans FB", 8));
+        //btnDelete3.setFont(Font.font ("Berlin Sans FB", 8));
         btnDelete3.setLayoutX(360);
         btnDelete3.setLayoutY(300);
+        add(btnDelete3, 5, 9);
 
         btnDelete4 = new Button("-");
         btnDelete4.setMaxWidth(Double.MAX_VALUE);
         btnDelete4.setMaxHeight(20);
         btnDelete4.setOnAction(this::onClickDelete4);
         btnDelete4.setPadding(new Insets(0));
-        btnDelete4.setFont(Font.font ("Berlin Sans FB", 8));
+        //btnDelete4.setFont(Font.font ("Berlin Sans FB", 8));
         btnDelete4.setLayoutX(360);
         btnDelete4.setLayoutY(325);
+        add(btnDelete4, 5, 10);
+
+
+        VBox vbox = new VBox(btnDelete1, btnDelete2, btnDelete3, btnDelete4);
+        vbox.setSpacing(15);
+        add(vbox, 5, 7);
+        GridPane.setRowSpan(vbox, 4);
 
 
         //----------------------------//
         btnReturn = new Button("←");
         btnReturn.setMaxWidth(Double.MAX_VALUE);
+        btnReturn.setMaxHeight(Double.MAX_VALUE);
         btnReturn.setOnAction(this::onClickReturn);
 
-        btnReturn.setFont(Font.font ("Berlin Sans FB", 24));
+        //btnReturn.setFont(Font.font ("Berlin Sans FB", 24));
         btnReturn.setLayoutX(173.0);
         btnReturn.setLayoutY(94.0);
+        add(btnReturn, 1, 1);
 
         btnLogin.setLayoutX(50);
         btnLogin.setLayoutY(100);
-        btnLogin.setMinWidth(500);
+        //btnLogin.setMinWidth(500);
 
         btnRegister.setLayoutX(50);
         btnRegister.setLayoutY(150);
-        btnRegister.setMinWidth(500);
+        //btnRegister.setMinWidth(500);
 
         btnReturn.setLayoutY(10);
         btnReturn.setLayoutX(10);
@@ -164,24 +204,33 @@ public class AddPlayersOptionController extends Pane {
         lblPlayers.setLayoutY(230);
         lblPlayers.setUnderline(true);
         lblPlayers.getStyleClass().add("lblText");
+        add(lblPlayers, 3, 6);
+
 
         lblKansen = new Label(rb.getString("chances"));
         lblKansen.setLayoutX(300);
         lblKansen.setLayoutY(230);
         lblKansen.setUnderline(true);
         lblKansen.getStyleClass().add("lblText");
+        add(lblKansen, 4, 6);
     
         lblPlayersNaam = new Label(dc.geefSpelersNaam());
-
         lblPlayersNaam.setLayoutX(50);
         lblPlayersNaam.setLayoutY(250);
         lblPlayersNaam.getStyleClass().add("lblText");
+        lblPlayersNaam.setPadding(new Insets(0));
+        lblPlayersNaam.setContentDisplay(ContentDisplay.TOP);
+        lblPlayersNaam.setTextAlignment(TextAlignment.LEFT);
+        lblPlayersNaam.setStyle("-fx-alignment: top-left");
+        add(lblPlayersNaam, 3, 7);
+        //GridPane.setRowSpan(lblPlayersNaam, 4);
 
         lblPlayersKansen = new Label(dc.geefSpelerKansen());
-
-        lblPlayersKansen.setLayoutX(300);
-        lblPlayersKansen.setLayoutY(250);
+        //lblPlayersKansen.setLayoutX(300);
+        //lblPlayersKansen.setLayoutY(250);
         lblPlayersKansen.getStyleClass().add("lblText");
+        add(lblPlayersKansen, 4, 7);
+        //GridPane.setRowSpan(lblPlayersKansen, 4);
 
 
         //endRegion

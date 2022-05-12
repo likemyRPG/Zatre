@@ -109,7 +109,7 @@ public class StartMenuController extends GridPane {
     private void onClickHowToPlay(ActionEvent actionEvent) {
         try {
             HowToPlayController howToPlay = new HowToPlayController(dc);
-            Scene scene = new Scene(howToPlay, 600,400);
+            Scene scene = new Scene(howToPlay, 900,645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);

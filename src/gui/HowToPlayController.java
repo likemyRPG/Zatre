@@ -38,7 +38,7 @@ public class HowToPlayController extends BorderPane {
         this.genereerSchermen();
 
         setPadding(new Insets(10));
-        getStyleClass().add("bg-style");
+        getStyleClass().add("bg-image");
 
         createButtonBox();
         this.setBottom(buttonBox);
@@ -110,7 +110,7 @@ public class HowToPlayController extends BorderPane {
     private void doneButtonOnAction(ActionEvent event) {
         try {
             StartMenuController StartMenu = new StartMenuController(dc);
-            Scene scene = new Scene(StartMenu, 600, 400);
+            Scene scene = new Scene(StartMenu, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);

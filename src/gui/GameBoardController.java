@@ -112,8 +112,9 @@ public class GameBoardController extends Pane {
         lblScore.setLayoutX(700);
         lblScore.setLayoutY(550);
 
-        Title.setPrefWidth(Title.getText().length() * 28);
-        Title.setLayoutX(450 - Title.getPrefWidth() / 2);
+        //Title.setPrefWidth(Title.getText().length() * 28);
+        Title.setPrefWidth(370);
+        Title.setLayoutX(425 - Title.getPrefWidth() / 2);
         Title.setEditable(false);
         Title.setFocusTraversable(false);
 
@@ -128,10 +129,10 @@ public class GameBoardController extends Pane {
         txtTimer = new Label();
         txtTimer.setText("3");
         txtTimer.setVisible(false);
-        txtTimer.setTextFill(Color.GOLD);
-        txtTimer.setFont(new Font("Arial", 50));
-        txtTimer.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
-        txtTimer.setEffect(new DropShadow(+25d, 0d, 0d, Color.RED));
+        txtTimer.setTextFill(Color.color(0.72, 0.55, 0.36));
+        //txtTimer.setFont(new Font("Arial", 50));
+        txtTimer.setFont(Font.font("OCR A Extended", FontWeight.BOLD, 20));
+        txtTimer.setEffect(new DropShadow(+25d, 0d, 0d, Color.color(0.16, 0.16, 0.17)));
         txtTimer.setLayoutX(tbSelectionPiece.getLayoutX() + tbSelectionPiece.getMinWidth() + 10);
         txtTimer.setLayoutY(tbSelectionPiece.getLayoutY() + tbSelectionPiece.getMinHeight() / 2 - txtTimer.getPrefHeight() / 2);
 
@@ -207,7 +208,7 @@ public class GameBoardController extends Pane {
         //endregion
 
         //add Button to give back the pieces
-        btnGiveBack = new Button("Surrender");
+        btnGiveBack = new Button(rb.getString("surrender"));
         btnGiveBack.setMaxWidth(Double.MAX_VALUE);
         btnGiveBack.setOnAction(this::onClickButtonSurrender);
         btnGiveBack.setMinWidth(100);
@@ -216,7 +217,7 @@ public class GameBoardController extends Pane {
         btnGiveBack.setLayoutY(645 - btnGiveBack.getMinHeight() - 10);
 
         //button to end the game
-        btnEndGame = new Button("End Game");
+        btnEndGame = new Button(rb.getString("endgame"));
         btnEndGame.setMaxWidth(Double.MAX_VALUE);
         btnEndGame.setOnAction(this::onClickButtonEndGame);
         btnEndGame.setMinWidth(100);
