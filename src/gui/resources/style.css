@@ -28,7 +28,7 @@
 
 /*Set the text in all the lables centered*/
 .label {
--fx-alignment:top-left;
+-fx-alignment:center;
 }
 
 .button:hover {
@@ -72,14 +72,12 @@
 
 .lblLogin {
     -fx-text-fill: red;
-    -fx-font-size: 14px;
 }
 
 .lblText {
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-font-family: "OCR A Extended";
 }
 
 .frontImage {
@@ -120,8 +118,23 @@
 }
 
 .bg-image {
-    -fx-background-image: url('background.jpg');
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: stretch;
-    -fx-background-position: center center;
+-fx-background-image: url('background.jpg');
+-fx-background-repeat: no-repeat;
+-fx-background-size: stretch;
+-fx-background-position: center center;
+}
+
+.uitlegtext-style  {
+    -fx-font-family: "OCR A Extended";
+    -fx-font-size: 16px;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-label-padding: 0,20,0,5
+}
+
+.imageuitleg-style  {
+    -fx-border-color:darkblue;
+    -fx-border-insets:3;
+    -fx-border-radius:7;
+    -fx-border-width:1.0;
 }
