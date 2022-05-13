@@ -2,8 +2,6 @@ package gui;
 
 import domein.DomeinController;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,11 +12,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
-import java.util.ResourceBundle;
 
 import static persistence.language.rb;
 

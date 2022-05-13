@@ -1,8 +1,6 @@
 package gui;
 
 import domein.DomeinController;
-import domein.Score;
-import domein.Scoreblad;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -21,7 +19,6 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.util.Duration;
@@ -51,7 +48,7 @@ public class GameBoardController extends Pane {
     Label lblAantalSteentjes, totalScore,txtTimer;
     Slider sliderVolume; //De slider voor het volume
     MediaPlayer mediaPlayer;
-    ImageView imgLeftArrow, Spelbord,imgRightArrow;
+    ImageView Spelbord;
     Button btnGiveBack, btnEndGame;
 
     TextField txtPlayer;
@@ -205,16 +202,6 @@ public class GameBoardController extends Pane {
         btnEndGame.setLayoutX(900 - btnEndGame.getMinWidth() - 22);
         btnEndGame.setLayoutY(645 - btnEndGame.getMinHeight() - 10);
 
-        //region Random Button
-
-        Button btnRandom = new Button("Random");
-        btnRandom.setMaxWidth(Double.MAX_VALUE);
-        btnRandom.setLayoutX(10);
-        btnRandom.setLayoutY(550);
-        btnRandom.setOnAction(this::onClickButtonRandom);
-        //endregion
-
-
         //region Music button
         ImageView imgMusic = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/pause.png")));
         imgMusic.setFitWidth(20);
@@ -236,7 +223,7 @@ public class GameBoardController extends Pane {
         //endregion
 
         //region Add To Gameboard
-        this.getChildren().addAll(Spelbord, txtTimer, lblScore, totalScore, btnEndGame, SpelbordGrid, Title, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer, sliderVolume, Scoreboard, imgMusic, btnGiveBack);
+        this.getChildren().addAll(Spelbord, txtTimer, lblScore, totalScore, btnEndGame, SpelbordGrid, Title, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, txtPlayer, sliderVolume, Scoreboard, imgMusic, btnGiveBack);
         //endregion
     }
 
@@ -275,8 +262,8 @@ public class GameBoardController extends Pane {
         Label label2 = new Label("10\n (1pt)");
         Label label3 = new Label("11\n (2pt)");
         Label label4 = new Label("12\n (4pt)");
-        Label label5 = new Label("Bonus");
-        Label label6 = new Label("Total");
+        Label label5 = new Label(rb.getString("bonus"));
+        Label label6 = new Label(rb.getString("totaal"));
         Scoreboard.add(label1, 0,  0);
         Scoreboard.add(label2, 1, 0);
         Scoreboard.add(label3, 2, 0);
@@ -295,9 +282,9 @@ public class GameBoardController extends Pane {
     private void onClickButtonEndGame(ActionEvent event) {
         //get an allert that asks if the player wants to end the game
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("End Game");
-        alert.setHeaderText("End Game");
-        alert.setContentText("Are you sure you want to end the game? The results will be ");
+        alert.setTitle(rb.getString("endgame"));
+        alert.setHeaderText(rb.getString("endgame"));
+        alert.setContentText(rb.getString("alertConfirmEindeSpel"));
         alert.showAndWait();
         //When the user clicks ok, the game ends
         if (alert.getResult() == ButtonType.OK) gameOver();
@@ -327,10 +314,6 @@ public class GameBoardController extends Pane {
         return dc.getNameCurrentPlayer().split(System.lineSeparator())[(spelerAanBeurt % dc.getNameCurrentPlayer().split(System.lineSeparator()).length)];
     }
 
-    private void onClickButtonRandom(ActionEvent actionEvent) {
-
-    }
-
     private void clickGrid(MouseEvent e) {
         int column = (int) (e.getX() / 30);
         int row = (int) (e.getY() / 30);
@@ -340,12 +323,12 @@ public class GameBoardController extends Pane {
         if (valueOfSelectedPiece == 0) {
             tbSelectionPiece.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Selecteer een steen");
+            alert.setTitle(rb.getString("alertSelecteerSteenTitle"));
             alert.setHeaderText(null);
             if (firstRound) {
-                alert.setContentText("Selecteer een steen om te beginnen met spelen! De eerste steen mag enkel in het middelste vakje worden geplaatst.");
+                alert.setContentText(rb.getString("alertSelecteerSteenStart"));
             } else {
-                alert.setContentText("Selecteer een steen om te plaatsen.");
+                alert.setContentText(rb.getString("alertSelecteerSteen"));
             }
             alert.showAndWait();
         } else {

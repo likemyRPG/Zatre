@@ -10,7 +10,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class PlayerInformationController extends Pane {
     private DomeinController dc;

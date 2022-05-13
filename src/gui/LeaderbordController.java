@@ -20,7 +20,8 @@ import java.io.File;
 import static persistence.language.rb;
 
 
-public class LeaderbordController extends Pane {
+public class
+LeaderbordController extends Pane {
 
     private DomeinController dc;
     Rectangle rctFirst = new Rectangle();
@@ -42,7 +43,7 @@ public class LeaderbordController extends Pane {
     private void buildGUI() {
         getStyleClass().add("bg-image");
 
-        TextField txtTitle = new TextField(rb.getString("leaderboard"));
+        TextField txtTitle = new TextField(rb.getString("Leaderboard"));
         txtTitle.getStyleClass().add("Title");
         txtTitle.setEditable(false);
         txtTitle.setFocusTraversable(false);
@@ -162,7 +163,7 @@ public class LeaderbordController extends Pane {
                 new FileChooser.ExtensionFilter("PNG", "*.png"));
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
-            System.out.println("Saving file to: " + file.getAbsolutePath());
+            System.out.println(rb.getString("saveFile") + file.getAbsolutePath());
             dc.getLeaderboard(file.getAbsolutePath());
 
             //Show a confirmation message
