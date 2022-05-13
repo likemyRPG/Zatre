@@ -4,8 +4,6 @@ import domein.DomeinController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -17,8 +15,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import main.Main;
 import persistence.language;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -75,7 +71,6 @@ public class LanguageSelectionController extends GridPane {
 
         languageComboBox.setLayoutX(250);
         languageComboBox.setLayoutY(250);
-        //languageComboBox.setMaxSize(240, 100);
 
         lblLanguage = new Label();
         lblLanguage.setText("Select your language");

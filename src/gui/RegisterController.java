@@ -10,17 +10,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
-import static javafx.geometry.Pos.BOTTOM_LEFT;
 import static persistence.language.rb;
 
 public class RegisterController extends GridPane {

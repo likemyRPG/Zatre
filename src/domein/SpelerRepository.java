@@ -132,12 +132,6 @@ public class SpelerRepository {
         return false;
     }
 
-    // Method to give the reward to the player who won the game
-    public void giveReward(Speler speler){
-        speler.giveReward();
-        sql.giveAward(speler.getGebruikersnaam(), speler.getGeboortejaar(), speler.getAantalKansen());
-    }
-
     // Method to get the list of players
     public List<Speler> getSpelers() {
         return spelers;

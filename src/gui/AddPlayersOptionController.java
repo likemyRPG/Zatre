@@ -54,30 +54,50 @@ public class AddPlayersOptionController extends GridPane {
             btnDelete2.setDisable(true);
             btnDelete3.setDisable(true);
             btnDelete4.setDisable(true);
+            btnDelete1.setVisible(false);
+            btnDelete2.setVisible(false);
+            btnDelete3.setVisible(false);
+            btnDelete4.setVisible(false);
         }
         else if(dc.geefAantalSpelers() == 1){
             btnDelete1.setDisable(false);
             btnDelete2.setDisable(true);
             btnDelete3.setDisable(true);
             btnDelete4.setDisable(true);
+            btnDelete1.setVisible(true);
+            btnDelete2.setVisible(false);
+            btnDelete3.setVisible(false);
+            btnDelete4.setVisible(false);
         }
         else if(dc.geefAantalSpelers() == 2){
             btnDelete1.setDisable(false);
             btnDelete2.setDisable(false);
             btnDelete3.setDisable(true);
             btnDelete4.setDisable(true);
+            btnDelete1.setVisible(true);
+            btnDelete2.setVisible(true);
+            btnDelete3.setVisible(false);
+            btnDelete4.setVisible(false);
         }
         else if(dc.geefAantalSpelers() == 3){
             btnDelete1.setDisable(false);
             btnDelete2.setDisable(false);
             btnDelete3.setDisable(false);
             btnDelete4.setDisable(true);
+            btnDelete1.setVisible(true);
+            btnDelete2.setVisible(true);
+            btnDelete3.setVisible(true);
+            btnDelete4.setVisible(false);
         }
         else if(dc.geefAantalSpelers() == 4){
             btnDelete1.setDisable(false);
             btnDelete2.setDisable(false);
             btnDelete3.setDisable(false);
             btnDelete4.setDisable(false);
+            btnDelete1.setVisible(true);
+            btnDelete2.setVisible(true);
+            btnDelete3.setVisible(true);
+            btnDelete4.setVisible(true);
         }
     }
 
@@ -219,8 +239,6 @@ public class AddPlayersOptionController extends GridPane {
 
 
         //endRegion
-
-        this.getChildren().addAll(btnDelete1, btnDelete2, btnDelete3, btnDelete4, btnRegister, btnLogin, btnReturn, lblKansen, lblPlayersNaam, lblPlayersKansen, lblPlayers);
     }
 
     private void onClickDelete2(ActionEvent event) {

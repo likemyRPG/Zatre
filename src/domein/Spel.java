@@ -1,5 +1,7 @@
 package domein;
 
+import persistence.MyJDBC;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -16,6 +18,10 @@ public class Spel {
     private List<Speler> currentPlayers;
     private byte currentPlayer = 0;
     private String currentPlayerNameAndBirthYear, previousPlayerNameAndBirthYear;
+    List leaderBoard;
+
+    MyJDBC sql;
+
 
     int p10=0, p11=0, p12=0;
     boolean isDouble = false;
@@ -48,12 +54,12 @@ public class Spel {
     }
 
     // Method to get the next player
-    public Speler getNextPlayer(){
+    public String getNextPlayer(){
         int index = currentPlayers.indexOf(currentPlayer);
         if(index == currentPlayers.size() -1){
-            return currentPlayers.get(0);
+            return currentPlayers.get(0).getGebruikersnaam();
         }
-        return currentPlayers.get(index+1);
+        return currentPlayers.get(index+1).getGebruikersnaam();
     }
 
     // Method to get the current player
@@ -146,7 +152,6 @@ public class Spel {
     // Method to print the scoreboard of the current player
     // returns an int[][] with the scoreboard
     public int[][] printScoreBoard(){
-        // Create an 2d array of scores stored in ints
         int[][] scores = new int[currentPlayers.get(currentPlayer).getScoreblad().getScores().size()][6];
         for(Score s : currentPlayers.get(currentPlayer).getScoreblad().getScores()) {
             scores[currentPlayers.get(currentPlayer).getScoreblad().getScores().indexOf(s)][0] = s.isDoubleScore() ? 1 : 0;
@@ -314,9 +319,9 @@ public class Spel {
     }
 
     // Method to determine the winner of the game, and create the leaderboard
-    public List<Speler> determineWinner(){
+    public void determineWinner(){
         //Get the player with the highest score
-        List leaderBoard = new ArrayList<>();
+        leaderBoard = new ArrayList<>();
         Speler firstPlace = null, secondPlace = null, thirdPlace = null;
         for (int i = 0; i < currentPlayers.size(); i++) {
             if(firstPlace == null || currentPlayers.get(i).getScoreblad().getTotalScore() > firstPlace.getScoreblad().getTotalScore()){
@@ -336,8 +341,25 @@ public class Spel {
         leaderBoard.add(firstPlace);
         leaderBoard.add(secondPlace);
         leaderBoard.add(thirdPlace);
-        return leaderBoard;
     }
+
+    public String getNameScoreBoardOnPosition(int position){
+        Speler speler = (Speler) leaderBoard.get(position - 1);
+        return speler.getGebruikersnaam();
+    }
+
+    public int getScoreScoreBoardOnPosition(int position){
+        Speler speler = (Speler) leaderBoard.get(position - 1);
+        return speler.getScoreblad().getTotalScore();
+    }
+
+    // Method to give the reward to the player who won the game
+    public void giveReward(){
+        Speler speler = (Speler) leaderBoard.get(0);
+        speler.giveReward();
+        sql.giveAward(speler.getGebruikersnaam(), speler.getGeboortejaar(), speler.getAantalKansen());
+    }
+
 
     // Method to get the gameboard
     public int[][] getGameBoard() {
@@ -371,5 +393,13 @@ public class Spel {
     // Method to get the generate a name for the leaderboard
     public String getImageName() {
         return "LeaderBoard" + System.currentTimeMillis() + ".png";
+    }
+
+    public int getScoreCurrentPlayer() {
+        return getCurrentPlayer().getScoreblad().getTotalScore();
+    }
+
+    public String getNameCurrentPlayer() {
+        return getCurrentPlayer().getGebruikersnaam();
     }
 }

@@ -99,7 +99,7 @@ public class GameBoardController extends Pane {
         TextField Title = new TextField(rb.getString("title_gameboard"));
         Title.getStyleClass().add("Title");
 
-        totalScore = new Label(String.format("%d", dc.getCurrentPlayer().getScoreblad().getTotalScore()));
+        totalScore = new Label(String.format("%d", dc.getScoreCurrentPlayer()));
         totalScore.getStyleClass().add("totalScore");
         totalScore.setFocusTraversable(false);
         totalScore.setLayoutX(760);
@@ -170,7 +170,6 @@ public class GameBoardController extends Pane {
         for (int i = 0; i < amountOfRows; i++) {
             Scoreboard.getRowConstraints().add(new RowConstraints(height / amountOfRows));
         }
-        //set the first row its height 2 times the height of the other rows
         Scoreboard.getRowConstraints().get(0).setPrefHeight(2 * height / amountOfRows);
         Scoreboard.getStyleClass().add("grdScoreBord");
 
@@ -186,23 +185,6 @@ public class GameBoardController extends Pane {
         txtPlayer.setMinHeight(20);
         txtPlayer.setLayoutX(Scoreboard.getLayoutX() + Scoreboard.getMinWidth() / 2 - txtPlayer.getMinWidth() / 2);
         txtPlayer.setLayoutY(Scoreboard.getLayoutY() - (txtPlayer.getMinHeight() + 5));
-
-        imgLeftArrow = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/left_arrow.png")));
-
-        ImageView imgLeftArrow = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/left_arrow.png")));
-        //scale image to fit the size of the textfield
-        imgLeftArrow.setFitWidth(20);
-        imgLeftArrow.setFitHeight(txtPlayer.getMinHeight());
-        imgLeftArrow.setLayoutX(txtPlayer.getLayoutX() - imgLeftArrow.getFitWidth() - 5);
-        imgLeftArrow.setLayoutY(txtPlayer.getLayoutY() + (txtPlayer.getMinHeight() / 2) + 2 - imgLeftArrow.getFitHeight() / 2);
-        imgLeftArrow.setOnMouseClicked(this::clickLeftArrow);
-
-        imgRightArrow = new ImageView(new Image(getClass().getResourceAsStream("/gui/resources/right_arrow.png")));
-        imgRightArrow.setFitWidth(20);
-        imgRightArrow.setFitHeight(txtPlayer.getMinHeight());
-        imgRightArrow.setLayoutX(txtPlayer.getLayoutX() + txtPlayer.getMinWidth() + 5);
-        imgRightArrow.setLayoutY(txtPlayer.getLayoutY() + (txtPlayer.getMinHeight() / 2) + 2 - imgRightArrow.getFitHeight() / 2);
-        imgRightArrow.setOnMouseClicked(this::clickRightArrow);
         //endregion
 
         //add Button to give back the pieces
@@ -254,7 +236,8 @@ public class GameBoardController extends Pane {
         //endregion
 
         //region Add To Gameboard
-        this.getChildren().addAll(Spelbord, txtTimer, lblScore, totalScore, btnEndGame, SpelbordGrid, Title, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer, sliderVolume, imgLeftArrow, imgRightArrow, Scoreboard, imgMusic, btnGiveBack);        //endregion
+        this.getChildren().addAll(Spelbord, txtTimer, lblScore, totalScore, btnEndGame, SpelbordGrid, Title, tbSelectionPiece, imageAmountOfPieces, lblAantalSteentjes, btnRandom, txtPlayer, sliderVolume, Scoreboard, imgMusic, btnGiveBack);
+        //endregion
     }
 
 
@@ -327,7 +310,6 @@ public class GameBoardController extends Pane {
         for (int i = 0; i < tbSelectionPiece.getItems().size(); i++) {
             ids[i] = Integer.parseInt(tbSelectionPiece.getItems().get(i).getId());
         }
-        //use dc.voegPieceToe() with the ids of the buttons in the toolbar with a for loop
         for (int i = 0; i < ids.length; i++) {
             System.out.println(ids[i]);
             //Get the last number of the id
@@ -341,16 +323,8 @@ public class GameBoardController extends Pane {
 
     private String geefSpelerAanBeurt() {
         spelerAanBeurt++;
-        System.out.println(dc.getNextPlayer().getGebruikersnaam());
-        return dc.getCurrentPlayer().getGebruikersnaam().split(System.lineSeparator())[(spelerAanBeurt % dc.getCurrentPlayer().getGebruikersnaam().split(System.lineSeparator()).length)];
-    }
-
-    private void clickLeftArrow(MouseEvent mouseEvent) {
-        txtPlayer.setText(dc.getPreviousPlayer().getGebruikersnaam());
-    }
-
-    private void clickRightArrow(MouseEvent mouseEvent) {
-        txtPlayer.setText(dc.getNextPlayer().getGebruikersnaam());
+        System.out.println(dc.getNextPlayerUsername());
+        return dc.getNameCurrentPlayer().split(System.lineSeparator())[(spelerAanBeurt % dc.getNameCurrentPlayer().split(System.lineSeparator()).length)];
     }
 
     private void onClickButtonRandom(ActionEvent actionEvent) {
@@ -392,8 +366,8 @@ public class GameBoardController extends Pane {
                 if (isEmpty) {
                     if (dc.checkPlacement(row, column, firstRound, valueOfSelectedPiece)) {
                         score(row, column);
-                        txtPlayer.setText(dc.getCurrentPlayer().getGebruikersnaam());
-                        totalScore.setText(String.format(("%d"), dc.getCurrentPlayer().getScoreblad().getTotalScore()));
+                        txtPlayer.setText(dc.getNameCurrentPlayer());
+                        totalScore.setText(String.format(("%d"), dc.getScoreCurrentPlayer()));
                     }
                 }
             }
@@ -446,30 +420,6 @@ public class GameBoardController extends Pane {
                 GridPane.setHalignment(label, HPos.CENTER);
             }
         }
-        //Oude versie
-        /*
-        for (Score score : dc.getScoreblad().getScores()) {
-            Label label1 =new Label(String.format("%s", score.isDoubleScore() ? "x" : " "));
-            Label label2 =new Label(String.format("%s", printX(score.amountP10())));
-            Label label3 =new Label(String.format("%s", printX(score.amountP11())));
-            Label label4 =new Label(String.format("%s", printX(score.amountP12())));
-            Label label5 =new Label(String.format("%s", score.getBonus()));
-            Label label6 =new Label(String.format("%s", score.getScore()));
-            Scoreboard.add(label1, 0, i);
-            Scoreboard.add(label2, 1, i);
-            Scoreboard.add(label3, 2,i);
-            Scoreboard.add(label4, 3, i);
-            Scoreboard.add(label5, 4, i);
-            Scoreboard.add(label6, 5, i);
-            GridPane.setHalignment(label1, HPos.CENTER);
-            GridPane.setHalignment(label2, HPos.CENTER);
-            GridPane.setHalignment(label3, HPos.CENTER);
-            GridPane.setHalignment(label4, HPos.CENTER);
-            GridPane.setHalignment(label5, HPos.CENTER);
-            GridPane.setHalignment(label6, HPos.CENTER);
-            i++;
-        }
-        */
     }
 
     private String printX(int amount){
@@ -527,8 +477,8 @@ public class GameBoardController extends Pane {
                     generateButtons(2);
                     move++;
                     dc.setNextPlayer();
-                    txtPlayer.setText(dc.getCurrentPlayer().getGebruikersnaam());
-                    totalScore.setText(String.format(("%d"), dc.getCurrentPlayer().getScoreblad().getTotalScore()));
+                    txtPlayer.setText(dc.getNameCurrentPlayer());
+                    totalScore.setText(String.format(("%d"), dc.getScoreCurrentPlayer()));
                     disableSurrender(false);
                     btnEndGame.setDisable(false);
                     txtTimer.setVisible(false);
@@ -541,11 +491,10 @@ public class GameBoardController extends Pane {
 
     private void gameOver() {
         dc.determineWinner();
-        dc.giveReward(dc.determineWinner().get(0));
+        dc.giveReward();
         try {
             mediaPlayer.stop();
-            System.out.println(java.awt.Toolkit.getDefaultToolkit().getScreenResolution());
-            LeaderbordController Leaderbord = new LeaderbordController(dc); // <1>
+            LeaderbordController Leaderbord = new LeaderbordController(dc);
             Scene scene = new Scene(Leaderbord, 900, 645);
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();

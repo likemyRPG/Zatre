@@ -16,6 +16,12 @@ public class Score {
     int row = 0;
     //endregion
 
+    /**
+     * @param p10
+     * @param p11
+     * @param p12
+     * @param doubleScore
+     */
     // Constructor for the score class
     public Score(int p10, int p11, int p12, boolean doubleScore) {
         // Set the bonuses to an arraylist
@@ -33,6 +39,9 @@ public class Score {
         setScore();
     }
 
+    /**
+     * @param doubleScore
+     */
     // Method to set the double score
     public void setDoubleScore(boolean doubleScore) {
         if(doubleScore) this.isDoubleScore = true;
@@ -59,6 +68,9 @@ public class Score {
         bonus = BonusList.get(row);
     }
 
+    /**
+     * @return
+     */
     // Method to return if the score is double
     public boolean isDoubleScore() {
         return isDoubleScore;

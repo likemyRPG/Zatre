@@ -72,8 +72,16 @@ public class DomeinController{
 	}
 
 	// Method to give a reward to the winner
-	public void giveReward(Speler speler) {
-		spelerRepository.giveReward(speler);
+	public void giveReward() {
+		spel.giveReward();
+	}
+
+	public int getScoreScoreBoardOnPosition(int position){
+		return spel.getScoreScoreBoardOnPosition(position);
+	}
+
+	public String getNameScoreBoardOnPosition(int position){
+		return spel.getNameScoreBoardOnPosition(position);
 	}
 
 	// Method to check the registration of the player
@@ -85,32 +93,29 @@ public class DomeinController{
 	public void verwijderSpeler(int i) {
 		spelerRepository.verwijderSpeler(i);
 	}
+
 	//endregion
 
 	//region Player methods (spel)
 	// Method to get the leaderboard
-	public List<Speler> determineWinner(){
-		return spel.determineWinner();
+	public void determineWinner(){
+		spel.determineWinner();
 	}
 
 	// Method to get the next player in the list
-	public Speler getNextPlayer(){
+	public String getNextPlayerUsername(){
 		return spel.getNextPlayer();
-	}
-
-	// Method to get the previous player in the list
-	public Speler getPreviousPlayer(){
-		return spel.getPreviousPlayer();
-	}
-
-	// Method to get the current player
-	public Speler getCurrentPlayer() {
-		return spel.getCurrentPlayer();
 	}
 
 	// Method to set the next player
 	public void setNextPlayer() {
 		spel.setNextPlayer();
+	}
+
+	public int getScoreCurrentPlayer(){ return spel.getScoreCurrentPlayer();}
+
+	public String getNameCurrentPlayer(){
+		return spel.getNameCurrentPlayer();
 	}
 	//endregion
 
@@ -145,12 +150,19 @@ public class DomeinController{
 		return spel.checkPlacement(row, column, firstRound, valueOfSelectedPiece);
 	}
 
-	// Method to set a value on the gameboard
+	/**
+	 * @param row
+	 * @param column
+	 * @param valueOfSelectedPiece
+	 * Method to set a value on the gameboard
+	 */
 	public void setValuesGameBoard(int row, int column, int valueOfSelectedPiece) {
 		spel.setValuesGameBoard(row, column, valueOfSelectedPiece);
 	}
 
-	// NOT USED - Method to print the gameboard (for testing)
+	/**
+	 * 	NOT USED - Method to print the gameboard (for testing)
+	 */
 	public void printSpelBord() {
 		spel.printSpelBord();
 	}
@@ -161,6 +173,7 @@ public class DomeinController{
 	public void printScore() {
 		spel.printScore();
 	}
+
 
 	// Method to calculate the score of the player after a move
 	public void calculateScore(int row, int column, int valueOfSelectedPiece) {

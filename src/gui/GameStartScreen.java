@@ -1,7 +1,6 @@
 package gui;
 
 import domein.DomeinController;
-import domein.SpelerRepository;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -11,9 +10,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
-import java.io.PrintStream;
 
 import static persistence.language.rb;
 
@@ -78,8 +74,6 @@ public class GameStartScreen extends GridPane {
 
     getRowConstraints().addAll(row1, row2, row3, row4, row5, row6, row7);
 
-
-
         btnOk = new Button("Ok");
         btnOk.setMaxWidth(175);
         btnOk.setMinWidth(175);
@@ -134,16 +128,12 @@ public class GameStartScreen extends GridPane {
         vbox.setSpacing(17);
         add(vbox, 1, 3);
         GridPane.setRowSpan(vbox, 4);
-
-        this.getChildren().addAll(btnOk, lblPlayersNaam, lblPlayersKansen, lblTitel, vbox);
-
     }
 
     private void onClickButtonOk(ActionEvent event) {
         try {
             GameBoardController GameBoard = new GameBoardController(dc);
             Scene scene = new Scene(GameBoard, 900, 645);
-
             scene.getStylesheets().add(getClass().getResource("/gui/resources/style.css").toExternalForm());
             Stage stage = (Stage) this.getScene().getWindow();
             scene.setFill(Color.TRANSPARENT);

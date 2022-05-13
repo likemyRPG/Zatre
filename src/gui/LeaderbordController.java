@@ -93,7 +93,7 @@ public class LeaderbordController extends Pane {
         rctThird.setLayoutX(Podium.getLayoutX()+((Podium.getMinWidth() / 3) *2));
         rctThird.setLayoutY(Podium.getLayoutY()+Podium.getMinHeight()-rctThird.getHeight());
 
-        TextField txtFirst = new TextField(dc.determineWinner().get(0).getGebruikersnaam());
+        TextField txtFirst = new TextField(dc.getNameScoreBoardOnPosition(1));
         txtFirst.setLayoutX(rctFirst.getLayoutX());
         txtFirst.setLayoutY(rctFirst.getLayoutY() - 30);
         txtFirst.setEditable(false);
@@ -101,7 +101,7 @@ public class LeaderbordController extends Pane {
         txtFirst.setPrefWidth(rctFirst.getWidth());
         txtFirst.getStyleClass().add("txt-style");
 
-        TextField txtSecond = new TextField(dc.determineWinner().get(1).getGebruikersnaam());
+        TextField txtSecond = new TextField(dc.getNameScoreBoardOnPosition(2));
         txtSecond.setLayoutX(rctSecond.getLayoutX());
         txtSecond.setLayoutY(rctSecond.getLayoutY() - 30);
         txtSecond.setEditable(false);
@@ -110,10 +110,10 @@ public class LeaderbordController extends Pane {
         txtSecond.getStyleClass().add("txt-style");
 
         TextField txtThird = new TextField();
-        if(dc.determineWinner().get(2) == null) {
+        if(dc.geefAantalSpelers() < 3) {
             txtThird.setText("X");
         } else {
-            txtThird.setText(dc.determineWinner().get(2).getGebruikersnaam());
+            txtThird.setText(dc.getNameScoreBoardOnPosition(3));
         }
         txtThird.setLayoutX(rctThird.getLayoutX());
         txtThird.setLayoutY(rctThird.getLayoutY() - 30);
@@ -154,7 +154,6 @@ public class LeaderbordController extends Pane {
     }
 
     private void OnClickBtnDownload(ActionEvent event) {
-        //Let the user choose the location where to save the picture, then save it by using dc.getLeaderboard(filename)
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Scoreboard");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + "/Downloads"));
