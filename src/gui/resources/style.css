@@ -17,18 +17,18 @@
 }
 
 .button {
-        -fx-font-family: "OCR A Extended";
-        -fx-font-size: 16px;
-        -fx-font-weight: bold;
-        -fx-text-fill: #1d1d1d;
-        -fx-border-style: none;
-        -fx-label-padding: 4px;
-        -fx-background-color: #b78c5d;
+    -fx-font-family: "OCR A Extended";
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1d1d1d;
+    -fx-border-style: none;
+    -fx-label-padding: 4px;
+    -fx-background-color: #b78c5d;
 }
 
 /*Set the text in all the lables centered*/
 .label {
--fx-alignment:center;
+    -fx-alignment:center;
 }
 
 .button:hover {
@@ -38,13 +38,13 @@
 }
 
 .button-start {
-        -fx-font-size: 27px;
-        -fx-font-family: "OCR A Extended";
-        -fx-font-weight: bold;
+    -fx-font-size: 27px;
+    -fx-font-family: "OCR A Extended";
+    -fx-font-weight: bold;
 }
 
 .button-quit {
-        -fx-font-family: "OCR A Extended";
+    -fx-font-family: "OCR A Extended";
 }
 
 .lblTitel {
@@ -72,12 +72,15 @@
 
 .lblLogin {
     -fx-text-fill: red;
+    -fx-font-family: "OCR A Extended";
+    -fx-font-weight: bold;
 }
 
 .lblText {
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
+    -fx-font-family: "OCR A Extended";
 }
 
 .frontImage {

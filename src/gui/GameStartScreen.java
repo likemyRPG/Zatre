@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -17,6 +18,7 @@ public class GameStartScreen extends GridPane {
     private DomeinController dc;
     private Button btnOk;
     private Label lblPlayersKansen, lblPlayersNaam;
+    private VBox vboxnaam, vboxgetal;
 
     public GameStartScreen(DomeinController dc){
         try {
@@ -60,9 +62,6 @@ public class GameStartScreen extends GridPane {
         RowConstraints row5 = new RowConstraints();
         RowConstraints row6 = new RowConstraints();
         RowConstraints row7 = new RowConstraints();
-        RowConstraints row8 = new RowConstraints();
-        RowConstraints row9 = new RowConstraints();
-        RowConstraints row10 = new RowConstraints();
 
         row1.setPercentHeight(5);
         row2.setPercentHeight(15);
@@ -81,15 +80,30 @@ public class GameStartScreen extends GridPane {
         add(btnOk, 4, 5);
         btnOk.setOnAction(this::onClickButtonOk);
 
+
+
         lblPlayersNaam = new Label(dc.geefSpelersNaam());
         lblPlayersNaam.getStyleClass().add("lblText");
         lblPlayersNaam.setMaxHeight(Double.MAX_VALUE);
-        add(lblPlayersNaam, 3, 3);
+        //lblPlayersNaam.setMinHeight(300);
+        //lblPlayersNaam.setContentDisplay(ContentDisplay.BOTTOM);
+        //add(lblPlayersNaam, 3, 3);
+
+        VBox vboxnaam = new VBox(lblPlayersNaam);
+        vboxnaam.setMaxHeight(Double.MAX_VALUE);
+        add(vboxnaam, 3, 3);
+        GridPane.setRowSpan(vboxnaam, 4);
 
         lblPlayersKansen = new Label(dc.geefSpelerKansen());
         lblPlayersKansen.getStyleClass().add("lblText");
+        //lblPlayersKansen.setMinHeight(300);
         lblPlayersKansen.setMaxHeight(Double.MAX_VALUE);
-        add(lblPlayersKansen, 5,3);
+        //add(lblPlayersKansen, 5,3);
+
+        VBox vboxkans = new VBox(lblPlayersKansen);
+        vboxkans.setMaxHeight(Double.MAX_VALUE);
+        add(vboxkans, 5, 3);
+        GridPane.setRowSpan(vboxkans, 4);
 
         Label lblTitel = new Label(rb.getString("activePlayers"));
         lblTitel.getStyleClass().add("Title");
@@ -124,10 +138,10 @@ public class GameStartScreen extends GridPane {
             lblopsom4.setVisible(true);
         }
 
-        VBox vbox = new VBox(lblopsom1, lblopsom2, lblopsom3, lblopsom4);
-        vbox.setSpacing(17);
-        add(vbox, 1, 3);
-        GridPane.setRowSpan(vbox, 4);
+        VBox vboxgetal = new VBox(lblopsom1, lblopsom2, lblopsom3, lblopsom4);
+        vboxgetal.setSpacing(17);
+        add(vboxgetal, 1, 3);
+        GridPane.setRowSpan(vboxgetal, 4);
     }
 
     private void onClickButtonOk(ActionEvent event) {
