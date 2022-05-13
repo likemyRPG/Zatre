@@ -17,12 +17,12 @@ public class Score {
     //endregion
 
     /**
-     * @param p10
-     * @param p11
-     * @param p12
-     * @param doubleScore
+     * @param p10 is the amount of times the player scored a 10 in a round.
+     * @param p11 is the amount of times the player scored a 11 in a round.
+     * @param p12 is the amount of times the player scored a 12 in a round.
+     * @param doubleScore is a boolean to check if the player earned a double score.
+     *                    Constructor for the Score class.
      */
-    // Constructor for the score class
     public Score(int p10, int p11, int p12, boolean doubleScore) {
         // Set the bonuses to an arraylist
         setBonusRound();
@@ -40,7 +40,8 @@ public class Score {
     }
 
     /**
-     * @param doubleScore
+     * @param doubleScore is a boolean to check if the player earned a double score.
+     *                    Method to set the double score.
      */
     // Method to set the double score
     public void setDoubleScore(boolean doubleScore) {
@@ -48,7 +49,9 @@ public class Score {
         else this.isDoubleScore = false;
     }
 
-    // Method to calculate the score
+    /**
+     * Method ot calculate the score.
+     */
     public void setScore() {
         score=0;
         score +=(1*amountP10())+(2*amountP11())+(4*amountP12());
@@ -57,64 +60,92 @@ public class Score {
         if(isDoubleScore) score *=2;
     }
 
-    // Method to check if the player earned a bonus
+    /**
+     * Method to check if the player earned a bonus.
+     */
     private void checkEarnedBonus(){
         if(p10!=0 && p11!=0 && p12 !=0) earnedBonus = true;
         else earnedBonus = false;
     }
 
+    /**
+     * @param row is the row of the Scoreboard.
+     *           Method to set the bonus for the row.
+     */
     // Method to set the bonus for the row (get the value from the list BonusList)
     private void setBonus(int row) {
         bonus = BonusList.get(row);
     }
 
     /**
-     * @return
+     * @return true if the player earned a double score.
      */
-    // Method to return if the score is double
     public boolean isDoubleScore() {
         return isDoubleScore;
     }
 
-    // Method to return the amount of 10's
+    /**
+     * @return the amount of times the player scored a 10 in a round.
+     */
     public int amountP10() {
         return p10;
     }
 
-    // Method to return the amount of 11's
+    /**
+     * @return the amount of times the player scored a 11 in a round.
+     */
     public int amountP11() {
         return p11;
     }
 
-    // Method to return the amount of 12's
+    /**
+     * @return the amount of times the player scored a 12 in a round.
+     */
     public int amountP12() {
         return p12;
     }
 
-    // Method to set the amount of 10's
+    /**
+     * @param p10 is the amount of times the player scored a 10 in a round.
+     *            Method to set the amount of times the player scored a 10 in a round.
+     */
     public void setP10(int p10) {
         this.p10 = p10;
     }
 
-    // Method to set the amount of 11's
+    /**
+     * @param p11 is the amount of times the player scored a 11 in a round.
+     *            Method to set the amount of times the player scored a 11 in a round.
+     */
     public void setP11(int p11) {
         this.p11 = p11;
     }
 
-    // Method to set the amount of 12's
+    /**
+     * @param p12 is the amount of times the player scored a 12 in a round.
+     *            Method to set the amount of times the player scored a 12 in a round.
+     */
     public void setP12(int p12) {
         this.p12 = p12;
     }
 
-    // Method to return the bonus
+    /**
+     * @return the bonus for the row.
+     *           Method to get the bonus for the row.
+     */
     public int getBonus(){ return bonus; }
 
-    // Method to return the score
+    /**
+     * @return the score.
+     *          Method to get the score.
+     */
     public Integer getScore(){
         return score;
     }
 
-    // Method to set the bonus list
+    /**
+     * Method to set the BonusList.
+     */
     private void setBonusRound(){
         BonusList = new ArrayList<>();
         int points = 3;

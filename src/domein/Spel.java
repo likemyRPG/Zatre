@@ -12,12 +12,10 @@ import java.util.List;
 
 public class Spel {
     //region Variables
-    private List<Integer> randomPieces;
     private int[][] spelBord;
     private int[][] ownPieces;
     private List<Speler> currentPlayers;
     private byte currentPlayer = 0;
-    private String currentPlayerNameAndBirthYear, previousPlayerNameAndBirthYear;
     List leaderBoard;
 
     MyJDBC sql;
@@ -27,8 +25,14 @@ public class Spel {
     boolean isDouble = false;
     //endregion
 
+    /**
+     * @param spelerList is the list of players.
+     *                   Constructor for the Spel class.
+     *                   Initializes the gameboard and the list of players.
+     *                   Initializes an array of own pieces.
+     *                   Adds the unusable tiles to the gameboard.
+     */
     //region Spelers
-    // Constructor for the spel class
     public Spel(List<Speler> spelerList) {
         currentPlayers = new ArrayList<>(spelerList);
         spelBord = new int[15][15];
@@ -36,25 +40,18 @@ public class Spel {
         addNonUsableTiles();
     }
 
-    // Method to set the next player
-    public Speler setNextPlayer(){
+    /**
+     *        Method to set the current player.
+     */
+    public void setNextPlayer(){
         if(currentPlayers.size() -1 == currentPlayer) currentPlayer = 0;
         else currentPlayer++;
-        return currentPlayers.get(currentPlayer);
     }
 
-    // Method to get the previous player
-    public Speler getPreviousPlayer(){
-        int index = currentPlayers.indexOf(currentPlayer);
-        System.out.println(index);
-        if(index == 0){
-            return currentPlayers.get(currentPlayers.size() -1);
-        }
-        return currentPlayers.get(currentPlayer-1);
-    }
-
-    // Method to get the next player
-    public String getNextPlayer(){
+    /**
+     * @return the username of the current player.
+     */
+    public String getUsernameNextPlayer(){
         int index = currentPlayers.indexOf(currentPlayer);
         if(index == currentPlayers.size() -1){
             return currentPlayers.get(0).getGebruikersnaam();
@@ -62,13 +59,22 @@ public class Spel {
         return currentPlayers.get(index+1).getGebruikersnaam();
     }
 
-    // Method to get the current player
+    /**
+     * @return the current player.
+     */
     public Speler getCurrentPlayer(){
         return currentPlayers.get(currentPlayer);
     }
     //endregion
 
-    // Method to calculate the score that has to be added to the scoreboard
+    /**
+     * @param row is the row of the tile.
+     * @param column is the column of the tile.
+     * @param valueOfSelectedPiece is the value of the selected piece.
+     *                             Method to calculate score of a placement by making a sum of the values of the
+     *                             pieces that are connected to the placed piece horizontally and vertically.
+     *                             After the calculation, add the score to the scoreboard of the current player.
+     */
     public void calculateScore(int row, int column, int valueOfSelectedPiece){
         // Calculate the score of the piece that is being placed horizontally
         int sumH = sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece);
@@ -86,7 +92,9 @@ public class Spel {
         addScore();
     }
 
-    // Method to add the score to the scoreboard after every placement of a piece
+    /**
+     * Method to add the score to the scoreboard after every placement of a piece.
+     */
     public void addScore(){
         // When the scoreboard is empty, add the first score(row) to the scoreboard
         if(currentPlayers.get(currentPlayer).getScoreblad().getScores().isEmpty()){
@@ -130,14 +138,18 @@ public class Spel {
         setScore();
     }
 
-    // Method to set the score of the scoreboard
+    /**
+     * Method to set the score of the scoreboard
+     */
     public void setScore(){
-        for (int i = 0; i < currentPlayers.size(); i++) {
-            currentPlayers.get(i).getScoreblad().setScore();
+        for (Speler player : currentPlayers) {
+            player.getScoreblad().setScore();
         }
     }
 
-    // Method to print the total score of the scoreboard
+    /**
+     * Method to print the total score of the scoreboard
+     */
     public void printScore(){
         for(Speler speler : currentPlayers){
             System.out.printf("%s\t%s%n", speler.getGebruikersnaam(), speler.getScoreblad().getTotalScore());
@@ -149,8 +161,10 @@ public class Spel {
         return currentPlayers.get(currentPlayer).getScoreblad();
     }
 
-    // Method to print the scoreboard of the current player
-    // returns an int[][] with the scoreboard
+    /**
+     * @return a two-dimensional array with all the values of the scoreboard.
+     *        Method to print the scoreboard of the current player.
+     */
     public int[][] printScoreBoard(){
         int[][] scores = new int[currentPlayers.get(currentPlayer).getScoreblad().getScores().size()][6];
         for(Score s : currentPlayers.get(currentPlayer).getScoreblad().getScores()) {
@@ -164,19 +178,37 @@ public class Spel {
         return scores;
     }
 
-    // Method to check or a placement is valid or not, returns true or false
+    /**
+     * @param row is the row of the tile.
+     * @param column is the column of the tile.
+     * @param firstRound is a boolean that is true when the game is in the first round.
+     * @param valueOfSelectedPiece is the value of the selected piece.
+     * @return a boolean that is true when the placement is valid.
+     *         Method to check if the placement is valid.
+     */
     boolean checkPlacement(int row, int column, boolean firstRound, int valueOfSelectedPiece){
         return (valueOfSelectedPiece != 0 && !alreadyUsed(row, column) && allowedPlacement(row, column, firstRound) && allowedPlacementSum(row, column, valueOfSelectedPiece) && checkSpecialTileAllowed(row, column, valueOfSelectedPiece));
     }
 
-    // method to check if the tile is 'Special', if it is, check or the value of the placement Horizontally and Vertically is more than 10
+    /**
+     * @param row is the row of the tile.
+     * @param column is the column of the tile.
+     * @param valueOfSelectedPiece is the value of the selected piece.
+     * @return a boolean that is true when the placement is valid.
+     *        Method to check if the tile is a special tile.
+     *        If it is, check if the placement is allowed. (Value of the piece must be 10 or 11 or 12)
+     */
     private boolean checkSpecialTileAllowed(int row, int column, int valueOfSelectedPiece) {
         if(checkSpecialTile(row, column)) {
             return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) >= 10 || sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) == valueOfSelectedPiece) && (sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) >= 10 || sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) == valueOfSelectedPiece));
         }else return true;
     }
 
-    // Method to check if the tile is special, returns true or false
+    /**
+     * @param row is the row of the tile.
+     * @param column is the column of the tile.
+     * @return a boolean that is true when the tile is a special tile.
+     */
     private boolean checkSpecialTile(int row, int column) {
         if(row ==7 && column == 7) return false;
         else if(row == column) return true;
@@ -187,12 +219,23 @@ public class Spel {
         return (column == 14-row);
     }
 
-    // Method to check if the placement is allowed (sum cant be higher than 12), returns true or false
+    /**
+     * @param row is the row of the tile.
+     * @param column is the column of the tile.
+     * @param valueOfSelectedPiece is the value of the selected piece.
+     * @return a boolean that is true when the placement is valid.
+     *       Method to check if the placement is allowed. The sum of connected tiles must be lower than or equal to 12.
+     */
     private boolean allowedPlacementSum(int row, int column, int valueOfSelectedPiece) {
         return ((sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) <= 12 || sumOfContinousFollowingValuesH(row, column, valueOfSelectedPiece) == valueOfSelectedPiece) && ((sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) <= 12) || sumOfContinousFollowingValuesV(row, column, valueOfSelectedPiece) == valueOfSelectedPiece));
     }
 
-    // Method to calculate the value of the row horizontally, returns an int as value
+    /**
+     * @param row is the row of the tile.
+     * @param column is the column of the tile.
+     * @param valueOfSelectedPiece is the value of the selected piece.
+     * @return an int that is the sum of the connected tiles horizontally.
+     */
     private int sumOfContinousFollowingValuesH(int row, int column, int valueOfSelectedPiece) {
         int sum1 = 0, sum2 = 0;
         int i = column;
@@ -216,7 +259,12 @@ public class Spel {
         return (sum1 + sum2) - valueOfSelectedPiece;
     }
 
-    // Method to calculate the value of the row vertically, returns an int as value
+    /**
+     * @param row is the row of the tile.
+     * @param column is the column of the tile.
+     * @param valueOfSelectedPiece is the value of the selected piece.
+     * @return an int that is the sum of the connected tiles vertically.
+     */
     private int sumOfContinousFollowingValuesV(int row, int column, int valueOfSelectedPiece) {
         int sum1 = 0, sum2 = 0;
         int i = column;
@@ -240,8 +288,14 @@ public class Spel {
         return (sum1 + sum2) - valueOfSelectedPiece;
     }
 
-    // Method to check if the placement is allowed (The tile has to be in the range of the board and cant be placed on the "not existing" tiles at the side of the gameboard),
-    // returns true or false
+    /**
+     * @param row is the row of the tile.
+     * @param column is the column of the tile.
+     * @param firstRound is a boolean that is true when the game is in the first round.
+     * @return a boolean that is true when the placement is allowed.
+     *        Method to check if the placement is allowed.
+     *        Check or the piece is connected to another tile that is not the player's piece of the same round.
+     */
     private boolean allowedPlacement(int row, int column, boolean firstRound) {
         if(column != 14 && (spelBord[row][column+1]!=0 && spelBord[row][column+1]!= 7 && (ownPieces[row][column+1] == 0 || firstRound)))
             return true;
@@ -252,12 +306,19 @@ public class Spel {
         else return row != 0 && ( spelBord[row-1][column] != 0 && spelBord[row-1][column] != 7 && (ownPieces[row-1][column] == 0 || firstRound));
     }
 
-    // Method to check if the placement is allowed (the tile can't be placed on a tile that is already placed), returns true or false
+    /**
+     * @param row is the row of the tile.
+     * @param column is the column of the tile.
+     * @return a boolean that is true when the tile already has a piece.
+     *       Method to check if the tile already has a piece.
+     */
     private boolean alreadyUsed(int row, int column){
         return spelBord[row][column] != 0;
     }
 
-    // Method to add the value 7 to the tiles that are not usable (not existing)
+    /**
+     * Method to add the value 7 to the tiles that are not usable (not existing)
+     */
     private void addNonUsableTiles(){
         spelBord[0][0]=7;
         spelBord[0][1]=7;
@@ -293,8 +354,10 @@ public class Spel {
         spelBord[14][14]=7;
     }
 
-    // Clear the list of ownpieces, this list is used to hold track of the pieces that are placed in one round by the same user
-    // Its used to check if the user doesnt place a piece next to another piece that is placed by the same user
+    /**
+     *     Method to clear the list of ownpieces, this list is used to hold track of the pieces that are placed in one round by the same user
+     *     It's used to check if the user doesn't place a piece next to another piece that is placed by the same user
+     */
     public void clearOwnPieces() {
         for (int col = 0; col < ownPieces.length; col++) {
             for (int row = 0; row < ownPieces.length; row++) {
@@ -303,22 +366,21 @@ public class Spel {
         }
     }
 
+    /**
+     * @param row is the row of the tile.
+     * @param column is the column of the tile.
+     * @param value is the value of the piece.
+     */
     // Method to save the placement of the user in the lists spelBord and ownPieces
     public void setValuesGameBoard(int row, int column, int value) {
         spelBord[row][column] = value;
         ownPieces[row][column] = value;
     }
 
-    // Method to print the gameboard (for debugging purposes)
-    public void printSpelBord(){
-        for (int row = 0; row < spelBord.length; row++) {
-            for (int col = 0; col < spelBord.length; col++) {
-                System.out.print(spelBord[row][col] + " ");
-            }
-        }
-    }
-
-    // Method to determine the winner of the game, and create the leaderboard
+    /**
+     * Determine the winner of the game. The winner is the player with the most points.
+     * Create a list of the players with the most points. (Top 3 players)
+     */
     public void determineWinner(){
         //Get the player with the highest score
         leaderBoard = new ArrayList<>();
@@ -343,30 +405,28 @@ public class Spel {
         leaderBoard.add(thirdPlace);
     }
 
+    /**
+     * @param position is the position of the leaderboard.
+     * @return a String with the name of the player with the position in the leaderboard.
+     */
     public String getNameScoreBoardOnPosition(int position){
         Speler speler = (Speler) leaderBoard.get(position - 1);
         return speler.getGebruikersnaam();
     }
 
-    public int getScoreScoreBoardOnPosition(int position){
-        Speler speler = (Speler) leaderBoard.get(position - 1);
-        return speler.getScoreblad().getTotalScore();
-    }
-
-    // Method to give the reward to the player who won the game
+    /**
+     * Method to give the reward to the player who won the game
+     */
     public void giveReward(){
         Speler speler = (Speler) leaderBoard.get(0);
         speler.giveReward();
         sql.giveAward(speler.getGebruikersnaam(), speler.getGeboortejaar(), speler.getAantalKansen());
     }
 
-
-    // Method to get the gameboard
-    public int[][] getGameBoard() {
-        return spelBord;
-    }
-
-    // Method to create an image of the scoreboard
+    /**
+     * @param pathToImage is the path to the image.
+     *                    Method to set create an image of the scoreboard.
+     */
     public void makeScoreBoardImage(String pathToImage){
         BufferedImage image = new BufferedImage(1400, 800, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = image.createGraphics();
@@ -390,15 +450,26 @@ public class Spel {
         }
     }
 
-    // Method to get the generate a name for the leaderboard
+    /**
+     * @return a String with the name of the image of the scoreboard.
+     *        Method to get the name of the image of the scoreboard.
+     */
     public String getImageName() {
         return "LeaderBoard" + System.currentTimeMillis() + ".png";
     }
 
+    /**
+     * @return an Integer with the score of the current player.
+     *       Method to get the score of the current player.
+     */
     public int getScoreCurrentPlayer() {
         return getCurrentPlayer().getScoreblad().getTotalScore();
     }
 
+    /**
+     * @return a String with the name of the current player.
+     *       Method to get the name of the current player.
+        */
     public String getNameCurrentPlayer() {
         return getCurrentPlayer().getGebruikersnaam();
     }

@@ -1,5 +1,4 @@
 package domein;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import persistence.language;
@@ -10,7 +9,6 @@ public class Speler {
     private int geboortejaar;
     private String gebruikersnaam;
     private int aantalKansen;
-    private boolean[][] score;
     public static final int MIN_LEEFTIJD = 6;
     Scoreblad scoreblad;
 
@@ -19,7 +17,15 @@ public class Speler {
     //endregion
 
     //region Methodes
-    // Constructor
+
+    /**
+     * @param gebruikersnaam the username of the player.
+     * @param geboortejaar the birthyear of the player.
+     * @param aantalKansen the amount of lives left for the player.
+     *                     Constructor for the Speler class.
+     *                     Initializes the variables.
+     *                     Initializes the scoreblad.
+     */
     public Speler(String gebruikersnaam, int geboortejaar, int aantalKansen) {
         setGebruikersnaam(gebruikersnaam);
         setGeboortejaar(geboortejaar);
@@ -31,7 +37,12 @@ public class Speler {
 
     //region Getters And Setters
 
-    // Method to set the birthyear of the player (Check if the player is old enough and the if the birthyear is valid)
+    /**
+     * @param geboortejaar the birthyear of the player.
+     *                     Sets the birthyear of the player.
+     *                     Checks if the birthyear is valid.
+     *                     Throws an exception when the birthyear is invalid.
+     */
     public void setGeboortejaar(int geboortejaar) {
         // Het huidige jaar ophalen
         int jaar = Calendar.getInstance().get(Calendar.YEAR);
@@ -41,11 +52,16 @@ public class Speler {
         // Checken of de leeftijd van de speler groter is dan de minimum leeftijd
         if (geboortejaar > (jaar - MIN_LEEFTIJD))
         // -> Wanneer < MINIMUM => Throw Exception
-            throw new IllegalArgumentException(String.format(rb.getString("minAge")));
+            throw new IllegalArgumentException(rb.getString("minAge"));
         this.geboortejaar = geboortejaar;
     }
 
-    // Method to set the username of the player (Check if the username is valid)
+    /**
+     * @param gebruikersnaam the username of the player.
+     *                       Sets the username of the player.
+     *                       Checks if the username is valid.
+     *                       Throws an exception when the username is invalid.
+     */
     public void setGebruikersnaam(String gebruikersnaam) {
         // Wanneer gebruikersnaam leeg of null is -> Throw exception
         if (gebruikersnaam == null || gebruikersnaam.isEmpty())
@@ -56,38 +72,55 @@ public class Speler {
         this.gebruikersnaam = gebruikersnaam;
     }
 
-    // Method to get the birthyear of the player (Testing purposes)
+    /**
+     * @return the birthyear of the player.
+     */
     public int getGeboortejaar() {
         return this.geboortejaar;
     }
 
-    // Method to get the username of the player
+    /**
+     * @return the username of the player.
+     */
     public String getGebruikersnaam() {
         return this.gebruikersnaam;
     }
 
-    // Method to get the scoreboard of the player
+    /**
+     * @return the scoreboard of the player.
+     */
     public Scoreblad getScoreblad() {
         return this.scoreblad;
     }
 
-    // Method to get the amount of lives the player has
+    /**
+     * @return the amount of lives left for the player.
+     */
     public int getAantalKansen() {
         return this.aantalKansen;
     }
 
-    // To String Method
+    /**
+     * @return String representation of the player.
+     *        Returns the username of the player.
+     *        Returns the birthyear of the player.
+     *        Returns the amount of lives left for the player.
+     */
     @Override
     public String toString(){
         return String.format(rb.getString("userInfo"), this.gebruikersnaam, this.geboortejaar, this.aantalKansen);
     }
 
-    // Method to subtract a life from the player
+    /**
+     * Subtracts 1 from the amount of lives left for the player.
+     */
     public void wijzigSpeelkansen() {
         this.aantalKansen-=1;
     }
 
-    // Method to add 2 lives to the winner
+    /**
+     * Add 2 lives to the amount of lives left for the player.
+     */
     public void giveReward() {
         this.aantalKansen+=2;
     }

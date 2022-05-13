@@ -21,7 +21,11 @@ public class SpelerRepository {
         spelers = new ArrayList<>();
     }
 
-    // Method to check the register of a player (Check username, bithyear and check if the player is already registered)
+    /**
+     * @param username the username of the player.
+     * @param birthyear the birthyear of the player.
+     *                  Method to check the register of a player (Check username, bithyear and check if the player is already registered).
+     */
     public void checkRegister(String username, int birthyear){
         if(username.length() < 5 || username.length() > 45) throw new IllegalArgumentException(language.rb.getString("minLengthUsername"));
         if(birthyear < 6 ) throw new IllegalArgumentException(language.rb.getString("minage"));
@@ -29,7 +33,11 @@ public class SpelerRepository {
         registreerSpeler(username, birthyear);
     }
 
-    // Method to register a new player and add it to the list
+    /**
+     * @param gebruikersnaam the username of the player.
+     * @param geboortejaar the birthyear of the player.
+     *                         Method to register a new player and add it to the list
+     */
     public void registreerSpeler(String gebruikersnaam, int geboortejaar) {
         aantalSpelers = spelers.size();
         // Make sure that the player limit is not reached
@@ -46,7 +54,11 @@ public class SpelerRepository {
         else throw new IllegalArgumentException("Het maximum aantal spelers is bereikt!");
     }
 
-    // Method to add a player to the list (Login)
+    /**
+     * @param gebruikersnaam the username of the player.
+     * @param geboortejaar the birthyear of the player.
+     *                         Method to add a player to the list (Login)
+     */
     public void selecteerSpeler(String gebruikersnaam, int geboortejaar) {
         aantalSpelers = spelers.size();
         if(aantalSpelers <= 3)
@@ -73,13 +85,18 @@ public class SpelerRepository {
 
     }
 
-    // Method to shuffle the list of players
+    /**
+     * @return the list of players.
+     *                  Method to shuffle the list of players
+     */
     public List<Speler> shufflePlayers(){
         Collections.shuffle(spelers);
         return spelers;
     }
 
-    // Method to remove a life from the players
+    /**
+     * Method to remove a life from a player
+     */
     public void verminderSpeelkansen(){
         for (Speler speler : spelers){
             speler.wijzigSpeelkansen();
@@ -87,7 +104,10 @@ public class SpelerRepository {
         }
     }
 
-    // Method to get the names of the players and the amount of lives left in a string
+    /**
+     * @return a String with the players names and lives
+     *               Method to get the names of the players and the amount of lives left in a string
+     */
     public String geefSpelers() {
         // Checken of de lijst van spelers leeg is, wanneer deze leeg is krijg je een gepast bericht
         if(spelers.isEmpty())
@@ -101,7 +121,10 @@ public class SpelerRepository {
         return resultaat;
     }
 
-    // Method to get the names of the players
+    /**
+     * @return a String with the players names.
+     *              Method to get the names of the players in a string.
+     */
     public String geefSpelersNaam() {
         if(spelers.isEmpty())
             return null;
@@ -112,7 +135,10 @@ public class SpelerRepository {
         return resultaat;
     }
 
-    // Method to get the amount of lives left of the players
+    /**
+     * @return a String with the players lives.
+     *             Method to get the amount of lives left in a string.
+     */
     public String geefSpelersKansen() {
         if(spelers.isEmpty())
             return null;
@@ -123,7 +149,11 @@ public class SpelerRepository {
         return resultaat;
     }
 
-    // Method to check if the player already is registered
+    /**
+     * @param gebruikersnaam the username of the player.
+     * @param geboortedatum the birthyear of the player.
+     * @return true if the player is already in logged in the list.
+     */
     public boolean alToegevoegd(String gebruikersnaam, int geboortedatum){
         for(Speler speler : spelers){
             if(gebruikersnaam.equals(speler.getGebruikersnaam()) && speler.getGeboortejaar() == geboortedatum)
@@ -132,22 +162,33 @@ public class SpelerRepository {
         return false;
     }
 
-    // Method to get the list of players
+    /**
+     * @return the players list.
+     *            Method to get the list of players.
+     */
     public List<Speler> getSpelers() {
         return spelers;
     }
 
-    // Method to get the amount of players
+    /**
+     * @return the amount of players.
+     *           Method to get the amount of players.
+     */
     public int getAantalSpelers() {
         return spelers.size();
     }
 
-    // Method to remove a player from the list
+    /**
+     * @param i the index of the player.
+     *          Method to remove a player from the list.
+     */
     public void verwijderSpeler(int i) {
         spelers.remove(i);
     }
 
-    // Method to remove all the players from the list
+    /**
+     * Method to remove all the players from the list
+     */
     public void clearPlayers() {
         spelers.clear();
     }

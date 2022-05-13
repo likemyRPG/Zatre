@@ -10,7 +10,9 @@ public class PieceRepository {
     private List<Piece> pieces;
     //endregion
 
-    // Constructor
+    /**
+     * Constructor for the PieceRepository class.
+     */
     public PieceRepository() {
         // Een nieuwe list aanmaken van spelers
         pieces = new ArrayList<>();
@@ -18,7 +20,9 @@ public class PieceRepository {
         shufflePieces();
     }
 
-    // method to create the pieces (Value 1-6) in the demanded amount of pieces + Add them to a list
+    /**
+     * Method to create the pieces (Value 1-6) in the demanded amount of pieces + Add them to a list.
+     */
     public void createPieces(){
         for (int i = 1; i <= 6; i++){
             for (int y = 1; y <= 20; y++){
@@ -30,12 +34,18 @@ public class PieceRepository {
         pieces.add(piece);
     }
 
-    // Method to shuffle the pieces
+    /**
+     * Method to shuffle the pieces.
+     */
     public void shufflePieces(){
         Collections.shuffle(pieces);
     }
 
-    // Method that returns the values of an X amount of pieces from the list and removes them from the list
+    /**
+     * @param amount the amount of pieces to be returned.
+     * @return the demanded amount of pieces.
+     *            Method to get the demanded amount of pieces.
+     */
     public List<Integer> giveRandomPieces(int amount)
     {
         //Get the first 3 value of the list pieces
@@ -56,12 +66,18 @@ public class PieceRepository {
         return randomPieces;
     }
 
-    // Method to add a piece to the list
+    /**
+     * @param piece the piece to be added.
+     *              Method to add a piece to the piece repository.
+     */
     public void addPiece(Piece piece){
         pieces.add(piece);
     }
 
-    // Method to get the list of pieces (String)
+    /**
+     * @return a String with all the values of the pieces.
+     *            Method to get all the values of the pieces.
+     */
     public String giveValues() {
         // Check if the list is empty
         if (pieces.isEmpty())
@@ -74,12 +90,18 @@ public class PieceRepository {
         return resultaat;
     }
 
-    // Method to get the list of pieces (Piece)
+    /**
+     * @return a List with all the pieces.
+     *           Method to get all the pieces.
+     */
     public List<Piece> getPieces() {
         return pieces;
     }
 
-    // Method that returns the amount of pieces left
+    /**
+     * @return an integer with the amount of pieces in the piece repository.
+     *           Method to get the amount of pieces in the piece repository.
+     */
     public int getAmountOfPieces() {
         return pieces.size();
     }
