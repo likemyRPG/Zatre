@@ -11,6 +11,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.util.Calendar;
@@ -47,14 +48,16 @@ public class LoginController extends GridPane {
         ColumnConstraints col2 = new ColumnConstraints();
         ColumnConstraints col3 = new ColumnConstraints();
         ColumnConstraints col4 = new ColumnConstraints();
+        ColumnConstraints col5 = new ColumnConstraints();
 
         col1.setHalignment(HPos.RIGHT);
         col2.setHgrow(Priority.ALWAYS);
         col1.setPercentWidth(15);
         col2.setPercentWidth(30);
         col3.setPercentWidth(20);
-        col4.setPercentWidth(35);
-        getColumnConstraints().addAll(col1, col2, col3, col4);
+        col4.setPercentWidth(5);
+        col5.setPercentWidth(30);
+        getColumnConstraints().addAll(col1, col2, col3, col4, col5);
 
         btnLogin = new Button(rb.getString("login"));
         btnLogin.setMaxWidth(240);
@@ -88,8 +91,9 @@ public class LoginController extends GridPane {
         lblLoginMessage = new Label();
         lblLoginMessage.setMaxWidth(Double.MAX_VALUE);
         lblLoginMessage.getStyleClass().add("lblLogin");
+        lblLoginMessage.setAlignment(Pos.BASELINE_LEFT);
         add(lblLoginMessage, 1, 9);
-        GridPane.setColumnSpan(lblLoginMessage, 2);
+        GridPane.setColumnSpan(lblLoginMessage, 3);
 
         btnCancel = new Button(rb.getString("back"));
         btnCancel.setMaxWidth(240);

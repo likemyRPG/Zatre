@@ -53,14 +53,16 @@ public class RegisterController extends GridPane {
         ColumnConstraints col2 = new ColumnConstraints();
         ColumnConstraints col3 = new ColumnConstraints();
         ColumnConstraints col4 = new ColumnConstraints();
+        ColumnConstraints col5 = new ColumnConstraints();
 
         col1.setHalignment(HPos.RIGHT);
         col2.setHgrow(Priority.ALWAYS);
         col1.setPercentWidth(15);
         col2.setPercentWidth(30);
         col3.setPercentWidth(20);
-        col4.setPercentWidth(35);
-        getColumnConstraints().addAll(col1, col2, col3, col4);
+        col4.setPercentWidth(5);
+        col5.setPercentWidth(30);
+        getColumnConstraints().addAll(col1, col2, col3, col4, col5);
 
         registerButton = new Button(rb.getString("register"));
         add(registerButton, 1,11);
@@ -103,7 +105,7 @@ public class RegisterController extends GridPane {
         messageLabel.getStyleClass().add("lblLogin");
         messageLabel.setAlignment(Pos.BASELINE_LEFT);
         add(messageLabel, 1, 9);
-        GridPane.setColumnSpan(messageLabel, 2);
+        GridPane.setColumnSpan(messageLabel, 3);
     }
 
     private void addBirthyearToComboBox() {
