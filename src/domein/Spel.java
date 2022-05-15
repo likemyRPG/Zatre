@@ -473,4 +473,5 @@ public class Spel {
     public String getNameCurrentPlayer() {
         return getCurrentPlayer().getGebruikersnaam();
     }
+
 }
