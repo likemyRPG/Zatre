@@ -19,10 +19,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
 import java.awt.*;
 import java.nio.channels.ShutdownChannelGroupException;
-
 import static persistence.language.rb;
 
 public class HowToPlayController extends BorderPane {
@@ -33,7 +31,7 @@ public class HowToPlayController extends BorderPane {
     private Label lblTitel;
     private HBox buttonBox;
     private int paginaTeller = 0;
-    private final int MAX_PAGINA = 6;
+    private final int MAX_PAGINA = 5;
     private Node[] schermen = new Node[MAX_PAGINA];
 
     public HowToPlayController(DomeinController dc) {
@@ -61,12 +59,12 @@ public class HowToPlayController extends BorderPane {
     }
 
     private void createTitelLabel() {
-        lblTitel = new Label("HOW TO PLAY");
+        lblTitel = new Label(rb.getString("lblHowToPlay"));
         lblTitel.setAlignment(Pos.CENTER);
         lblTitel.setMinWidth(200);
         lblTitel.setMaxWidth(Double.MAX_VALUE);
         lblTitel.setMinHeight(70);
-        lblTitel.setFont(new Font(30));
+        lblTitel.setFont(new Font(40));
         lblTitel.setStyle("-fx-text-fill: white");
     }
 
@@ -150,15 +148,14 @@ public class HowToPlayController extends BorderPane {
     private void genereerSchermen() {
         schermen[0] = createUitlegText1();
         schermen[1] = createUitlegText2();
-        schermen[2] = createScherm3();
-        schermen[3] = createScherm4();
-        schermen[4] = createScherm5();
-        schermen[5] = createScherm6();
+        schermen[2] = createUitlegText3();
+        schermen[3] = createUitlegText4();
+        schermen[4] = createUitlegText5();
     }
 
     private VBox createVbox1() {
         VBox vbox1 = new VBox();
-        Label lblregistreren = new Label("Registreren");
+        Label lblregistreren = new Label(rb.getString("lblRegistreren"));
 
         lblregistreren.setFont(new Font(25));
         lblregistreren.setStyle("-fx-text-fill: white");
@@ -174,15 +171,17 @@ public class HowToPlayController extends BorderPane {
         VBox vbox1 = new VBox();
         HBox lblbox = new HBox();
         Label lbluitlegtext = new Label();
-        ImageView img = new ImageView("file:src/gui/resources/voorbeeld_registreren.png");
+        ImageView img = new ImageView(rb.getString("voorbeeld_registreren"));
         HBox imgBox = new HBox();
+        Label gap0 = new Label();
         Label gap1 = new Label();
         Label gap2 = new Label();
 
+        gap0.setMinHeight(20);
         gap1.setMinHeight(20);
         gap2.setMinHeight(50);
 
-        lbluitlegtext.setText("Jouw gebruikersnaam moet minstens 5 karakters lang zijn en je moet minstens 6 jaar zijn of dit jaar 6 worden om een speler aan te maken.");
+        lbluitlegtext.setText(rb.getString("uitlegtextRegistreren"));
         lbluitlegtext.setWrapText(true);
         lbluitlegtext.getStyleClass().add("uitlegtext-style");
         lbluitlegtext.setTextAlignment(TextAlignment.CENTER);
@@ -192,19 +191,19 @@ public class HowToPlayController extends BorderPane {
         lblbox.setAlignment(Pos.CENTER);
 
         img.setPreserveRatio(true);
-        img.setFitWidth(750);
+        img.setFitWidth(450);
         img.getStyleClass().add("imageuitleg-style");
 
         imgBox.getChildren().add(img);
         imgBox.setAlignment(Pos.CENTER);
 
-        vbox1.getChildren().addAll(createVbox1(),gap1,lblbox,gap2,imgBox);
+        vbox1.getChildren().addAll(gap0,createVbox1(),gap1,lblbox,gap2,imgBox);
         return vbox1;
     }
 
     private VBox createVbox2() {
         VBox vbox2 = new VBox();
-        Label lblinloggen = new Label("Aanmelden");
+        Label lblinloggen = new Label(rb.getString("lblAanmelden"));
 
         lblinloggen.setFont(new Font(25));
         lblinloggen.setStyle("-fx-text-fill: white");
@@ -219,44 +218,46 @@ public class HowToPlayController extends BorderPane {
         VBox vbox1 = new VBox();
         HBox lblbox = new HBox();
         Label lbluitlegtext = new Label();
-        ImageView img = new ImageView("file:src/gui/resources/zatre_1.png");
+        ImageView img = new ImageView(rb.getString("voorbeeld_inloggen"));
         HBox imgBox = new HBox();
+        Label gap0 = new Label();
         Label gap1 = new Label();
         Label gap2 = new Label();
 
+        gap0.setMinHeight(20);
         gap1.setMinHeight(20);
-        gap2.setMinHeight(20);
+        gap2.setMinHeight(50);
 
-        lbluitlegtext.setText("Jouw gebruikersnaam moet minstens 5 karakters lang zijn en je moet minstens 6 jaar zijn of dit jaar 6 worden om een speler aan te maken.");
+        lbluitlegtext.setText(rb.getString("uitlegtextInloggen"));
         lbluitlegtext.setWrapText(true);
         lbluitlegtext.getStyleClass().add("uitlegtext-style");
         lbluitlegtext.setTextAlignment(TextAlignment.CENTER);
-        lbluitlegtext.setMaxWidth(250);
+        lbluitlegtext.setMaxWidth(500);
 
         lblbox.getChildren().add(lbluitlegtext);
         lblbox.setAlignment(Pos.CENTER);
 
         img.setPreserveRatio(true);
-        img.setFitWidth(250);
+        img.setFitWidth(400);
         img.getStyleClass().add("imageuitleg-style");
 
         imgBox.getChildren().add(img);
         imgBox.setAlignment(Pos.CENTER);
 
-        vbox1.getChildren().addAll(gap1,lblbox,gap2,imgBox);
+        vbox1.getChildren().addAll(gap0,createVbox2(),gap1,lblbox,gap2,imgBox);
         return vbox1;
     }
 
     private VBox createVbox3() {
         VBox vbox3 = new VBox();
-        Label lblregistreren = new Label("Spel starten");
+        Label lblSpelers = new Label(rb.getString("lblSpelers"));
 
-        lblregistreren.setFont(new Font(25));
-        lblregistreren.setStyle("-fx-text-fill: white");
-        lblregistreren.setMaxWidth(Double.MAX_VALUE);
-        lblregistreren.setMinWidth(200);
+        lblSpelers.setFont(new Font(25));
+        lblSpelers.setStyle("-fx-text-fill: white");
+        lblSpelers.setMaxWidth(Double.MAX_VALUE);
+        lblSpelers.setMinWidth(200);
 
-        vbox3.getChildren().add(lblregistreren);
+        vbox3.getChildren().add(lblSpelers);
 
         return vbox3;
     }
@@ -265,19 +266,69 @@ public class HowToPlayController extends BorderPane {
         VBox vbox1 = new VBox();
         HBox lblbox = new HBox();
         Label lbluitlegtext = new Label();
-        ImageView img = new ImageView("file:src/gui/resources/zatre_1.png");
+        ImageView img = new ImageView(rb.getString("voorbeeld_spelers"));
         HBox imgBox = new HBox();
+        Label gap0 = new Label();
         Label gap1 = new Label();
         Label gap2 = new Label();
 
+        gap0.setMinHeight(20);
         gap1.setMinHeight(20);
-        gap2.setMinHeight(20);
+        gap2.setMinHeight(50);
 
-        lbluitlegtext.setText("Jouw gebruikersnaam moet minstens 5 karakters lang zijn en je moet minstens 6 jaar zijn of dit jaar 6 worden om een speler aan te maken.");
+        lbluitlegtext.setText(rb.getString("uitlegtextSpelers"));
         lbluitlegtext.setWrapText(true);
         lbluitlegtext.getStyleClass().add("uitlegtext-style");
         lbluitlegtext.setTextAlignment(TextAlignment.CENTER);
-        lbluitlegtext.setMaxWidth(250);
+        lbluitlegtext.setMaxWidth(500);
+
+        lblbox.getChildren().add(lbluitlegtext);
+        lblbox.setAlignment(Pos.CENTER);
+
+        img.setPreserveRatio(true);
+        img.setFitWidth(450);
+        img.getStyleClass().add("imageuitleg-style");
+
+        imgBox.getChildren().add(img);
+        imgBox.setAlignment(Pos.CENTER);
+
+        vbox1.getChildren().addAll(gap0,createVbox3(),gap1,lblbox,gap2,imgBox);
+        return vbox1;
+    }
+
+    private VBox createVbox4() {
+        VBox vbox1 = new VBox();
+        Label lblSpelBord = new Label(rb.getString("lblSpelBord"));
+
+        lblSpelBord.setFont(new Font(25));
+        lblSpelBord.setStyle("-fx-text-fill: white");
+        lblSpelBord.setMaxWidth(Double.MAX_VALUE);
+        lblSpelBord.setMinWidth(200);
+
+        vbox1.getChildren().add(lblSpelBord);
+
+        return vbox1;
+    }
+
+    private VBox createUitlegText4() {
+        VBox vbox1 = new VBox();
+        HBox lblbox = new HBox();
+        Label lbluitlegtext = new Label();
+        ImageView img = new ImageView(rb.getString("voorbeeld_spelbord"));
+        HBox imgBox = new HBox();
+        Label gap0 = new Label();
+        Label gap1 = new Label();
+        Label gap2 = new Label();
+
+        gap0.setMinHeight(20);
+        gap1.setMinHeight(20);
+        gap2.setMinHeight(50);
+
+        lbluitlegtext.setText(rb.getString("uitlegtextSpelBord"));
+        lbluitlegtext.setWrapText(true);
+        lbluitlegtext.getStyleClass().add("uitlegtext-style");
+        lbluitlegtext.setTextAlignment(TextAlignment.CENTER);
+        lbluitlegtext.setMaxWidth(500);
 
         lblbox.getChildren().add(lbluitlegtext);
         lblbox.setAlignment(Pos.CENTER);
@@ -289,44 +340,57 @@ public class HowToPlayController extends BorderPane {
         imgBox.getChildren().add(img);
         imgBox.setAlignment(Pos.CENTER);
 
-        vbox1.getChildren().addAll(gap1,lblbox,gap2,imgBox);
+        vbox1.getChildren().addAll(gap0,createVbox4(),gap1,lblbox,gap2,imgBox);
         return vbox1;
     }
 
-    private Pane createScherm2() {
-        Pane scherm = new Pane();
-        scherm.setStyle("-fx-background-color: green;");
-        return scherm;
+    private VBox createVbox5() {
+        VBox vbox1 = new VBox();
+        Label lblSpelRegels = new Label(rb.getString("lblSpelRegels"));
+
+        lblSpelRegels.setFont(new Font(25));
+        lblSpelRegels.setStyle("-fx-text-fill: white");
+        lblSpelRegels.setMaxWidth(Double.MAX_VALUE);
+        lblSpelRegels.setMinWidth(200);
+
+        vbox1.getChildren().add(lblSpelRegels);
+
+        return vbox1;
     }
 
-    private Pane createScherm3() {
-        Pane scherm = new Pane();
-        scherm.setStyle("-fx-background-color: blue;");
-        return scherm;
-    }
+    private VBox createUitlegText5() {
+        VBox vbox1 = new VBox();
+        HBox lblbox = new HBox();
+        Label lbluitlegtext = new Label();
+        ImageView img = new ImageView(rb.getString("voorbeeld_spelregels"));
+        HBox imgBox = new HBox();
+        Label gap0 = new Label();
+        Label gap1 = new Label();
+        Label gap2 = new Label();
 
-    private Pane createScherm4() {
-        Pane scherm = new Pane();
-        scherm.setStyle("-fx-background-color: orange;");
-        return scherm;
-    }
+        gap0.setMinHeight(20);
+        gap1.setMinHeight(20);
+        gap2.setMinHeight(20);
 
-    private Pane createScherm5() {
-        Pane scherm = new Pane();
-        scherm.setStyle("-fx-background-color: yellow;");
-        return scherm;
-    }
+        lbluitlegtext.setText(rb.getString("uitlegtextSpelRegels"));
+        lbluitlegtext.setWrapText(true);
+        lbluitlegtext.getStyleClass().add("uitlegtext-style");
+        lbluitlegtext.setTextAlignment(TextAlignment.CENTER);
+        lbluitlegtext.setMaxWidth(500);
 
-    private BorderPane createScherm6() {
-        BorderPane scherm = new BorderPane();
-        scherm.setStyle("-fx-background-color: pink;");
-        Button testButton = new Button("Finish");
-        testButton.setMaxWidth(Double.MAX_VALUE);
-        testButton.setMinWidth(200);
-        scherm.setLeft(testButton);
-        return scherm;
-    }
+        lblbox.getChildren().add(lbluitlegtext);
+        lblbox.setAlignment(Pos.CENTER);
 
+        img.setPreserveRatio(true);
+        img.setFitWidth(380);
+        img.getStyleClass().add("imageuitleg-style");
+
+        imgBox.getChildren().add(img);
+        imgBox.setAlignment(Pos.CENTER);
+
+        vbox1.getChildren().addAll(gap0,createVbox5(),gap1,lblbox,gap2,imgBox);
+        return vbox1;
+    }
 
 }
 
